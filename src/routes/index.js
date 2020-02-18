@@ -7,7 +7,8 @@ const {ErrorMiddleware, NotFoundMiddleware}=require("../middlewares");
 
 module.exports=function({
     UserRoutes,
-    AuthRoutes
+    AuthRoutes,
+    NeighborhoodRoutes
 }){
     const router= express.Router();
     const apiRoutes=express.Router();
@@ -21,6 +22,8 @@ module.exports=function({
 
     apiRoutes.use('/user',UserRoutes);
     apiRoutes.use('/auth',AuthRoutes);
+    apiRoutes.use('/neighborhood',NeighborhoodRoutes);
+
 
     router.use('/v1/api',apiRoutes);
     router.use(NotFoundMiddleware);

@@ -6,5 +6,8 @@ module.exports={
     MONGO_URI:process.env.MONGO_URI,
     APPLICATION_NAME:process.env.APPLICATION_NAME,
     JWT_SECRET:process.env.JWT_SECRET,
-    CACHE_KEY:process.env.CACHE
+    JWT_SECRETADMIN:process.env.JWT_SECRETADMIN,
+    JWT_SECRETOWNER:process.env.JWT_SECRETOWNER,
+    CACHE_KEY:process.env.CACHE,
+    SECRET_OWNER:process.env.SECRET_OWNER
 }

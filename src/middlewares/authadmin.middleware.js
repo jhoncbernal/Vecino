@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const {JWT_SECRET}= require('../config');
+const {JWT_SECRETADMIN}= require('../config');
 module.exports= function(req,res,next){
 const token =req.headers['authorization'];
 if(!token){
@@ -8,16 +8,15 @@ if(!token){
     error.message="token must be sent";
     throw error;
 }
-jwt.verify(token,JWT_SECRET,function(err,decodedToken){
+jwt.verify(token,JWT_SECRETADMIN,function(err,decodedToken){
     if(err){
         const error= new Error();
-        error.message="validate token value";
+        error.message="Validate token access or token value";
         error.status=400;
         throw error;
     }
-  
     req.user=decodedToken.user;
     next();
-
 });
+
 }

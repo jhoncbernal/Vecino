@@ -6,6 +6,7 @@ const VehicleSchema = new Schema({
     plate:              { type: String,  required: true },
     position:           { type: String },
     enabled:            { type: Boolean, required: true },
+    parkingplan:        { type: String },
     user:{
         type:Schema.Types.ObjectId,
         ref:"user",

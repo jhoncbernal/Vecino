@@ -16,6 +16,13 @@ async getAll(req,res){
 async update(req,res){
     const{body}=req;
     const{neighborhoodId}=req.params;
+    
+    if(body.neighborhoodcode){
+        delete body.neighborhoodcode;
+    }
+    if(body.totalNumberOfUsers){
+        delete body.totalNumberOfUsers;
+    }
     const updateNeighborhood = await _neighborhoodService.update(neighborhoodId,body);
     return res.send(updateNeighborhood);
 }

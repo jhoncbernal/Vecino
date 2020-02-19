@@ -16,7 +16,7 @@ const UserSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
         required:true,
-        autopopulate:{ select: 'neighborhoodname' }
+        autopopulate:{ select: ['neighborhoodname' ]}
     },
 });
 UserSchema.path('email').validate(function (email) {

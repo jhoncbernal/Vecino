@@ -1,91 +1,103 @@
-const {generateToken}=require('../helpers/jwt.helper');
-let _userService=null;
+const { generateToken, generateTokenAdmin, generateTokenOwner } = require('../helpers/jwt.helper');
+const { SECRET_OWNER } = require('../config');
+let _userService = null;
 let _neighborhoodRepository = null;
 
-class AuthService{
-constructor({UserService,NeighborhoodRepository }){
-    _userService=UserService;
-    _neighborhoodRepository = NeighborhoodRepository;
-}
-async signUp(user){
-    const {neighborhoodcode}=user;
-    const neighborhoodExist= await _neighborhoodRepository.getNeighborhoodByNeighborhoodcode(neighborhoodcode);
-    if (!neighborhoodExist){
-        const error = new Error();
-        error.status=401;
-        error.message= "Neighborhoodcode does not exist";
-        throw error;
+class AuthService {
+    constructor({ UserService, NeighborhoodRepository }) {
+        _userService = UserService;
+        _neighborhoodRepository = NeighborhoodRepository;
     }
-    const {username}=user;
-    const userExist= await _userService.getUserByUsername(username);
-    if (userExist){
-        const error = new Error();
-        error.status=401;
-        error.message= "User already exists";
-        throw error;
-    }
-    return await _userService.create({...user,neighborhood:neighborhoodExist._id});
-    }
-    async signIn(user){
-        const {username,password}=user;
-        const userExist= await _userService.getUserByUsername(username);
-        if (!userExist){
+    async signUp(user) {
+        const { neighborhoodcode } = user;
+        const neighborhoodExist = await _neighborhoodRepository.getNeighborhoodByNeighborhoodcode(neighborhoodcode);
+        if (!neighborhoodExist) {
             const error = new Error();
-            error.status=400;
-            error.message= "User does not exist";
+            error.status = 401;
+            error.message = "Neighborhoodcode does not exist";
             throw error;
         }
-        const validPassword=userExist.comparePasswords(password);
-        if (!validPassword){
+        const { username } = user;
+        const userExist = await _userService.getUserByUsername(username);
+        if (userExist) {
             const error = new Error();
-            error.status=400;
-            error.message= "Invalid Password";
+            error.status = 401;
+            error.message = "User already exists";
             throw error;
         }
-        const userToEncode={
-            username:userExist.username,
-            id:userExist._id
-        };
-        const token =generateToken(userToEncode);
-
-        return {token, user:userExist};
-
+        return await _userService.create({ ...user, neighborhood: neighborhoodExist._id });
     }
-    async signUpNeighborhood(neighborhood){
-        const {neighborhoodname}=neighborhood;
-        const neighborhoodExist= await _neighborhoodRepository.getNeighborhoodByNeighborhoodname(neighborhoodname);
-        if (neighborhoodExist){
+    async signIn(user) {
+        const { username, password, secretKey } = user;
+        const userExist = await _userService.getUserByUsername(username);
+        const neighborhoodExist = await _neighborhoodRepository.getNeighborhoodByNeighborhoodname(username);
+        let validPassword;
+        let result,token;
+        if (!userExist && !neighborhoodExist) {
             const error = new Error();
-            error.status=401;
-            error.message= "Neighborhood already exists";
+            error.status = 400;
+            error.message = "User does not exist";
+            throw error;
+        }
+        if (userExist) {
+            validPassword = userExist.comparePasswords(password);
+            if (userExist.roles.includes("ROLE_USER_ACCESS")&&validPassword) {
+                const userToEncode = {
+                    username: userExist.username,
+                    id: userExist._id
+                };
+                token = generateToken(userToEncode);             
+            }
+            if (userExist.roles.includes("ROLE_OWNER_ACCESS") && secretKey&&validPassword) {
+                if (secretKey != SECRET_OWNER) {
+                    const error = new Error();
+                    error.status = 400;
+                    error.message = "Invalid secretKey";
+                    throw error;
+                }
+                const userToEncode = {
+                    username: userExist.username,
+                    id: userExist._id
+                };
+                token = generateTokenOwner(userToEncode);
+            }
+            result=  { token, user: userExist }
+        }
+        if (neighborhoodExist) {
+            validPassword = neighborhoodExist.comparePasswords(password);
+            if (neighborhoodExist.roles.includes("ROLE_ADMINISTRATION_ACCESS")&&validPassword) {
+                const neighborhoodToEncode = {
+                    username: neighborhoodExist.neighborhoodname,
+                    id: neighborhoodExist._id
+                };
+                token = generateTokenAdmin(neighborhoodToEncode);
+            }
+            result=  { token, neighborhood: neighborhoodExist }
+        }
+        if (!validPassword) {
+            const error = new Error();
+            error.status = 400;
+            error.message = "Invalid Password";
+            throw error;
+        }
+        if (!token) {
+            const error = new Error();
+            error.status = 400;
+            error.message = "Validate user role access";
+            throw error;
+        }
+        return result;
+    }
+    async signUpNeighborhood(neighborhood) {
+        const { neighborhoodname } = neighborhood;
+        const neighborhoodExist = await _neighborhoodRepository.getNeighborhoodByNeighborhoodname(neighborhoodname);
+        if (neighborhoodExist) {
+            const error = new Error();
+            error.status = 401;
+            error.message = "Neighborhood already exists";
             throw error;
         }
         return await _neighborhoodRepository.create(neighborhood);
-        }
-        async signInNeighborhood(neighborhood){
-            const {neighborhoodname,password}=neighborhood;
-            const neighborhoodExist= await _neighborhoodRepository.getNeighborhoodByNeighborhoodname(neighborhoodname);
-            if (!neighborhoodExist){
-                const error = new Error();
-                error.status=400;
-                error.message= "neighborhood does not exist";
-                throw error;
-            }
-            const validPassword=neighborhoodExist.comparePasswords(password);
-            if (!validPassword){
-                const error = new Error();
-                error.status=400;
-                error.message= "Invalid Password";
-                throw error;
-            }
-            const neighborhoodToEncode={
-                neighborhoodname:neighborhoodExist.neighborhoodname,
-                id:neighborhoodExist._id
-            };
-            const token =generateToken(neighborhoodToEncode);
-    
-            return {token, neighborhood:neighborhoodExist};
-    
-        }
+    }
 }
-module.exports=AuthService;
+module.exports = AuthService;

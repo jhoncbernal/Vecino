@@ -43,9 +43,9 @@ it("Should update a user by id", async () => {
 });
 it("Should delete a user by id", async () => {
     const UserRepository = UserRepositoryMock;
-    UserRepository.delete.mockReturnValue(true);
+    UserRepository.delete.mockReturnValue(user);
 
     const _userService = new UserService({ UserRepository });
     const expected = await _userService.repository.delete(user._id);
-    expect(expected).toEqual(true);
+    expect(expected).toEqual(user);
 });

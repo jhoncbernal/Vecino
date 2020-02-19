@@ -1,22 +1,46 @@
 module.exports = {
     user: {
-        "_id": "5e3d9bea456ee0208c48a941",
-        "name": "Jhon",
+        "roles": [
+            "ROLE_USER_ACCESS"
+        ],
+        "_id": "5e4d4b204662504f25cddc8d",
         "username": "Jhoncbernal",
-        "password": "MyContraseña"
+        "password": "MyContraseña",
+        "email": "jhoncberna@gmail.com",
+        "enabled": true,
+        "phone": "3157700615",
+        "firstName": "Jhon",
+        "neighborhoodcode": "CMBOREAL001",
+        "lastName": "Casallas"
     },
     users: [
         {
-            "_id": "5e3da1acd06ed227542c9a9f",
-            "name": "Juan",
-            "username": "Juanito",
-            "password": "MyContraseña"
+            "roles": [
+                "ROLE_USER_ACCESS"
+            ],
+            "_id": "5e4d4b204662504f25cddc8d",
+            "username": "Jhoncbernal",
+            "password": "MyContraseña",
+            "email": "jhoncberna@gmail.com",
+            "enabled": true,
+            "phone": "3157700615",
+            "firstName": "Jhon",
+            "neighborhoodcode": "CMBOREAL001",
+            "lastName": "Casallas"
         },
         {
-            "_id": "5e3da1bcd06ed227542c9aa0",
-            "name": "Pedro",
-            "username": "Pedrito",
-            "password": "MyContraseña"
+            "roles": [
+                "ROLE_USER_ACCESS"
+            ],
+            "_id": "5e4d4b8ccb4f5c4f7b9cb00a",
+            "username": "PedroPablo",
+            "password": "MyContraseña",
+            "email": "Pedropablo@gmail.com",
+            "enabled": true,
+            "phone": "3204459854",
+            "firstName": "Pedro",
+            "neighborhoodcode": "CMBOREAL001",
+            "lastName": "Pablo"
         }
     ]
 };

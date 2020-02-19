@@ -9,6 +9,7 @@ describe("User Repository Tests", () => {
         mockingoose.resetAll();
         jest.clearAllMocks();
     });
+
     it("Shold return a user by id ", async () => {
         const _user = { ...user };
         delete _user.password;
@@ -62,6 +63,6 @@ describe("User Repository Tests", () => {
         const _userRepository = new UserRepository({ User });
         const expected = await _userRepository.delete(_user._id);
 
-        expect(JSON.parse(JSON.stringify(expected))).toEqual(true);
+        expect(JSON.parse(JSON.stringify(expected))).toEqual(_user);
     });
 })

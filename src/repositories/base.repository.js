@@ -19,8 +19,7 @@ class BaseRepository {
         return await this.model.findByIdAndUpdate(id, entity, { new: true });
     }
     async delete(id) {
-         await this.model.findByIdAndDelete(id);
-         return true;
+        return await this.model.findByIdAndDelete(id);
     }
 }
 module.exports = BaseRepository;

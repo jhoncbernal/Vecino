@@ -5,8 +5,23 @@ constructor({VehicleService}) {
 }
 async get(req,res){
     const{vehicleId}=req.params;
-    const vehicle = await _vehicleService.get(vehicleId);
-    return res.send(vehicle);
+     await _vehicleService.get(vehicleId).then(vehicle => {
+        if(!vehicle) {
+            return res.status(404).send({
+                message: "vehicle not found with id " + req.params.vehicleId
+            });            
+        }
+        res.send(vehicle);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "vehicle not found with id " + req.params.vehicleId
+            });                
+        }
+        return res.status(500).send({
+            message: "Error retrieving vehicle with id " + req.params.vehicleId
+        });
+    });
 }
 async getAll(req,res){
     const {pageSize,pageNum}=req.query;
@@ -16,13 +31,44 @@ async getAll(req,res){
 async update(req,res){
     const{body}=req;
     const{vehicleId}=req.params;
-    const updateVehicle = await _vehicleService.update(vehicleId,body);
-    return res.send(updateVehicle);
+    _vehicleService.update(vehicleId,body).then(vehicle => {
+        if(!vehicle) {
+            return res.status(404).send({
+                message: "vehicle not found with id " + req.params.vehicleId
+            });
+        }
+        res.send(vehicle);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "vehicle not found with id " + req.params.vehicleId
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating vehicle with id " + req.params.vehicleId
+        });
+    });
+ 
 }
 async delete(req,res){
     const{vehicleId}=req.params;
-    const deleteVehicle= await _vehicleService.delete(vehicleId);
-    return res.send(deleteVehicle);
+    await _vehicleService.delete(vehicleId).then(vehicle => {
+        if(!vehicle) {
+            return res.status(404).send({
+                message: "vehicle not found with id " + req.params.vehicleId
+            });
+        }
+        res.send({message: "vehicle deleted successfully!"});
+    }).catch(err => {
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+                message: "vehicle not found with id " + req.params.vehicleId
+            });                
+        }
+        return res.status(500).send({
+            message: "Could not delete vehicle with id " + req.params.vehicleId
+        });
+    });
 }
 async create(req,res){
     const{body}=req;

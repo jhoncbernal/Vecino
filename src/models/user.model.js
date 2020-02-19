@@ -10,13 +10,15 @@ const UserSchema = new Schema({
     roles:              [{type: String, required: true }],
     firstName:          { type: String,  required: true },
     lastName:           { type: String,  required: true },
+    HomeNumber:         { type: Number},
+    BlockNumber:        { type: Number},
     phone:              { type: String,  required: true },
     neighborhoodcode:   { type: String,  required: true },
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
         required:true,
-        autopopulate:{ select: ['neighborhoodname' ]}
+        autopopulate:{ select: ['neighborhoodname','address' ]}
     },
 });
 UserSchema.path('email').validate(function (email) {

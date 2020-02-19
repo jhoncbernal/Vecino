@@ -14,7 +14,9 @@ const VehicleSchema = new Schema({
             'lastName',
             'phone',
             'email',
-            'neighborhood.neighborhoodname' ]}
+            'HomeNumber',
+            'BlockNumber',
+            'neighborhood.neighborhoodname', ]}
     }
 });
 

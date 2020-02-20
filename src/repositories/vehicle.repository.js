@@ -6,7 +6,7 @@ constructor({Vehicle}){
     _vehicle=Vehicle;
 }
 async getUserByVehicleByPlate(plate){
-    return await _vehicle.findOne({plate});
+    return await _vehicle.find({'plate':plate});
 }
 async getUserByVehicleByusername(username){
     return await _vehicle.find({username});

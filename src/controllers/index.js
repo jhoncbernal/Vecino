@@ -3,4 +3,5 @@ module.exports={
     AuthController:require('./auth.controller'),
     NeighborhoodController:require('./neighborhood.controller'),
     VehicleController:require('./vehicle.controller'),
+    ParkingSpaceController:require('./parkingspace.controller'),
 }

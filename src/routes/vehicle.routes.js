@@ -1,6 +1,6 @@
 const {Router}=require("express");
 const {AuthMiddleware,ParseIntMiddleware,CacheMiddleware}=require('../middlewares');
-const {CACHE_TIME} = require('../helpers')
+const {CACHE_TIME} = require('../helpers');
 module.exports=function({VehicleController}){
     const router=Router();
     router.get('/:vehicleId',AuthMiddleware,VehicleController.get);

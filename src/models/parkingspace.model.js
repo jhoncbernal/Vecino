@@ -6,17 +6,23 @@ const ParkingSpaceSchema = new Schema({
     enabled:            {  type: Boolean, required: true },
     address:            {  type: String},
     totalspace:         {  type: Number,  required: true },
-    prices:             [{ type: Number}],
+    prices:             [{  
+        kind:  {type: String,  required: true },
+        value:  {type: String,  required: true }
+    }],
     position:[{
-        posnumber:  {type: Number,  required: true },
-        available:  {type: Number,  required: true },
+        posnumber:  {type: String,  required: true },
+        available:  {type: String,  required: true },
         vehicle:{
             type:Schema.Types.ObjectId,
             ref:"vehicle",
             autopopulate:{ select: ['vehicletype','plate' ]}
         }
     }],
-    schedule:           [{ type: String}],
+    schedule:           [{ 
+        rank:  {type: String,  required: true },
+        value:  {type: String,  required: true }
+    }],
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",

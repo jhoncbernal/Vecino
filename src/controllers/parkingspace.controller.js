@@ -25,10 +25,9 @@ async get(req,res){
     });
 }
 async getAll(req,res){
-    const{id:userId}=req.user;
+    const{id:neighborhoodId}=req.user;
     const {pageSize,pageNum}=req.query;
-    const neighborhood  = await _neighborhoodService.get(userId);
-    const parkingSpace = await _parkingSpaceService.getAll('neighborhoodname',neighborhood.neighborhoodname,pageSize,pageNum);
+    const parkingSpace = await _parkingSpaceService.getAll('neighborhood',neighborhoodId,pageSize,pageNum);
     return res.send(parkingSpace);
 }
 async update(req,res){
@@ -75,6 +74,8 @@ async delete(req,res){
 }
 async create(req,res){
     const{body}=req;
+    const{id:neighborhoodId}=req.user;
+    body.neighborhood=neighborhoodId;
     const parkingSpace= await _parkingSpaceService.create(body);
     return res.send(parkingSpace);
 }

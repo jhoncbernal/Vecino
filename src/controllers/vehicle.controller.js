@@ -92,7 +92,7 @@ async create(req,res){
 
 async getUserByVehicleByPlate(req,res){
     const{plate}=req.params;
-    const deleteVehicle= await _vehicleService.getUserByVehicleByPlate(plate);
+    const vehicle= await _vehicleService.getUserByVehicleByPlate(plate);
     return res.send(vehicle);
 }
 async getUserByVehicleByusername(req,res){

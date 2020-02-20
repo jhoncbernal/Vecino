@@ -1,27 +1,27 @@
-let _vehicleService=null;
+let _parkingpositionService=null;
 let _userService=null;
-class VehicleController{
-constructor({VehicleService,UserService}) {
-    _vehicleService=VehicleService;
+class ParkingpositionController{
+constructor({ParkingpositionService,UserService}) {
+    _parkingpositionService=ParkingpositionService;
     _userService=UserService;
 }
 async get(req,res){
-    const{vehicleId}=req.params;
-     await _vehicleService.get(vehicleId).then(vehicle => {
-        if(!vehicle) {
+    const{parkingpositionId}=req.params;
+     await _parkingpositionService.get(parkingpositionId).then(parkingposition => {
+        if(!parkingposition) {
             return res.status(404).send({
-                message: "vehicle not found with id " + req.params.vehicleId
+                message: "parkingposition not found with id " + req.params.parkingpositionId
             });            
         }
-        res.send(vehicle);
+        res.send(parkingposition);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "vehicle not found with id " + req.params.vehicleId
+                message: "parkingposition not found with id " + req.params.parkingpositionId
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving vehicle with id " + req.params.vehicleId
+            message: "Error retrieving parkingposition with id " + req.params.parkingpositionId
         });
     });
 }
@@ -29,68 +29,68 @@ async getAll(req,res){
     const{id:userId}=req.user;
     const {pageSize,pageNum}=req.query;
     const user  = await _userService.get(userId);
-    const vehicles = await _vehicleService.getAll('username',user.username,pageSize,pageNum);
-    return res.send(vehicles);
+    const parkingpositions = await _parkingpositionService.getAll('username',user.username,pageSize,pageNum);
+    return res.send(parkingpositions);
 }
 async update(req,res){
     const{body}=req;
-    const{vehicleId}=req.params;
-    _vehicleService.update(vehicleId,body).then(vehicle => {
-        if(!vehicle) {
+    const{parkingpositionId}=req.params;
+    _parkingpositionService.update(parkingpositionId,body).then(parkingposition => {
+        if(!parkingposition) {
             return res.status(404).send({
-                message: "vehicle not found with id " + req.params.vehicleId
+                message: "parkingposition not found with id " + req.params.parkingpositionId
             });
         }
-        res.send(vehicle);
+        res.send(parkingposition);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "vehicle not found with id " + req.params.vehicleId
+                message: "parkingposition not found with id " + req.params.parkingpositionId
             });                
         }
         return res.status(500).send({
-            message: "Error updating vehicle with id " + req.params.vehicleId
+            message: "Error updating parkingposition with id " + req.params.parkingpositionId
         });
     });
  
 }
 async delete(req,res){
-    const{vehicleId}=req.params;
-    await _vehicleService.delete(vehicleId).then(vehicle => {
-        if(!vehicle) {
+    const{parkingpositionId}=req.params;
+    await _parkingpositionService.delete(parkingpositionId).then(parkingposition => {
+        if(!parkingposition) {
             return res.status(404).send({
-                message: "vehicle not found with id " + req.params.vehicleId
+                message: "parkingposition not found with id " + req.params.parkingpositionId
             });
         }
-        res.send({message: "vehicle deleted successfully!"});
+        res.send({message: "parkingposition deleted successfully!"});
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
-                message: "vehicle not found with id " + req.params.vehicleId
+                message: "parkingposition not found with id " + req.params.parkingpositionId
             });                
         }
         return res.status(500).send({
-            message: "Could not delete vehicle with id " + req.params.vehicleId
+            message: "Could not delete parkingposition with id " + req.params.parkingpositionId
         });
     });
 }
 async create(req,res){
     const{body}=req;
-    const vehicle= await _vehicleService.create(body);
-    return res.send(vehicle);
+    const parkingposition= await _parkingpositionService.create(body);
+    return res.send(parkingposition);
 }
 
-async getUserByVehicleByPlate(req,res){
+async getUserByParkingpositionByPlate(req,res){
     const{plate}=req.params;
-    const deleteVehicle= await _vehicleService.getUserByVehicleByPlate(plate);
-    return res.send(vehicle);
+    const parkingposition= await _parkingpositionService.getUserByParkingpositionByPlate(plate);
+    return res.send(parkingposition);
 }
-async getUserByVehicleByusername(req,res){
+async getUserByParkingpositionByusername(req,res){
     const{username}=req.params;
-    const vehicle= await _vehicleService.getUserByVehicleByusername(username);
-    return res.send(vehicle);
+    const parkingposition= await _parkingpositionService.getUserByParkingpositionByusername(username);
+    return res.send(parkingposition);
 }
 
 
 }
-module.exports=VehicleController
+module.exports=ParkingpositionController

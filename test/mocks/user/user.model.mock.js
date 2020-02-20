@@ -1,46 +1,54 @@
 module.exports = {
-    user: {
+    user:        {
         "roles": [
-            "ROLE_USER_ACCESS"
+            "ROLE_USER_ACCESS",
+            "ROLE_OWNER_ACCESS"
         ],
-        "_id": "5e4d4b204662504f25cddc8d",
+        "_id": "5e4d80d38f71b670471d30d6",
         "username": "Jhoncbernal",
         "password": "MyContraseña",
-        "email": "jhoncberna@gmail.com",
+        "email": "Jhoncbernal@gmail.com",
         "enabled": true,
-        "phone": "3157700615",
+        "phone": "3204459854",
         "firstName": "Jhon",
         "neighborhoodcode": "CMBOREAL001",
-        "lastName": "Casallas"
+        "lastName": "Casallas Bernal",
+        "neighborhood": "5e4c4f63a4294b2e2b16106d",
+           
     },
     users: [
         {
             "roles": [
-                "ROLE_USER_ACCESS"
+                "ROLE_USER_ACCESS",
+                "ROLE_OWNER_ACCESS"
             ],
-            "_id": "5e4d4b204662504f25cddc8d",
+            "_id": "5e4d80d38f71b670471d30d6",
             "username": "Jhoncbernal",
             "password": "MyContraseña",
-            "email": "jhoncberna@gmail.com",
+            "email": "Jhoncbernal@gmail.com",
             "enabled": true,
-            "phone": "3157700615",
+            "phone": "3204459854",
             "firstName": "Jhon",
             "neighborhoodcode": "CMBOREAL001",
-            "lastName": "Casallas"
+            "lastName": "Casallas Bernal",
+            "neighborhood": "5e4c4f63a4294b2e2b16106d",
+               
         },
         {
             "roles": [
                 "ROLE_USER_ACCESS"
             ],
-            "_id": "5e4d4b8ccb4f5c4f7b9cb00a",
-            "username": "PedroPablo",
+            "_id": "5e4dd8e1fafd55a1149bb9d5",
+            "username": "PabloPerez",
             "password": "MyContraseña",
-            "email": "Pedropablo@gmail.com",
+            "email": "PabloPerez@gmail.com",
             "enabled": true,
-            "phone": "3204459854",
-            "firstName": "Pedro",
+            "phone": "5645440145",
+            "firstName": "Pablo",
             "neighborhoodcode": "CMBOREAL001",
-            "lastName": "Pablo"
+            "lastName": "Perez Suarez",
+            "neighborhood":  "5e4c4f63a4294b2e2b16106d",
+                
         }
     ]
 };

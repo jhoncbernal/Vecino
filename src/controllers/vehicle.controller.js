@@ -1,7 +1,9 @@
 let _vehicleService=null;
+let _userService=null;
 class VehicleController{
-constructor({VehicleService}) {
+constructor({VehicleService,UserService}) {
     _vehicleService=VehicleService;
+    _userService=UserService;
 }
 async get(req,res){
     const{vehicleId}=req.params;
@@ -24,9 +26,10 @@ async get(req,res){
     });
 }
 async getAll(req,res){
+    const{id:userId}=req.user;
     const {pageSize,pageNum}=req.query;
-    const vehicle = await _vehicleService.getAll(pageSize,pageNum);
-    return res.send(vehicle);
+    const vehicles = await _vehicleService.getAll('user',userId,pageSize,pageNum);
+    return res.send(vehicles);
 }
 async update(req,res){
     const{body}=req;
@@ -71,7 +74,18 @@ async delete(req,res){
     });
 }
 async create(req,res){
-    const{body}=req;
+    const {body}=req;
+    const{id:userId}=req.user;
+    body.user=userId;
+    const vehicleExist= await _vehicleService.getUserByVehicleByPlate(body.plate);
+    const userExist= await _userService.get(userId);
+    if (vehicleExist.length!=0) {
+        const error = new Error();
+        error.status = 401;
+        error.message = "vehicle already exist";
+        throw error;
+    }
+    body.owner=userExist.id;
     const vehicle= await _vehicleService.create(body);
     return res.send(vehicle);
 }

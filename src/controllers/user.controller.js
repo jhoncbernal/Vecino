@@ -1,7 +1,8 @@
-let _userService=null;
+let _userService,_neighborhoodService=null;
 class UserController{
-constructor({UserService}) {
+constructor({UserService,NeighborhoodService}) {
     _userService=UserService;
+    _neighborhoodService= NeighborhoodService;
 }
 async get(req,res){
     const{userId}=req.params;
@@ -9,8 +10,10 @@ async get(req,res){
     return res.send(user);
 }
 async getAll(req,res){
+    const{id:userId}=req.user;
     const {pageSize,pageNum}=req.query;
-    const users = await _userService.getAll(pageSize,pageNum);
+    const neighborhood = await _neighborhoodService.get(userId);
+    const users = await _userService.getAll('neighborhoodcode',neighborhood.neighborhoodcode,pageSize,pageNum);
     return res.send(users);
 }
 async update(req,res){

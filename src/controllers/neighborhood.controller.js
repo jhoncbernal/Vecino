@@ -10,8 +10,8 @@ async get(req,res){
 }
 async getAll(req,res){
     const {pageSize,pageNum}=req.query;
-    const neighborhood = await _neighborhoodService.getAll(pageSize,pageNum);
-    return res.send(neighborhood);
+    const neighborhoods = await _neighborhoodService.getAll("neighborhoodcode",{ $exists: true },pageSize,pageNum);
+    return res.send(neighborhoods);
 }
 async update(req,res){
     const{body}=req;

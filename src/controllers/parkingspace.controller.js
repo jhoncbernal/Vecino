@@ -76,20 +76,24 @@ async create(req,res){
     const{body}=req;
     const{id:neighborhoodId}=req.user;
     body.neighborhood=neighborhoodId;
+    const parkingSpaceExist= await _parkingSpaceService.getParkingSpaceByname(body.parkingname,neighborhoodId);
+    if (parkingSpaceExist) {
+        const error = new Error();
+        error.status = 401;
+        error.message = "parkingSpace already exist";
+        throw error;
+    }
     const parkingSpace= await _parkingSpaceService.create(body);
     return res.send(parkingSpace);
 }
 
-async getEmptySpace(req,res){
-    const parkingSpace= await _parkingSpaceService.getEmptySpace();
+async getAllParkingPositionEmptySpaceByVehicleType(req,res){
+    const { parkingspaceId}=req.params;
+    let   {vehicletype="Car",available="true"}=req.query;
+    const parkingSpace= await _parkingSpaceService.getAllParkingPositionEmptySpaceByVehicleType(parkingspaceId,vehicletype,available);
     return res.send(parkingSpace);
 }
-async addParkingPosition(req,res){
-    const{body}=req;
-    const{parkingspaceId}=req.params;
-    const parkingSpace= await _parkingSpaceService.addParkingPosition(parkingspaceId,body);
-    return res.send(parkingSpace);
-}
+
 
 }
 

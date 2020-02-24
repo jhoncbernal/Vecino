@@ -6,11 +6,22 @@ class ParkinSpaceService extends BaseService {
         super(ParkingSpaceRepository);
         _parkingspaceRepository = ParkingSpaceRepository;
     }
-    async getEmptySpace(){
-        return await _parkingspaceRepository.getEmptySpace();
+    async getAllParkingPositionEmptySpaceByVehicleType(parkingspaceId,vehicletype,available){
+        return await _parkingspaceRepository.getAllParkingPositionEmptySpaceByVehicleType(parkingspaceId,vehicletype,available);
     }
-    async addParkingPosition(parkingspaceId,body){
-        return await _parkingspaceRepository.addParkingPosition(parkingspaceId,body);
+    async getParkingPositionByPosId(parkingspaceId,positionId){
+        return await _parkingspaceRepository.getParkingPositionByPosgetParkingPositionByPosIdnumber(parkingspaceId,positionId);
+    } 
+    async getParkingSpaceByname(parkingname,neighborhoodId){
+        return await _parkingspaceRepository.getParkingSpaceByname(parkingname,neighborhoodId);
     }
+    async updateParkingPositionByPosId(parkingspaceId,positionId,body){
+        return await _parkingspaceRepository.updateParkingPositionByPosId(parkingspaceId,positionId,body);
+    }
+    async deleteParkingPositionByPosId(parkingspaceId,body){
+        return await _parkingspaceRepository.deleteParkingPositionByPosId(parkingspaceId,positionId,body);
+    }
+
+ 
 }
 module.exports = ParkinSpaceService;

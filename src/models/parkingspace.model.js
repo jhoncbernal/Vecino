@@ -13,7 +13,7 @@ const ParkingSpaceSchema = new Schema({
     position:[{
         posnumber:  {type: String,  required: true },
         available:  {type: String,  required: true },
-        typevehicle:{type: String,  required: true },
+        vehicletype:{type: String,  required: true },
         vehicle:{
             type:Schema.Types.ObjectId,
             ref:"vehicle",

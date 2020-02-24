@@ -15,8 +15,9 @@ module.exports=function({
     const router= express.Router();
     const apiRoutes=express.Router();
 
-    apiRoutes
+    apiRoutes   
     .use(express.json())
+    .use(express.urlencoded({ extended: true }))
     .use(cors())
     .use(helmet())
     .use(compression());

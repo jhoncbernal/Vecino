@@ -21,7 +21,8 @@ class ParkingSpaceRepository extends BaseRepository {
             },
             {
                 $project:
-                {
+                {   parkingname:1,
+                    totalspace:1,
                     positions:
                     {
                         $filter: {
@@ -36,9 +37,21 @@ class ParkingSpaceRepository extends BaseRepository {
                                 ]
                             }
                         }
-                    }
+                    },
+                    NumberOfCreatePositions:{$size:"$position"}
                 }
-            }
+            },
+            {$group: {
+                _id: {
+                    parkingname:'$parkingname',
+                    totalspace:'$totalspace',
+                    positions: '$positions',
+                    NumberOfCreatePositions:'$NumberOfCreatePositions',
+                    NumberOfPosAvailables:{$size:"$positions"}
+                },
+               
+              }}
+            
         ]);
         //.find({"_id": parkingspaceId},{position: {$elemMatch: {available:'true'}}});
     }

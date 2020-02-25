@@ -30,6 +30,6 @@ const ParkingSpaceSchema = new Schema({
         required:true,
         autopopulate:{ select: ['neighborhoodname','address','phone' ]}
     }
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model('parkingspace', ParkingSpaceSchema);

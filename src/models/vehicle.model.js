@@ -21,7 +21,7 @@ const VehicleSchema = new Schema({
             'BlockNumber',
             'neighborhood neighborhoodname' ]}
     }
-});
+}, {timestamps: true});
 
 
 VehicleSchema.plugin(require("mongoose-autopopulate"))

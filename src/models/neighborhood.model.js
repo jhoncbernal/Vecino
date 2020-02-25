@@ -3,17 +3,17 @@ const { Schema } = mongoose;
 const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 
 const NeighborhoodSchema = new Schema({    
-    neighborhoodname:   { type: String,  required: true },
-    password:           { type: String,  required: true },
-    email:              { type: String,  required: true },
+    neighborhoodname:   { type: String,  required: true  , lowercase:true },
+    password:           { type: String,  required: [true, 'What is your password?'] },
+    email:              { type: String,  required: [true, 'What is your email?'] },
     enabled:            { type: Boolean, required: true },
-    roles:              [{type: String, required: true }],
-    phone:              { type: String,  required: true },
+    roles:              [{type: String,  required: true  , lowercase:false }],
+    phone:              { type: String,  required: [true, 'What is your contact number?'] },
     address:            { type: String,  required: true },
-    neighborhoodcode:   { type: String,  required: true },
+    neighborhoodcode:   { type: String,  required: [true, 'What is your neighborhoodcode?'] },
     totalNumberOfUsers: { type: Number,  required: true },
-    registeredUsers:    { type: String},
-});
+    registeredUsers:    { type: String,  max:this.totalNumberOfUsers},
+}, {timestamps: true});
 NeighborhoodSchema.path('email').validate(function (email) {
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     return emailRegex.test(email); // Assuming email has a text attribute

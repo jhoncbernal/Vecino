@@ -9,5 +9,11 @@ class UserService extends BaseService {
     async getUserByUsername(username){
         return await _userRepository.getUserByUsername(username);
     }
+    async getUsersByPoints(pageSize,pageNum){
+        return await this.repository.getUsersByPoints(pageSize,pageNum);
+    }
+    async getUsersByPoints(pageSize,pageNum){
+        return await this.repository.getUsersByPoints(pageSize,pageNum);
+    }
 }
 module.exports = UserService;

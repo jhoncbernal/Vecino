@@ -103,7 +103,14 @@ class ParkingSpaceRepository extends BaseRepository {
                     posnumber: positionnumber
                 }
             }
-        }, { $pull: { "positions.posnumber": positionnumber } });
+        },{
+            $pull: {
+                positions:
+                {
+                    posnumber: positionnumber
+                }
+            }
+        });
     }
     async getParkingSpaceByname(parkingname, neighborhoodId) {
         return await _parkingspace.findOne({ "parkingname": parkingname, "neighborhood": neighborhoodId });

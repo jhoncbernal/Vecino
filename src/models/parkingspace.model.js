@@ -10,7 +10,7 @@ const ParkingSpaceSchema = new Schema({
         kind:  {type: String,  required: true },
         value:  {type: String,  required: true }
     }],
-    position:[{
+    positions:[{
         posnumber:  {type: String,  required: true },
         available:  {type: String,  required: true },
         vehicletype:{type: String,  required: true },

@@ -8,7 +8,7 @@ const { UserService,AuthService,NeighborhoodService,VehicleService,ParkingSpaceS
 //controllers
 const { UserController,AuthController,NeighborhoodController,VehicleController,ParkingSpaceController } = require('../controllers');
 //routes
-const { UserRoutes,AuthRoutes,NeighborhoodRoutes,VehicleRoutes,ParkingSpaceRoutes} = require('../routes/index.routes');
+const { UserRoutes,AuthRoutes,NeighborhoodRoutes,VehicleRoutes,ParkingSpaceRoutes,PositionsRoutes} = require('../routes/index.routes');
 const Routes = require('../routes');
 
 
@@ -44,6 +44,7 @@ container
         NeighborhoodRoutes: asFunction(NeighborhoodRoutes).singleton(),
         VehicleRoutes: asFunction(VehicleRoutes).singleton(),
         ParkingSpaceRoutes: asFunction(ParkingSpaceRoutes).singleton(),
+        PositionsRoutes: asFunction(PositionsRoutes).singleton(),
     }).register({
         User: asValue(User),
         Neighborhood: asValue(Neighborhood),

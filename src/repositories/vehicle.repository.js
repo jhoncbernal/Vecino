@@ -11,5 +11,8 @@ async getUserByVehicleByPlate(plate){
 async getUserByVehicleByusername(username){
     return await _vehicle.find({username});
 }
+async getFavoritePosition(favoriteposition){
+    return await _vehicle.findOne({"favoriteposition":favoriteposition});
+}
 }
 module.exports=VehicleRepository;

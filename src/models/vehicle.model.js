@@ -5,9 +5,10 @@ const VehicleSchema = new Schema({
     vehicletype:        { type: String,  required: true },
     username:           { type: String},
     plate:              { type: String,  required: true },
-    position:           { type: String },
+    favoriteposition:   { type: String },
     enabled:            { type: Boolean, required: true },
     parkingplan:        { type: String, required: true },
+    startplan:          { type: String },
     user:{
         type:Schema.Types.ObjectId,
         ref:"user",

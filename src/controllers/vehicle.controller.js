@@ -100,7 +100,11 @@ async getUserByVehicleByusername(req,res){
     const vehicle= await _vehicleService.getUserByVehicleByusername(username);
     return res.send(vehicle);
 }
-
+async getFavoritePosition(req,res){
+    const{favoriteposition}=req.params;
+    const vehicle= _vehicleService.getFavoritePosition(favoriteposition);
+    return res.send(vehicle);
+}
 
 }
 module.exports=VehicleController

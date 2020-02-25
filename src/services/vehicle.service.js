@@ -12,5 +12,8 @@ class VehicleService extends BaseService {
     async getUserByVehicleByusername(username){
         return await _vehicleRepository.getUserByVehicleByusername(username);
     }
+    async getFavoritePosition(favoriteposition){
+        return await _vehicleRepository.getFavoritePosition(favoriteposition);
+    }
 }
 module.exports = VehicleService;

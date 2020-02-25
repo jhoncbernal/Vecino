@@ -79,7 +79,7 @@ async create(req,res){
     body.user=userId;
     const vehicleExist= await _vehicleService.getUserByVehicleByPlate(body.plate);
     const userExist= await _userService.get(userId);
-    if (vehicleExist.length!=0) {
+    if (vehicleExist) {
         const error = new Error();
         error.status = 401;
         error.message = "vehicle already exist";

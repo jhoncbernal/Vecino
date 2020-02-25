@@ -9,5 +9,7 @@ module.exports={
     JWT_SECRETADMIN:process.env.JWT_SECRETADMIN,
     JWT_SECRETOWNER:process.env.JWT_SECRETOWNER,
     CACHE_KEY:process.env.CACHE_KEY,
+    PSWD_EMAIL:process.env.PSWD_EMAIL,
+    FROM_EMAIL:process.env.FROM_EMAIL,
     SECRET_OWNER:process.env.SECRET_OWNER
 }

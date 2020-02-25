@@ -99,5 +99,14 @@ class AuthService {
         }
         return await _neighborhoodRepository.create(neighborhood);
     }
+    async recover(body,host){
+        return await _userService.recover(body,host);
+    }
+    async reset(token){
+        return await _userService.reset(token);
+    }
+    async resetPassword(token,body){
+        return await _userService.resetPassword(token,body);
+    }
 }
 module.exports = AuthService;

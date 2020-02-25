@@ -10,7 +10,8 @@ module.exports=function({
     AuthRoutes,
     NeighborhoodRoutes,
     VehicleRoutes,
-    ParkingSpaceRoutes
+    ParkingSpaceRoutes,
+    PositionsRoutes
 }){
     const router= express.Router();
     const apiRoutes=express.Router();
@@ -28,7 +29,7 @@ module.exports=function({
     apiRoutes.use('/neighborhood',NeighborhoodRoutes);
     apiRoutes.use('/vehicle',VehicleRoutes);
     apiRoutes.use('/parkingspace',ParkingSpaceRoutes);
-
+    apiRoutes.use('/parkingspace/positions',PositionsRoutes);
 
 
     router.use('/v1/api',apiRoutes);

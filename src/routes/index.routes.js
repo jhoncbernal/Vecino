@@ -3,5 +3,6 @@ module.exports={
     AuthRoutes:require('./auth.routes'),
     NeighborhoodRoutes:require('./neighborhood.routes'),
     VehicleRoutes:require('./vehicle.routes'),
-    ParkingSpaceRoutes:require('./parkingspace.routes')
+    ParkingSpaceRoutes:require('./parkingspace.routes'),
+    PositionsRoutes:require('./positions.routes')
 }

@@ -29,8 +29,8 @@ class AuthController {
 
     async recover(req, res) {
         try {
-            const { body } = req;
-            const host = req.headers.host
+            const { body,baseUrl } = req;
+            const host = req.headers.host+baseUrl;
             await _authService.recover(body, host).then((successMessage) => {
                     return res.status(200).send(successMessage);
               }).catch((error)=>{throw error});     
@@ -49,5 +49,6 @@ class AuthController {
         const resetPasswordUser = await _authService.resetPassword(token,body)
         return res.status(200).send(resetPasswordUser);
     }
+    
 }
 module.exports = AuthController;

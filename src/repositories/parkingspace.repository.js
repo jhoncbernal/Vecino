@@ -98,7 +98,8 @@ class ParkingSpaceRepository extends BaseRepository {
     }
     async deleteParkingPositionByPosnumber(parkingspaceId, positionnumber) {
         return await _parkingspace.update({
-            _id: parkingspaceId, positions: {
+            _id: parkingspaceId,
+            positions: {
                 $elemMatch: {
                     posnumber: positionnumber
                 }
@@ -110,7 +111,14 @@ class ParkingSpaceRepository extends BaseRepository {
                     posnumber: positionnumber
                 }
             }
-        });
+        }
+        , { safe: true },await async function(err, doc)  {
+            if (err) {
+                err.message="Something wrong when updating data!"
+                throw err;
+            }        
+            return doc.configuration.links;
+        }).catch(error=>{throw error});
     }
     async getParkingSpaceByname(parkingname, neighborhoodId) {
         return await _parkingspace.findOne({ "parkingname": parkingname, "neighborhood": neighborhoodId });
@@ -118,9 +126,8 @@ class ParkingSpaceRepository extends BaseRepository {
     async createParkingPositions(parkingspaceId, body) {
         return await _parkingspace.update({
             _id: parkingspaceId
-
         }, {
-            $push:
+            $addToSet:
             {
                 positions: {
                     "posnumber": body.posnumber,
@@ -128,7 +135,14 @@ class ParkingSpaceRepository extends BaseRepository {
                     "vehicletype": body.vehicletype
                 }
             }
-        });
+        }
+        ,  (err, doc) => {
+            if (err) {
+                err.message="Something wrong when updating data!"
+                throw err;
+            }        
+            return {...doc}
+        }).then((result)=>{return result}).catch(error=>{throw error});
     }
 }
 module.exports = ParkingSpaceRepository;

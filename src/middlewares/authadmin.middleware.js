@@ -12,7 +12,7 @@ jwt.verify(token,JWT_SECRETADMIN,function(err,decodedToken){
     if(err){
         const error= new Error();
         error.message="Validate token access or token value";
-        error.status=400;
+        error.status=401;
         throw error;
     }
     req.user=decodedToken.user;

@@ -7,8 +7,21 @@ class AuthController {
     }
     async signUp(req, res) {
         const { body } = req;
-        const createdUser = await _authService.signUp(body)
-        return res.status(200).send(createdUser);
+        const { baseUrl } = req;
+        const host = req.headers.host + baseUrl;
+        await _authService.signUp(body)
+            .then((userService) => {
+                return _authService.verifyEmail(userService, host)
+                    .then((sendVerifyUser) => {
+                        return res.status(200).send({ userService, ...{ "emailResult": sendVerifyUser } });
+                    }).catch((error) => {
+                        return res.status(500).send({ userService, ...{ "emailResult": error.message } });
+                    });
+            }).catch((error) => {
+                return res.status(500).send({ "error": error.message });
+            });;
+
+
     }
     async signIn(req, res) {
         const { body } = req;
@@ -29,11 +42,11 @@ class AuthController {
 
     async recover(req, res) {
         try {
-            const { body,baseUrl } = req;
-            const host = req.headers.host+baseUrl;
+            const { body, baseUrl } = req;
+            const host = req.headers.host + baseUrl;
             await _authService.recover(body, host).then((successMessage) => {
-                    return res.status(200).send(successMessage);
-              }).catch((error)=>{throw error});     
+                return res.status(200).send(successMessage);
+            }).catch((error) => { throw error });
         } catch (e) {
             return res.status(500).send(e.message);
         }
@@ -46,17 +59,17 @@ class AuthController {
     async resetPassword(req, res) {
         const { token } = req.params;
         const { body } = req;
-        const resetPasswordUser = await _authService.resetPassword(token,body)
+        const resetPasswordUser = await _authService.resetPassword(token, body)
         return res.status(200).send(resetPasswordUser);
     }
     async verifyEmail(req, res) {
         try {
             const { body } = req;
             const { baseUrl } = req;
-            const host = req.headers.host+baseUrl;
+            const host = req.headers.host + baseUrl;
             await _authService.verifyEmail(body, host).then((successMessage) => {
-                    return res.status(200).send(successMessage);
-              }).catch((error)=>{throw error});     
+                return res.status(200).send(successMessage);
+            }).catch((error) => { throw error });
         } catch (e) {
             return res.status(500).send(e.message);
         }

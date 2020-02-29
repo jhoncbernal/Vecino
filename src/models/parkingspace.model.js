@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const ParkingSpaceSchema = new Schema({    
     parkingname:        {  type: String,  required: true,   unique: true },
-    enabled:            {  type: Boolean, required: true },
+    enabled:            {  type: Boolean, default: true },
     address:            {  type: String},
     totalspace:         {  type: Number,  required: true },
     prices:             [{  
@@ -11,9 +11,9 @@ const ParkingSpaceSchema = new Schema({
         value:  {type: String,  required: true }
     }],
     positions:[{
-        posnumber:  {type: String,  required: true,unique: true },
+        posnumber:  {type: String,  required: true },
         available:  {type: String,  required: true },
-        vehicletype:{type: String,  required: true },
+        vehicletype:{ type: String,  required: [true , 'What kind of vehicle? ["Car", "Bike", "Motorcycle"]'] , enum: ['Car', 'Bike', 'Motorcycle']},
         vehicle:{
             type:Schema.Types.ObjectId,
             ref:"vehicle",

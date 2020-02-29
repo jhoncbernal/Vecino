@@ -15,33 +15,33 @@ class AuthService {
         const neighborhoodExist = await _neighborhoodService.getNeighborhoodByUsername(username);
         if (neighborhoodExist) {
             const error = new Error();
-            error.status = 401;
+            error.status = 409;
             error.message = "Neighborhood already exists";
             throw error;
         }
         return await _neighborhoodService.create(neighborhood);
     }
     async signUp(userBody) {
-        const { neighborhoodcode, username } = userBody;
-        userBody.enabled=false;
-        const userExist = await selectNeighborhoodOrUserProperty("neighborhoodcode", neighborhoodcode, true);
-        if (userBody.roles.includes("ROLE_USER_ACCESS")){            
-            return userExist.service.create({ ...userBody, neighborhood: userExist.user._id })
-            .catch((error)=>{
-                if(error.message.includes("duplicate key")){ 
-                    const error = new Error();
-                    error.status = 500;
-                    error.message = "username or email alredy exists";
-                    throw error;
-                }
-                if(error) throw error;
-            });
+        const { neighborhoodcode } = userBody;
+        userBody.enabled = false;
+        const userExist = await selectNeighborhoodOrUserProperty("neighborhoodcode", neighborhoodcode, true).catch(err => { throw err });
+        if (userBody.roles.includes("ROLE_USER_ACCESS")) {
+            return _userService.create({ ...userBody, neighborhood: userExist.user._id })
+                .catch((error) => {
+                    if (error.message.includes("duplicate key")) {
+                        const error = new Error();
+                        error.status = 500;
+                        error.message = "username or email alredy exists";
+                        throw error;
+                    }
+                    if (error) throw error;
+                });
         }
-        if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS")&&!userExist.user.isVerified) {
-            return userExist.service.update(userExist.user._id, userBody)
-            .then((user)=>{ return user.save();}               
-            );
-        }else{
+        if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") && !userExist.user.isVerified) {
+            return _neighborhoodService.update(userExist.user._id, userBody)
+                .then((user) => { return user.save(); }
+                );
+        } else {
             const error = new Error();
             error.status = 400;
             error.message = "User alredy exist";
@@ -50,8 +50,16 @@ class AuthService {
 
     }
     async signIn(user) {
-        const { username, password, secretKey } = user;
-        return await selectNeighborhoodOrUserProperty("username", username)
+        const { username, email, password, secretKey } = user;
+        let propName, value = null;
+        if (username) {
+            propName = "username",
+            value = username
+        } else {
+            propName = "email",
+            value = email
+        }
+        return await selectNeighborhoodOrUserProperty(propName, value)
             .then((userExist) => {
                 let validPassword;
                 let token;
@@ -65,8 +73,8 @@ class AuthService {
                     }
                     if (userExist.user.roles.includes("ROLE_USER_ACCESS") && validPassword) {
                         const userToEncode = {
-                            username: user.username,
-                            id: user._id
+                            username: userExist.user.email,
+                            id: userExist.user._id
                         };
                         token = generateToken(userToEncode);
                     }
@@ -78,15 +86,15 @@ class AuthService {
                             throw error;
                         }
                         const userToEncode = {
-                            username: user.username,
-                            id: user._id
+                            username: userExist.user.email,
+                            id: userExist.user._id
                         };
                         token = generateTokenOwner(userToEncode);
                     }
                     if (userExist.user.roles.includes("ROLE_ADMINISTRATION_ACCESS") && validPassword) {
                         const neighborhoodToEncode = {
-                            username: user.username,
-                            id: user._id
+                            username: userExist.user.email,
+                            id: userExist.user._id
                         };
                         token = generateTokenAdmin(neighborhoodToEncode);
                     }
@@ -109,7 +117,7 @@ class AuthService {
             .then(user => {
                 if (!user) {
                     const err = new Error();
-                    err.status = 401;
+                    err.status = 404;
                     err.message = 'The email address ' + body.email + ' is not associated with any account. Double-check your email address and try again.';
                     throw err;
                 }
@@ -146,7 +154,7 @@ class AuthService {
             })
             .catch(err => { throw err });
     }
-    async resetPassword(token,body) {
+    async resetPassword(token, body) {
         const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token);
         return await userExist.service.resetPassword(token)
             .then((user) => {
@@ -180,40 +188,40 @@ class AuthService {
             });
     }
     async verifyEmail(body, host) {
-        return await selectNeighborhoodOrUserProperty("email", body.email,true)
-        .then((userExist)=>{
-           return userExist.service.verifyEmail(body)
-            .then(user => {
-                if (!user) {
-                    const err = new Error();
-                    err.status = 401;
-                    err.message = 'The email address ' + body.email + ' is not associated with any account. Double-check your email address and try again.';
-                    throw err;
-                }
-                //Generate and set password reset token
-                user.generatePasswordReset();
-                // Save the updated user object
-                return user.save()
-                .then(user => {
-                    return sendEmail(user, "Please Verify your Vecino Account",
-                        `http://${host}/verify/${user.resetPasswordToken}`,
-                        ('../public/pages/verifyemail.html'))
-                        .then((result) => {
-                            return { ...{ "message": "Verify Account" }, ... { "email": { result } } };
-                        }).catch((error) => {
-                            throw error;
-                        })
-                });
-            })
-            
-            .catch((error) => {
-                throw error
+        return await selectNeighborhoodOrUserProperty("email", body.email, true)
+            .then((userExist) => {
+                return userExist.service.verifyEmail(body)
+                    .then(user => {
+                        if (!user) {
+                            const err = new Error();
+                            err.status = 404;
+                            err.message = 'The email address ' + body.email + ' is not associated with any account. Double-check your email address and try again.';
+                            throw err;
+                        }
+                        //Generate and set password reset token
+                        user.generatePasswordReset();
+                        // Save the updated user object
+                        return user.save()
+                            .then(user => {
+                                return sendEmail(user, "Please Verify your Vecino Account",
+                                    `http://${host}/verify/${user.resetPasswordToken}`,
+                                    ('../public/pages/verifyemail.html'))
+                                    .then((result) => {
+                                        return { ...{ "message": "Verify Account" }, ... { "email": { result } } };
+                                    }).catch((error) => {
+                                        throw error;
+                                    })
+                            });
+                    })
+
+                    .catch((error) => {
+                        throw error
+                    });
             });
-        });
-        
+
     }
     async verify(token) {
-        const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token,true);
+        const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token, true);
         return await userExist.service.verify(token)
             .then((user) => {
                 if (!user) {
@@ -236,7 +244,7 @@ class AuthService {
                 Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
                     ('../public/pages/changeconfirmation.html'))
                     .then((result) => {
-                        return { ...{ "message": "Your email has been verified" }, ... { "email": { "aceptado por" : result.accepted ,"rechazado por" : result.rejected } } };
+                        return { ...{ "message": "Your email has been verified" }, ... { "email": { "aceptado por": result.accepted, "rechazado por": result.rejected } } };
                     }).catch((error) => {
                         throw error;
                     })
@@ -252,7 +260,7 @@ async function selectNeighborhoodOrUserProperty(propName, value, signUp = false)
     const neighborhoodExist = await _neighborhoodService.getNeighborhoodByProperty(propName, value);
     if (!userExist && !neighborhoodExist) {
         const error = new Error();
-        error.status = 400;
+        error.status = 404;
         error.message = `${propName} does not exist`;
         throw error;
     }
@@ -260,11 +268,11 @@ async function selectNeighborhoodOrUserProperty(propName, value, signUp = false)
     let _service = null;
     let _user = null;
     if (userExist) {
-        _service =_userService;
-        _user= userExist;
+        _service = _userService;
+        _user = userExist;
     } else {
         _service = _neighborhoodService;
-        _user= neighborhoodExist;
+        _user = neighborhoodExist;
     }
     if ((!_user.isVerified) && !signUp) {
         const error = new Error();
@@ -278,7 +286,7 @@ async function selectNeighborhoodOrUserProperty(propName, value, signUp = false)
         error.message = "User disabled";
         throw error;
     }
-    return {"service":_service,"user":_user};
-    
+    return { "service": _service, "user": _user };
+
 }
 module.exports = AuthService;

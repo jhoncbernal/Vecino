@@ -12,7 +12,7 @@ jwt.verify(token,JWT_SECRET,function(err,decodedToken){
     if(err){
         const error= new Error();
         error.message="validate token value";
-        error.status=400;
+        error.status=401;
         throw error;
     }
   

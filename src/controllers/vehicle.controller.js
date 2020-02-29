@@ -81,7 +81,7 @@ async create(req,res){
     const userExist= await _userService.get(userId);
     if (vehicleExist) {
         const error = new Error();
-        error.status = 401;
+        error.status = 409;
         error.message = "vehicle already exist";
         throw error;
     }
@@ -103,6 +103,12 @@ async getUserByVehicleByusername(req,res){
 async getFavoritePosition(req,res){
     const{favoriteposition}=req.params;
     const vehicle= _vehicleService.getFavoritePosition(favoriteposition);
+    return res.send(vehicle);
+}
+async createObservation(req,res){
+    const {body}=req;
+    const{id:userId}=req.user;
+    const vehicle= await _vehicleService.create(body);
     return res.send(vehicle);
 }
 

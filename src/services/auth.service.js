@@ -267,12 +267,12 @@ async function selectNeighborhoodOrUserProperty(propName, value, signUp = false)
 
     let _service = null;
     let _user = null;
-    if (userExist) {
-        _service = _userService;
-        _user = userExist;
-    } else {
+    if (neighborhoodExist) {
         _service = _neighborhoodService;
         _user = neighborhoodExist;
+    } else {
+        _service = _userService;
+        _user = userExist;
     }
     if ((!_user.isVerified) && !signUp) {
         const error = new Error();

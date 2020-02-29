@@ -13,7 +13,7 @@ const Routes = require('../routes');
 
 
 //models
-const {User,Neighborhood,Vehicle,ParkingSpace } = require('../models')
+const {User,Neighborhood,Vehicle,ParkingSpace,Positions } = require('../models')
 //repositories
 const {UserRepository,NeighborhoodRepository,VehicleRepository,ParkingSpaceRepository } = require('../repositories')
 
@@ -50,6 +50,7 @@ container
         Neighborhood: asValue(Neighborhood),
         Vehicle: asValue(Vehicle),
         ParkingSpace: asValue(ParkingSpace),
+        Positions: asValue(Positions),
     }).register({
         UserRepository: asClass(UserRepository).singleton(),
         NeighborhoodRepository: asClass(NeighborhoodRepository).singleton(),

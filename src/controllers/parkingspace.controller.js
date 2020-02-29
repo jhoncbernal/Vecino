@@ -1,9 +1,9 @@
-let _parkingSpaceService, _neighborhoodService, _vehicle = null;
+let _parkingSpaceService, _neighborhoodService, _vehicleService = null;
 class ParkingSpaceController {
     constructor({ ParkingSpaceService, NeighborhoodService, VehicleService }) {
         _parkingSpaceService = ParkingSpaceService;
         _neighborhoodService = NeighborhoodService;
-        _vehicle = VehicleService
+        _vehicleService = VehicleService
     }
     async get(req, res) {
         const { parkingspaceId } = req.params;
@@ -95,11 +95,29 @@ class ParkingSpaceController {
 
         const { parkingspaceId, positionnumber } = req.params;
         const { body } = req;
-        const vehicleExist = await _vehicle.getUserByVehicleByPlate(body.plate);
+        const vehicleExist = await _vehicleService.getUserByVehicleByPlate(body.plate)
         if (vehicleExist) {
+            const posVehicle = await _parkingSpaceService.getAll("positions.vehicle",vehicleExist._id)
+
+        if (posVehicle.length!=0) {
+            const err = new Error();
+            err.status = 500;
+            err.message = `the plate ${body.plate} is already asigned to some position`;
+            throw err;                
+        }
+        
             body.vehicle = vehicleExist._id;
         }
-        const parkingSpace = await _parkingSpaceService.updateParkingPositionByPosnumber(parkingspaceId, positionnumber, body);
+        const parkingSpace = await _parkingSpaceService.updateParkingPositionByPosnumber(parkingspaceId, positionnumber, body)
+        .then((vehicleExist) => {
+            if (vehicleExist == null) {
+                const err = new Error();
+                err.status = 404;
+                err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parkingspaceId} not found!`;
+                throw err;                }
+
+            return res.status(200).send(vehicleExist);
+        });
         return res.send(parkingSpace);
     }
     async deleteParkingPositionByPosnumber(req, res) {
@@ -121,26 +139,12 @@ class ParkingSpaceController {
         }
     }
     async createParkingPositions(req, res) {
+        try{
         const { body } = req;
         const { parkingspaceId } = req.params;
-        const positionExist = await _parkingSpaceService.getParkingPositionByPosNumber(parkingspaceId, body.posnumber);
-        if (positionExist) {
-            const error = new Error();
-            error.status = 409;
-            error.message = "position already exist";
-            throw error;
-        }
-        const parkingSpace = await _parkingSpaceService.createParkingPositions(parkingspaceId, body).then((parkingSpace) => {
-            if (parkingSpace == null) {
-                const err = new Error();
-                err.status = 404;
-                err.message = `parkingspaceId: ${parkingspaceId} not found!`;
-                throw err;
-            }
-
-            return res.status(201).send(parkingSpace);
-        });
+        const parkingSpace = await _parkingSpaceService.createParkingPositions(parkingspaceId, body)
         return res.send(parkingSpace);
+    }catch(err){return res.send(err);}
     }
 }
 

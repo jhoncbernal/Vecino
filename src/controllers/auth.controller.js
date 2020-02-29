@@ -49,6 +49,22 @@ class AuthController {
         const resetPasswordUser = await _authService.resetPassword(token,body)
         return res.status(200).send(resetPasswordUser);
     }
-    
+    async verifyEmail(req, res) {
+        try {
+            const { body } = req;
+            const { baseUrl } = req;
+            const host = req.headers.host+baseUrl;
+            await _authService.verifyEmail(body, host).then((successMessage) => {
+                    return res.status(200).send(successMessage);
+              }).catch((error)=>{throw error});     
+        } catch (e) {
+            return res.status(500).send(e.message);
+        }
+    }
+    async verify(req, res) {
+        const { token } = req.params;
+        const resetUser = await _authService.verify(token)
+        return res.status(200).send(resetUser);
+    }
 }
 module.exports = AuthController;

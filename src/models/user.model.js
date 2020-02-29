@@ -4,25 +4,26 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
 
 const UserSchema = new Schema({    
-    username:           { type: String,  required: true  , lowercase:true },
+    username:           { type: String,  required: true  , lowercase:true, unique: true, trim: true},
     password:           { type: String,  required: [true , 'What is your password?'] },
-    email:              { type: String,  required: [true , 'What is your email?'], lowercase:true },
-    enabled:            { type: Boolean, required: true },
+    email:              { type: String,  required: [true , 'What is your email?'], lowercase:true, unique: true, trim: true},
+    enabled:            { type: Boolean, required: true  , default:0 },
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
     lastName:           { type: String,  required: true },
-    HomeNumber:         { type: Number},
-    BlockNumber:        { type: Number},
+    HomeNumber:         { type: Number  },
+    BlockNumber:        { type: Number  },
     phone:              { type: String,  required: [true , 'What is your contact number?'] },
     neighborhoodcode:   { type: String,  required: [true , 'What is your neighborhoodcode?'] },
     points:             { type: Number,  required: true  , trim: true, default:0 },
     resetPasswordToken: { type: String,  required: false},
     resetPasswordExpires:{type: Date,    required: false},
+    isVerified:         { type: Boolean, default:0 },
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
         required:true,
-        autopopulate:{ select: ['neighborhoodname','address' ]}
+        autopopulate:{ select: ['username','address' ]}
     },
 }, {timestamps: true});
 UserSchema.path('email').validate(function (email) {

@@ -9,20 +9,29 @@ class UserService extends BaseService {
     async getUserByUsername(username){
         return await _userRepository.getUserByUsername(username);
     }
-    async getUsersByPoints(pageSize,pageNum){
-        return await _userRepository.getUsersByPoints(pageSize,pageNum);
+    async getUserByProperty(propName,value){
+        return await _userRepository.getUserByProperty(propName,value);
     }
     async getUsersByPoints(pageSize,pageNum){
         return await _userRepository.getUsersByPoints(pageSize,pageNum);
     }
-    async recover(body,host){
-        return await _userRepository.recover(body,host);
+    async getUsersByPoints(pageSize,pageNum){
+        return await _userRepository.getUsersByPoints(pageSize,pageNum);
+    }
+    async recover(body){
+        return await _userRepository.recover(body);
     }
     async reset(token){
         return await _userRepository.reset(token);
     }
-    async resetPassword(token,body){
-        return await _userRepository.resetPassword(token,body);
+    async resetPassword(token){
+        return await _userRepository.resetPassword(token);
+    }
+    async verifyEmail(token){
+        return await _userRepository.verifyEmail(token);
+    }
+    async verify(token){
+        return await _userRepository.verify(token);
     }
 }
 module.exports = UserService;

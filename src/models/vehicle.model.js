@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const VehicleSchema = new Schema({    
     vehicletype:        { type: String,  required: true },
     username:           { type: String},
-    plate:              { type: String,  required: true },
+    plate:              { type: String,  required: true, unique: true },
     favoriteposition:   { type: String },
     enabled:            { type: Boolean, required: true },
     parkingplan:        { type: String, required: true },
@@ -19,7 +19,7 @@ const VehicleSchema = new Schema({
             'email',
             'HomeNumber',
             'BlockNumber',
-            'neighborhood neighborhoodname' ]}
+            'neighborhood username' ]}
     }
 }, {timestamps: true});
 

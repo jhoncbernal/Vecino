@@ -1,18 +1,23 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
+const crypto = require('crypto');
 
 const NeighborhoodSchema = new Schema({    
-    neighborhoodname:   { type: String,  required: true  , lowercase:true },
-    password:           { type: String,  required: [true, 'What is your password?'] },
-    email:              { type: String,  required: [true, 'What is your email?'] },
-    enabled:            { type: Boolean, required: true },
+    username:   { type: String,  required: true  , lowercase:true, unique: true},
+    password:           { type: String,  required: [true, 'What is your password?'], lowercase:true, unique: true, trim: true },
+    email:              { type: String,  required: [true, 'What is your email?'], lowercase:true, unique: true, trim: true },
+    enabled:            { type: Boolean, required: true, default:0 },
     roles:              [{type: String,  required: true  , lowercase:false }],
+    firstName:          { type: String,  required: true },
     phone:              { type: String,  required: [true, 'What is your contact number?'] },
     address:            { type: String,  required: true },
-    neighborhoodcode:   { type: String,  required: [true, 'What is your neighborhoodcode?'] },
+    neighborhoodcode:   { type: String,  required: [true, 'What is your neighborhoodcode?'], unique: true},
     totalNumberOfUsers: { type: Number,  required: true },
     registeredUsers:    { type: String,  max:this.totalNumberOfUsers},
+    resetPasswordToken: { type: String,  required: false},
+    resetPasswordExpires:{type: Date,    required: false},
+    isVerified:         { type: Boolean, default:0 },
 }, {timestamps: true});
 NeighborhoodSchema.path('email').validate(function (email) {
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -38,5 +43,24 @@ NeighborhoodSchema.pre('save', async function (next) {
     const hashedPassword = hashSync(neighborhood.password, salt);
     neighborhood.password = hashedPassword;
     next();
-})
+});
+NeighborhoodSchema.methods.generateJWT = function() {
+    const today = new Date();
+    const expirationDate = new Date(today);
+    expirationDate.setDate(today.getDate() + 365);
+
+    let payload = {
+        id: this._id,
+        email: this.email,
+        username: this.username,
+        firstName: this.firstName,
+    };
+    return jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: parseInt(expirationDate.getTime() / 1000, 10)
+    });
+};
+NeighborhoodSchema.methods.generatePasswordReset = function() {
+    this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+    this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+};
 module.exports = mongoose.model('neighborhood', NeighborhoodSchema);

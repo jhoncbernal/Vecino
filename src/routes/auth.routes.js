@@ -11,5 +11,8 @@ router.post('/signinneighborhood',AuthController.signInNeighborhood);
 router.post('/recover',AuthController.recover);
 router.get('/reset/:token',AuthController.reset);
 router.post('/reset/:token',AuthController.resetPassword);
+
+router.post('/verify',AuthController.verifyEmail);
+router.get('/verify/:token',AuthController.verify);
 return router;
 }

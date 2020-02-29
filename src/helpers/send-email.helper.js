@@ -14,13 +14,13 @@ async function readHTMLFile(path, callback) {
         }
     });
 }
-async function sendEmail(user, subject, text, htmlpath, mailtrap = false) {
+async function sendEmail(user, subject, text, htmlpath, mailtrap = true) {
     try {
         htmlToSend = await new Promise((resolve, reject) => {
             readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
                 var template = handlebars.compile(html);
                 var replacements = {
-                    username: user.firstName + ' ' + user.lastName,
+                    username: user.firstName,
                     link: text
                 };
                 if (err) {

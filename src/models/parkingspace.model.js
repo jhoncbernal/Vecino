@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ParkingSpaceSchema = new Schema({    
-    parkingname:        {  type: String,  required: true },
+    parkingname:        {  type: String,  required: true,   unique: true },
     enabled:            {  type: Boolean, required: true },
     address:            {  type: String},
     totalspace:         {  type: Number,  required: true },
@@ -11,7 +11,7 @@ const ParkingSpaceSchema = new Schema({
         value:  {type: String,  required: true }
     }],
     positions:[{
-        posnumber:  {type: String,  required: true },
+        posnumber:  {type: String,  required: true,unique: true },
         available:  {type: String,  required: true },
         vehicletype:{type: String,  required: true },
         vehicle:{
@@ -28,7 +28,7 @@ const ParkingSpaceSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
         required:true,
-        autopopulate:{ select: ['neighborhoodname','address','phone' ]}
+        autopopulate:{ select: ['username','address','phone' ]}
     }
 }, {timestamps: true});
 

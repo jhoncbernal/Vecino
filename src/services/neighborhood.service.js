@@ -8,8 +8,26 @@ class NeighborhoodService extends BaseService {
     async getNeighborhoodByNeighborhoodcode(neighborhoodcode){
         return await _neighborhoodRepository.getNeighborhoodByNeighborhoodcode(neighborhoodcode);
     }
-    async getNeighborhoodByNeighborhoodname(neighborhoodname){
-        return await _neighborhoodRepository.getNeighborhoodByNeighborhoodname(neighborhoodname);
+    async getNeighborhoodByUsername(username){
+        return await _neighborhoodRepository.getNeighborhoodByUsername(username);
+    }
+    async getNeighborhoodByProperty(propName,value){
+        return await _neighborhoodRepository.getNeighborhoodByProperty(propName,value);
+    }
+    async recover(body){
+        return await _neighborhoodRepository.recover(body);
+    }
+    async reset(token){
+        return await _neighborhoodRepository.reset(token);
+    }
+    async resetPassword(token){
+        return await _neighborhoodRepository.resetPassword(token);
+    }
+    async verifyEmail(token){
+        return await _neighborhoodRepository.verifyEmail(token);
+    }
+    async verify(token){
+        return await _neighborhoodRepository.verify(token);
     }
 }
 module.exports = NeighborhoodService;

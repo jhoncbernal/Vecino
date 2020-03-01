@@ -1,6 +1,5 @@
 let _authService = null
 
-
 class AuthController {
     constructor({ AuthService }) {
         _authService = AuthService;

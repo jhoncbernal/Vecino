@@ -4,6 +4,8 @@ const helmet=require('helmet');
 const compression =require('compression');
 require('express-async-errors');
 const {ErrorMiddleware, NotFoundMiddleware}=require("../middlewares");
+//fileupload
+var fileUpload = require('express-fileupload');
 
 module.exports=function({
     UserRoutes,
@@ -11,7 +13,8 @@ module.exports=function({
     NeighborhoodRoutes,
     VehicleRoutes,
     ParkingSpaceRoutes,
-    PositionsRoutes
+    PositionsRoutes,
+    FileRoutes
 }){
     const router= express.Router();
     const apiRoutes=express.Router();
@@ -21,7 +24,8 @@ module.exports=function({
     .use(express.urlencoded({ extended: true }))
     .use(cors())
     .use(helmet())
-    .use(compression());
+    .use(compression())
+    .use(fileUpload());
 
 
     apiRoutes.use('/user',UserRoutes);
@@ -30,6 +34,8 @@ module.exports=function({
     apiRoutes.use('/vehicle',VehicleRoutes);
     apiRoutes.use('/parkingspace',ParkingSpaceRoutes);
     apiRoutes.use('/parkingspace/positions',PositionsRoutes);
+    apiRoutes.use('/file',FileRoutes);
+    
 
 
     router.use('/v1/api',apiRoutes);

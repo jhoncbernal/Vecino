@@ -4,6 +4,7 @@ module.exports={
     AuthService:require('./auth.service'),
     NeighborhoodService:require('./neighborhood.service'),
     VehicleService:require('./vehicle.service'),
-    ParkingSpaceService:require('./parkingspace.service')
+    ParkingSpaceService:require('./parkingspace.service'),
+    FileService:require('./file.service'),
 
 }

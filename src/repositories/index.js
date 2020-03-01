@@ -3,4 +3,5 @@ module.exports={
     NeighborhoodRepository:require('./neighborhood.repository'),
     VehicleRepository:require('./vehicle.repository'),
     ParkingSpaceRepository:require('./parkingspace.repository'),
+    FileRepository:require('./file.repository'),
 }

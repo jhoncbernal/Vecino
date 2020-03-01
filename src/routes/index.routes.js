@@ -4,5 +4,6 @@ module.exports={
     NeighborhoodRoutes:require('./neighborhood.routes'),
     VehicleRoutes:require('./vehicle.routes'),
     ParkingSpaceRoutes:require('./parkingspace.routes'),
-    PositionsRoutes:require('./positions.routes')
+    PositionsRoutes:require('./positions.routes'),
+    FileRoutes:require('./file.routes')
 }

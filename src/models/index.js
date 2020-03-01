@@ -6,4 +6,5 @@ module.exports={
     Positions:      require('./parkingspace.model').Positions,
     Prices:         require('./parkingspace.model').Prices,
     Schedule:       require('./parkingspace.model').Schedule,
+    File:           require('./file.model'),
 }

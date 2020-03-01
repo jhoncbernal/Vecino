@@ -9,9 +9,8 @@ try{
         if (!req.files) {
             return res.status(400).send('No files were uploaded.');
         }
-        var portfolioFile = req.files.file;
-        const file = await _fileService.uploadFileCSV(portfolioFile);
-        return res.send(file);
+        const result = await _fileService.uploadFileCSV(req.files.file.data);
+        return res.status(200).send(result);
     
 }catch(err){ return res.send(err);}
 }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 let PositionsSchema = new Schema({
-    posnumber:      { type: String,  required: true },
+    posnumber:      { type: String,  required: true ,index:true},
     available:      { type: String,  required: true },
     vehicletype:    { type: String,  required: [true , 'What kind of vehicle? ["Car", "Bike", "Motorcycle"]'] , enum: ['Car', 'Bike', 'Motorcycle']},
     vehicle:{

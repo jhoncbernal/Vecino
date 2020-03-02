@@ -4,9 +4,9 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
 
 const UserSchema = new Schema({    
-    username:           { type: String,  required: true  , lowercase:true, unique: true, trim: true},
+    username:           { type: String,  required: true  , lowercase:true, unique: true, trim: true,index:true},
     password:           { type: String,  required: [true , 'What is your password?'] },
-    email:              { type: String,  required: [true , 'What is your email?'], lowercase:true, unique: true, trim: true},
+    email:              { type: String,  required: [true , 'What is your email?'], lowercase:true, unique: true, trim: true,index:true},
     enabled:            { type: Boolean, required: true  , default:0 },
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
@@ -20,7 +20,9 @@ const UserSchema = new Schema({
     resetPasswordExpires:{type: Date,    required: false},
     isVerified:         { type: Boolean, default:0 },
     isOwner:            { type: Boolean, default:0 },
-    code:               {type:String},
+    code:               { type:String} ,
+    debt:               { type:String  , default:null} ,
+    payOnTime:          { type: Boolean, default:false},
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
@@ -42,7 +44,7 @@ UserSchema.methods.comparePasswords = function (password) {
     return compareSync(password, this.password);
 }
 UserSchema.pre('save', function(next) {
-    this.code = this.blockNumber+this.homeNumber;
+    this.code = this.blockNumber.toString()+this.homeNumber.toString();
     next();
 });
 UserSchema.pre('save', async function (next) {

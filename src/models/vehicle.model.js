@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const VehicleSchema = new Schema({    
     vehicletype:        { type: String,  required: [true , 'What kind of vehicle? ["Car", "Bike", "Motorcycle"]'] , enum: ['Car', 'Bike', 'Motorcycle']},
     username:           { type: String},
-    plate:              { type: String,  required: true, unique: true,uppercase: true},
+    plate:              { type: String,  required: true, unique: true,uppercase: true,index:true},
     favoriteposition:   { type: String },
     brand:              { type: String, required: true,lowercase: true },
     color:              { type: String, required: true,uppercase: true },

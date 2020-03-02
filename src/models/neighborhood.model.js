@@ -4,15 +4,15 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
 
 const NeighborhoodSchema = new Schema({    
-    username:           { type: String,  required: [true, 'What is your username?']  , lowercase:true, unique: true, trim: true },
+    username:           { type: String,  required: [true, 'What is your username?']  , lowercase:true, unique: true, trim: true ,index:true},
     password:           { type: String,  required: [true, 'What is your password?']},
-    email:              { type: String,  required: [true, 'What is your email?'], lowercase:true, unique: true, trim: true },
+    email:              { type: String,  required: [true, 'What is your email?'], lowercase:true, unique: true, trim: true ,index:true},
     enabled:            { type: Boolean, required: true, default:0 },
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
     phone:              { type: String,  required: [true, 'What is your contact number?'] },
     address:            { type: String,  required: true },
-    neighborhoodcode:   { type: String,  required: [true, 'What is your neighborhoodcode?'], unique: true},
+    neighborhoodcode:   { type: String,  required: [true, 'What is your neighborhoodcode?'], unique: true,index:true},
     totalNumberOfUsers: { type: Number,  required: true },
     registeredUsers:    { type: String,  max:this.totalNumberOfUsers},
     resetPasswordToken: { type: String,  required: false},

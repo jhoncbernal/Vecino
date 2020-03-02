@@ -11,8 +11,8 @@ const UserSchema = new Schema({
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
     lastName:           { type: String,  required: true },
-    homeNumber:         { type: Number  },
-    blockNumber:        { type: Number  },
+    homeNumber:         { type: Number,  required: true  },
+    blockNumber:        { type: Number,  required: true  },
     phone:              { type: String,  required: [true , 'What is your contact number?'] },
     neighborhoodcode:   { type: String,  required: [true , 'What is your neighborhoodcode?'] },
     points:             { type: Number,  required: true  , trim: true, default:0 },
@@ -20,6 +20,7 @@ const UserSchema = new Schema({
     resetPasswordExpires:{type: Date,    required: false},
     isVerified:         { type: Boolean, default:0 },
     isOwner:            { type: Boolean, default:0 },
+    code:               {type:String},
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
@@ -40,7 +41,10 @@ UserSchema.methods.toJSON = function () {
 UserSchema.methods.comparePasswords = function (password) {
     return compareSync(password, this.password);
 }
-
+UserSchema.pre('save', function(next) {
+    this.code = this.blockNumber+this.homeNumber;
+    next();
+});
 UserSchema.pre('save', async function (next) {
     const user = this;
     if (!user.isModified("password")) {

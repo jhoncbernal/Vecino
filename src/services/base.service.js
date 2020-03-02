@@ -18,8 +18,8 @@ async get(id){
     }
     return currentEntity;
 }
-async getAll(propName, value,pageSize,pageNum){
-    return await this.repository.getAll(propName, value,pageSize,pageNum);
+async getAll(propName, value,pageSize,pageNum,orderBy){
+    return await this.repository.getAll(propName, value,pageSize,pageNum,orderBy);
 }
 async create(entity){
     return await this.repository.create(entity);

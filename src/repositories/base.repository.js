@@ -5,10 +5,11 @@ class BaseRepository {
     async get(id) {
         return await this.model.findById(id);
     }
-    async getAll(propName, value,pageSize=5,pageNum=1,) {
+    async getAll(propName, value,pageSize=5,pageNum=1,orderBy="_id") {
         const skips=pageSize*(pageNum-1);
         return await this.model
-        .find({[propName]: value })        
+        .find({[propName]: value })
+        .sort(-orderBy)      
         .skip(skips)
         .limit(pageSize);
     }

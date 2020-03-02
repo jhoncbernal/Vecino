@@ -36,8 +36,15 @@ async updatePoints(req,res){
 async getUsersByPoints(req,res){
     const{id:userId}=req.user;
     const {pageSize,pageNum}=req.query;
-    const neighborhood = await _neighborhoodService.get(userId);
-    const users = await _userService.getUsersByPoints('neighborhoodcode',neighborhood.neighborhoodcode,pageSize,pageNum);
+    const neighborhood = await _neighborhoodService.get(userId).catch((err)=>{
+        return res.status(500).send(err);
+    });;
+     await _userService.getUsersByPoints('neighborhoodcode',neighborhood.neighborhoodcode).catch((err)=>{
+        return res.status(500).send(err);
+    });
+    const users = await _userService.getAll('neighborhoodcode',neighborhood.neighborhoodcode,pageSize,pageNum,"payOnTime").catch((err)=>{
+        return res.status(500).send(err);
+    });;
     return res.send(users);
 }
 }

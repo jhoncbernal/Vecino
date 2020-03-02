@@ -6,6 +6,7 @@ module.exports=function({NeighborhoodController}){
     router.get('/:neighborhoodId',AuthMiddlewareAdmin,NeighborhoodController.get);
     router.get('',[AuthMiddlewareOwner,ParseIntMiddleware,CacheMiddleware(CACHE_TIME.ONE_HOUR)],NeighborhoodController.getAll);
     router.patch('/:neighborhoodId',AuthMiddlewareAdmin,NeighborhoodController.update);
-    router.delete('/:neighborhoodId',AuthMiddlewareOwner,NeighborhoodController.delete)
+    router.delete('/:neighborhoodId',AuthMiddlewareOwner,NeighborhoodController.delete);
+    router.post('/',AuthMiddlewareOwner,NeighborhoodController.create)
     return router;
 };

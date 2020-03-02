@@ -31,6 +31,11 @@ async delete(req,res){
     const deleteNeighborhood= await _neighborhoodService.delete(neighborhoodId);
     return res.send(deleteNeighborhood);
 }
+async create(req,res){
+    const{body}=req;
+    const createdNeighborhood = await _neighborhoodService.create(body);
+    return res.send(createdNeighborhood);
+}
 
 }
 module.exports=NeighborhoodController

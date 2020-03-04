@@ -1,12 +1,12 @@
 module.exports = {
-    user: {
+	user: {
 		"_id": "5e4d80d38f71b670471d30d6",
 		"code": "1101",
 		"isOwner": true,
 		"blockNumber": 1,
 		"homeNumber": 101,
 		"roles": ["ROLE_USER_ACCESS", "ROLE_OWNER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "jhoncbernal",
 		"password": "$2a$10$ysVFpQXOyWTjJxU8wear7eSjfLb.Fb5rbtxM5XayUsmtQGtb1k4O.",
 		"email": "jhonc8bernal@gmail.com",
@@ -16,18 +16,20 @@ module.exports = {
 		"lastName": "Casallas Bernal",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "257380"
 	},
-    users:[{
+	users: [{
 		"_id": "5e4d80d38f71b670471d30d6",
 		"code": "1101",
 		"isOwner": true,
 		"blockNumber": 1,
 		"homeNumber": 101,
 		"roles": ["ROLE_USER_ACCESS", "ROLE_OWNER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "jhoncbernal",
 		"password": "$2a$10$ysVFpQXOyWTjJxU8wear7eSjfLb.Fb5rbtxM5XayUsmtQGtb1k4O.",
 		"email": "jhonc8bernal@gmail.com",
@@ -37,8 +39,10 @@ module.exports = {
 		"lastName": "Casallas Bernal",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "257380"
 	},
 	{
@@ -48,7 +52,7 @@ module.exports = {
 		"blockNumber": 1,
 		"homeNumber": 203,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "pabloperez",
 		"password": "$2a$10$edcy82Fwcl4p7EVw1dXj6.8q4HhRt.ByFXLFtdBUah.4Xpw/grZ7i",
 		"email": "pabloperez@gmail.com",
@@ -58,8 +62,10 @@ module.exports = {
 		"lastName": "perez Suarez",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": true,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": true,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "0"
 	},
 	{
@@ -69,7 +75,7 @@ module.exports = {
 		"blockNumber": 2,
 		"homeNumber": 309,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "josedav",
 		"password": "$2a$10$n1aOSkiiI7Ux9P0o.CbjwOg2ZnPcsxTFVn/OlDhi10pi.a9Kkq0zu",
 		"email": "pedropablo@gmail.com",
@@ -79,8 +85,10 @@ module.exports = {
 		"lastName": "Alvarez",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "80150"
 	},
 	{
@@ -90,7 +98,7 @@ module.exports = {
 		"blockNumber": 1,
 		"homeNumber": 408,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "pedropablo",
 		"password": "$2a$10$SkAZxtimcKK7b4qIAm3m6.WV488/ZxxBseY3vBuCcaHrt.oUmkGaK",
 		"email": "jhoncbernal@gmail.com",
@@ -100,8 +108,10 @@ module.exports = {
 		"lastName": "pablo",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "169700"
 	},
 	{
@@ -111,7 +121,7 @@ module.exports = {
 		"blockNumber": 3,
 		"homeNumber": 517,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "josedav96",
 		"password": "$2a$10$kbJQO3cISq1sUvAyLqcVC.AgPaF4V/y/XAxtAs7URhYrrwyugIkkC",
 		"email": "asd@asds.com",
@@ -121,8 +131,10 @@ module.exports = {
 		"lastName": "Alvarez",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "89800"
 	},
 	{
@@ -132,7 +144,7 @@ module.exports = {
 		"blockNumber": 3,
 		"homeNumber": 619,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "josetest",
 		"password": "$2a$10$tG6kRSbEuKPsXPEzPE9SbukTMUSwEvIHSc/2wdg8tHzV8PI8j5Ici",
 		"email": "asd@sasd.com",
@@ -142,8 +154,10 @@ module.exports = {
 		"lastName": "Alvarez",
 		"enabled": true,
 		"isVerified": false,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "93160"
 	},
 	{
@@ -153,7 +167,7 @@ module.exports = {
 		"blockNumber": 4,
 		"homeNumber": 726,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "testing",
 		"password": "$2a$10$XuPcr6XiIC8WoUwHUpljO.7PtYrHbBE1I8/WYc8UDbLQ8uucDz6rq",
 		"email": "assd@asd.com",
@@ -163,8 +177,10 @@ module.exports = {
 		"lastName": "Alvarez",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "241760"
 	},
 	{
@@ -174,7 +190,7 @@ module.exports = {
 		"blockNumber": 4,
 		"homeNumber": 825,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "juancamilo",
 		"password": "$2a$10$W7ZsX.1yHav8IJ6P86LnjO4kfFJJQAzhq0NmthWRwTFE9wJh95yye",
 		"email": "juancamilo@gmail.com",
@@ -184,8 +200,10 @@ module.exports = {
 		"lastName": "Castillo",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e5859596143ff025b8bed2b",
-        "payOnTime": true,
+		"neighborhood": "5e5859596143ff025b8bed2b",
+		"payOnTime": true,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "0"
 	},
 	{
@@ -195,7 +213,7 @@ module.exports = {
 		"blockNumber": 5,
 		"homeNumber": 933,
 		"roles": ["ROLE_OWNER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "sadmin",
 		"password": "$2a$10$Gr3uWKKTFyBDu7oJ5AgDneaIThv2gts7NrXvYYJo6knGWeE8vhhCW",
 		"email": "sadmin@gmail.com",
@@ -205,8 +223,10 @@ module.exports = {
 		"lastName": "admin",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e4c4f63a4294b2e2b16106d",
-        "payOnTime": false,
+		"neighborhood": "5e4c4f63a4294b2e2b16106d",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "1700"
 	},
 	{
@@ -216,7 +236,7 @@ module.exports = {
 		"blockNumber": 10,
 		"homeNumber": 173,
 		"roles": ["ROLE_USER_ACCESS"],
-		"points":  0,
+		"points": 0,
 		"username": "jorgeptn",
 		"password": "$2a$10$1W2vs0RVjEqbqmgDrVJh3us7r/OHPpLYt6XxBSTNYg7LDNousyWqi",
 		"email": "jorgeptn@gmail.com",
@@ -226,9 +246,11 @@ module.exports = {
 		"lastName": "Patiño",
 		"enabled": true,
 		"isVerified": true,
-        "neighborhood": "5e5859596143ff025b8bed2b",
-        "payOnTime": false,
+		"neighborhood": "5e5859596143ff025b8bed2b",
+		"payOnTime": false,
+		"count": 9,
+		"averagePoints": 5,
 		"debt": "84000"
 	}
-]
+	]
 };

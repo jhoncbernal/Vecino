@@ -24,9 +24,21 @@ class AuthService {
     async signUp(userBody) {
         const { neighborhoodcode } = userBody;
         userBody.enabled = false;
-        const userExist = await selectNeighborhoodOrUserProperty("neighborhoodcode", neighborhoodcode, true).catch(err => { throw err });
-        if (userBody.roles.includes("ROLE_USER_ACCESS")) {
-            return _userService.create({ ...userBody, neighborhood: userExist.user._id })
+        let userExist;
+        if ((userBody.roles.includes("ROLE_OWNER_ACCESS"))) {
+            if (!userBody.secretKey) {
+                const error = new Error();
+                error.status = 400;
+                error.message = "For owner role secretKey must be sent";
+                throw error;
+            }
+            if (userBody.secretKey != SECRET_OWNER) {
+                const error = new Error();
+                error.status = 400;
+                error.message = "Invalid secretKey";
+                throw error;
+            }
+            return _userService.create({ ...userBody})
                 .catch((error) => {
                     if (error.message.includes("duplicate key")) {
                         const error = new Error();
@@ -36,16 +48,30 @@ class AuthService {
                     }
                     if (error) throw error;
                 });
-        }
-        if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") && !userExist.user.isVerified) {
-            return _neighborhoodService.update(userExist.user._id, userBody)
-                .then((user) => { return user.save(); }
-                );
         } else {
-            const error = new Error();
-            error.status = 400;
-            error.message = "User alredy exist";
-            throw error;
+            userExist = await selectNeighborhoodOrUserProperty("neighborhoodcode", neighborhoodcode, true).catch(err => { throw err });
+            if (userBody.roles.includes("ROLE_USER_ACCESS")) {
+                return _userService.create({ ...userBody, neighborhood: userExist.user._id })
+                    .catch((error) => {
+                        if (error.message.includes("duplicate key")) {
+                            const error = new Error();
+                            error.status = 500;
+                            error.message = "username or email alredy exists";
+                            throw error;
+                        }
+                        if (error) throw error;
+                    });
+            }
+            if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") && !userExist.user.isVerified) {
+                return _neighborhoodService.update(userExist.user._id, userBody)
+                    .then((user) => { return user.save(); }
+                    );
+            } else {
+                const error = new Error();
+                error.status = 400;
+                error.message = "User alredy exist";
+                throw error;
+            }
         }
 
     }
@@ -54,10 +80,10 @@ class AuthService {
         let propName, value = null;
         if (username) {
             propName = "username",
-            value = username
+                value = username
         } else {
             propName = "email",
-            value = email
+                value = email
         }
         return await selectNeighborhoodOrUserProperty(propName, value)
             .then((userExist) => {

@@ -12,33 +12,55 @@
   <title>Upload</title>
 </head>
 
+
 <body>
- <div class="card" style="width: 18rem; margin: 0 auto;float: none;margin-bottom: 10px;margin-top: 10px;">
+  <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Vecino</a>
+      </div>
+
+        <div class="my-2 my-lg-0">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="">Sign Out</button>
+        </div>
+  </nav>
+ <div class="card" style="width: 20rem; margin: 0 auto;float: none;margin-bottom: 10px;margin-top: 10px;">
     <div class="card-body">
-      <h5 class="card-title">Upload File CSV</h5>
+      <h5 class="card-title">Subir documento Excel</h5>
       <h6 class="card-subtitle mb-2 text-muted">
-        <p>Use the form below to upload a list of portafolio.
+        <p>para actualizar cartera.
         </p>
       </h6>
       <div class="custom-file">
         <form class="was-validated" action="/v1/api/file" method="POST" encType="multipart/form-data">
           <input type="file" class="custom-file-input" id="validatedCustomFile" name="file"
-            accept="*.csv" /><br /><br />
-          <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-          <input class="btn" type="submit" value="Upload" style="background-color: #039BE5;color: white;" />
+            accept="*.xlsx" /><br /><br />
+          <label class="custom-file-label" for="validatedCustomFile">Seleccione el archivo...</label>
+          <input class="btn" type="submit" value="Upload" disabled style="background-color: #039BE5;color: white;" />
         </form>
       </div>
     </div>
     <div class="card-footer text-muted">
-      Click <a class="card-link" href="/v1/api/file/template">here</a> for an example template.
+      De clic <a class="card-link" href="/v1/api/file/template">aqui</a> para ver un ejemplo en formato csv.
     </div>
   </div>
 
+
+ <script type="application/javascript">
+  $('input[type="status"]').change(function (e) {
+    alert( $('input[type="status"]').text());
+    
+  });
+</script>
   <script type="application/javascript">
     $('input[type="file"]').change(function (e) {
-      var fileName = e.target.files[0].name;
+      var fileName = e.target.files[0].name
+      if(fileName.includes(".xlsx")){
       $('.custom-file-label').html(fileName);
+      $('input[type="submit"]').removeAttr('disabled');
+      }
     });
+    $("form").submit(function(){
+  alert("Enviado");
+});
   </script>
 
 </body>

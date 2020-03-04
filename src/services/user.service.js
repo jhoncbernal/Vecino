@@ -12,11 +12,11 @@ class UserService extends BaseService {
     async getUserByProperty(propName,value){
         return await _userRepository.getUserByProperty(propName,value);
     }
-    async getUsersByPoints(pageSize,pageNum){
-        return await _userRepository.getUsersByPoints(pageSize,pageNum);
+    async updateUserPoints(propName,value){
+        return await _userRepository.updateUserPoints(propName,value);
     }
-    async getUsersByPoints(propName, value){
-        return await _userRepository.getUsersByPoints(propName, value);
+    async getUsersByPoints(propName, value,pageSize,pageNum){
+        return await _userRepository.getUsersByPoints(propName, value,pageSize,pageNum);
     }
     async recover(body){
         return await _userRepository.recover(body);

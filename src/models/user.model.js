@@ -15,7 +15,7 @@ const UserSchema = new Schema({
     blockNumber:        { type: Number,  required: true  },
     phone:              { type: String,  required: [true , 'What is your contact number?'] },
     neighborhoodcode:   { type: String,  required: [true , 'What is your neighborhoodcode?'] },
-    points:             { type: Number,  required: true  , trim: true, default:0 },
+    points:             { type: Number,  required: true  , trim: true, default:5 },
     resetPasswordToken: { type: String,  required: false},
     resetPasswordExpires:{type: Date,    required: false},
     isVerified:         { type: Boolean, default:0 },
@@ -23,10 +23,11 @@ const UserSchema = new Schema({
     code:               { type:String} ,
     debt:               { type:String  , default:null} ,
     payOnTime:          { type: Boolean, default:false},
+    count:              { type:Number, default:1} ,
+    averagePoints:      { type:Number, default:0} ,
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
-        required:true,
         autopopulate:{ select: ['username','address' ]}
     },
 }, {timestamps: true});

@@ -9,70 +9,103 @@ class UserRepository extends BaseRepository {
     async getUserByUsername(username) {
         return await _user.findOne({ username });
     }
-
-    async getUsersByPoints(propName, value) {
-        let pipeline = [
-           
+    async updateUserPoints(propName,value){
+        await  _user.aggregate([{
+            $lookup:
             {
-                $lookup:
+                from: "portafolios",
+                localField: "code",
+                foreignField: "codigo",
+                as: "bestUsersByPoints_docs"
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                points:
                 {
-                    from: "portafolios",
-                    localField: "code",
-                    foreignField: "codigo",
-                    as: "bestUsersByPoints_docs"
-                }
-            },
-            {
-                $project: {
-                    _id: 1, code: 1, blockNumber: 1, homeNumber: 1, roles: 1, points: 1, username: 1, password: 1, email: 1, phone: 1, firstName: 1, lastName: 1, neighborhoodcode: 1, neighborhood: 1, createdAt: 1, updatedAt: new Date(), isOwner: 1, enabled: 1, isVerified: 1,
-                    payOnTime:
-                    {
-                        $cond: {
-                            if: {
-                                $and: [{
-                                    $eq: [{ $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, "0"]
-                                },
-                                { $eq: [`$${propName}`, `${value}`] }]
+                    $cond: {
+                        if: {
+                            $and: [{
+                                $eq: [{ $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, "0"]
                             },
-                            then: true, else:
-                            {
-                                $cond: {
-                                    if: {
-                                        $eq: [`$${propName}`, `${value}`]
-                                    }, then: false,else:'$payOnTime'
-                                }
+                            { $eq: [`$${propName}`, `${value}`] }]
+                        },
+                        then: { $sum: { $add: ["$points", 5] } }, else: { $sum: { $add: ["$points", -5] } }
+                    }
+                },
+                count: {
+                    $cond: {
+                        if: {
+                            
+                             $eq: [`$${propName}`, `${value}`] 
+                        },
+                        then: { $add: ["$count", 1] }, else: "$count"
+                    }
+                },
+                averagePoints: {
+                    $cond: {
+                        if: {
+                            $and: [{
+                                $eq: [{ $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, "0"]
+                            },
+                            { $eq: [`$${propName}`, `${value}`] }]
+                        },
+                        then: { $divide: ["$points", '$count'] }, else: "$averagePoints"
+                    }
+                },
+                payOnTime:
+                {
+                    $cond: {
+                        if: {
+                            $and: [{
+                                $eq: [{ $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, "0"]
+                            },
+                            { $eq: [`$${propName}`, `${value}`] }]
+                        },
+                        then: true, else:
+                        {
+                            $cond: {
+                                if: {
+                                    $eq: [`$${propName}`, `${value}`]
+                                }, then: false, else: '$payOnTime'
                             }
                         }
-                    }, debt: {
-                        $cond: {
-                            if: {
-                                $and: [{
-                                    $gte: [{ $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, "0"]
-                                },
-                                { $eq: [`$${propName}`, `${value}`] }]
+                    }
+                }, debt: {
+                    $cond: {
+                        if: {
+                            $and: [{
+                                $gte: [{ $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, "0"]
                             },
-                            then: { $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] }, 
-                            else: {
-                                $cond: {
-                                    if: {
-                                        $eq: [`$${propName}`, `${value}`]
-                                    }, then: null,else:'$debt'
-                                }
+                            { $eq: [`$${propName}`, `${value}`] }]
+                        },
+                        then: { $arrayElemAt: ["$bestUsersByPoints_docs.total", 0] },
+                        else: {
+                            $cond: {
+                                if: {
+                                    $eq: [`$${propName}`, `${value}`]
+                                }, then: null, else: '$debt'
                             }
                         }
                     }
                 }
-            },
-            { $out: "users" }
-
-        ]
-
-        return await _user.aggregate(pipeline).then((result) => {
-            return ' users have been successfully uploaded.'
-        }).catch((err) => { throw err })
-
-
-
+            }
+        }]).then(
+            (documents) => {
+               return Promise.all(documents.map(doc => _user.findOneAndUpdate({ "_id": doc._id, [propName]: value }, { "debt": doc.debt, "payOnTime": doc.payOnTime, "averagePoints": doc.averagePoints, "count": doc.count, "points": doc.points })))
+               .then((result)=>{return(result.length+'users were updated')})
+               .catch((err)=>{throw err})
+            }
+        ).catch((err)=>{throw err})
+    }
+    async getUsersByPoints(propName, value, pageSize, pageNum) {
+        const skips = pageSize * (pageNum - 1);
+        return await _user.find({[propName]: value,payOnTime:true})
+        .sort(-"points") 
+        .skip(skips)
+        .limit(pageSize)
+        .catch((err)=>{throw err})
     }
     async getUserByProperty(propName, value) {
         return await _user.findOne({ [propName]: value });

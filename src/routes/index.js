@@ -22,7 +22,7 @@ module.exports=function({
     apiRoutes   
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    .use(cors())
+    .use(cors({origin: true}))
     .use(helmet())
     .use(compression())
     .use(fileUpload());

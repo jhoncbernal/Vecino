@@ -40,14 +40,14 @@ class AuthController {
             delete body.password;
             const updateUser = await _userService.update(result.user._id, body).then((user)=>{
                  //Set the new values
-                 if (!user.isVerified) { user.enabled = true };
+                user.enabled = true;
                  user.isVerified = true;
                  user.resetPasswordToken = undefined;
                  user.resetPasswordExpires = undefined;
                  // Save
                  return user.save()
             });
-            return res.send("Actualizacion de datos exitosa");
+            return res.redirect('https://vecinoo.firebaseapp.com/')//send("Actualizacion de datos exitosa");
         } catch (e) {
             return res.status(500).send(e.message);
         }

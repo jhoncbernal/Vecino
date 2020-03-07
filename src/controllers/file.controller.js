@@ -26,11 +26,11 @@ class FileController {
         } catch (err) { return res.send(err); }
     }
     async get(req, res) {
-        const { id: userId } ={id:"5e5d8865e13634446e9ddc50"};// req.user;
+       /*  const { id: userId } ={id:"5e5d8865e13634446e9ddc50"};// req.user;
         neighborhood = await _neighborhoodService.get(userId).catch((err) => {
             return res.status(500).send(err);
-        });
-        res.sendFile(path.join(__dirname, '/../public/pages/fileupload.html'));
+        }); */
+      return  res.sendFile(path.join(__dirname, '/../public/pages/fileupload.html'));
     }
     async getExampledata(req, res) {
 

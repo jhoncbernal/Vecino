@@ -112,5 +112,16 @@ async createObservation(req,res){
     return res.send(vehicle);
 }
 
+async getVehicleByPlate(req,res){
+    try{
+    const{plate}=req.params;
+    const{id:userId}=req.user;
+    const vehicle= await _vehicleService.getVehicleByPlate(plate,userId);
+    return res.send(vehicle);
+    }
+    catch(e){
+        return res.status(404).send(e);
+    }
+}
 }
 module.exports=VehicleController

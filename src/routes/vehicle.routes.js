@@ -1,5 +1,5 @@
 const {Router}=require("express");
-const {AuthMiddleware,ParseIntMiddleware,CacheMiddleware}=require('../middlewares');
+const {AuthMiddleware,AuthMiddlewareAdmin,ParseIntMiddleware,CacheMiddleware}=require('../middlewares');
 const {CACHE_TIME} = require('../helpers');
 module.exports=function({VehicleController}){
     const router=Router();
@@ -8,6 +8,6 @@ module.exports=function({VehicleController}){
     router.patch('/:vehicleId',AuthMiddleware,VehicleController.update);
     router.delete('/:vehicleId',AuthMiddleware,VehicleController.delete);
     router.post('',AuthMiddleware,VehicleController.create)
-    router.get('/plate',AuthMiddleware,VehicleController.getUserByVehicleByPlate)
+    router.get('/plate/:plate',AuthMiddlewareAdmin,VehicleController.getVehicleByPlate)
     return router;
 };

@@ -15,5 +15,9 @@ class VehicleService extends BaseService {
     async getFavoritePosition(favoriteposition){
         return await _vehicleRepository.getFavoritePosition(favoriteposition);
     }
+    async getVehicleByPlate(plate,userId){
+        return await await _vehicleRepository.getVehicleByPlate(plate,userId);
+    }
+
 }
 module.exports = VehicleService;

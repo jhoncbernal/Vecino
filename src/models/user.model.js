@@ -25,7 +25,7 @@ const UserSchema= new Schema({
     debt:               { type:String  , default:null} ,
     payOnTime:          { type: Boolean, default:false},
     count:              { type:Number,   default:1}  ,
-    averagePoints:      { type:mongoose.Decimal128, default:0.0} ,
+    averagePoints:      { type:Number,   default:0} ,
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",

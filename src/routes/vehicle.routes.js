@@ -8,6 +8,6 @@ module.exports=function({VehicleController}){
     router.patch('/:vehicleId',AuthMiddleware,VehicleController.update);
     router.delete('/:vehicleId',AuthMiddleware,VehicleController.delete);
     router.post('',AuthMiddleware,VehicleController.create)
-
+    router.get('/plate',AuthMiddleware,VehicleController.getUserByVehicleByPlate)
     return router;
 };

@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 var handlebars = require('handlebars');
 var fs = require('fs');
 var path = require('path');
-const { FROM_EMAIL, PSWD_EMAIL } = require('../config');
+const { FROM_EMAIL, PSWD_EMAIL,BLNMAILTRAP } = require('../config');
 
 async function readHTMLFile(path, callback) {
     fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
@@ -33,7 +33,7 @@ async function HTMLReplace(htmlpath,replacements){
         throw error
     }
 }
-async function sendEmail(user, subject, text, htmlpath, mailtrap = true) {
+async function sendEmail(user, subject, text, htmlpath) {
     try {
         htmlToSend = await new Promise((resolve, reject) => {
             readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
@@ -60,7 +60,7 @@ async function sendEmail(user, subject, text, htmlpath, mailtrap = true) {
 
         return await new Promise((resolve, reject) => {
             let transport;
-            if (mailtrap) {
+            if (BLNMAILTRAP!="no") {
                 transport = nodemailer.createTransport({
                     host: "smtp.mailtrap.io",
                     port: 2525,

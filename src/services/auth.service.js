@@ -75,7 +75,7 @@ class AuthService {
         }
 
     }
-    async signIn(user) {
+    async signIn(user,singUp=false) {
         const { username, email, password, secretKey } = user;
         let propName, value = null;
         if (username) {
@@ -85,7 +85,7 @@ class AuthService {
             propName = "email",
                 value = email
         }
-        return await selectNeighborhoodOrUserProperty(propName, value)
+        return await selectNeighborhoodOrUserProperty(propName, value,singUp)
             .then((userExist) => {
                 let validPassword;
                 let token;
@@ -268,13 +268,14 @@ class AuthService {
                         documentId: user.documentId
                     };
                 }else{
-                
+               if (!user.isVerified) { user.enabled = true };
                 //Set the new values
                 user.isVerified = true;
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
+             
                 }
-                if (!user.isVerified) { user.enabled = true };
+                
                 // Save
                return user.save().then((user)=>{
                     return sendEmail(user,

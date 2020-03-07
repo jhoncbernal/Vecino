@@ -36,10 +36,11 @@ class AuthController {
     async signInAndUpdate(req, res) {
         try {
             const { body } = req;            
-            const result= await _authService.signIn(body);
+            const result= await _authService.signIn(body,true);
             delete body.password;
             const updateUser = await _userService.update(result.user._id, body).then((user)=>{
                  //Set the new values
+                 if (!user.isVerified) { user.enabled = true };
                  user.isVerified = true;
                  user.resetPasswordToken = undefined;
                  user.resetPasswordExpires = undefined;

@@ -1,5 +1,6 @@
 module.exports={
     jwtHelper:require('./jwt.helper'),
     CACHE_TIME:require('./cache-time.helper'),
-    sendEmail:require('./send-email.helper')
+    HTMLReplace:require('./send-email.helper').HTMLReplace,
+    sendEmail:require('./send-email.helper').sendEmail,
 }

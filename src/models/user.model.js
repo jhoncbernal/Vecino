@@ -2,25 +2,26 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
-
-const UserSchema = new Schema({    
+const UserSchema= new Schema({
     username:           { type: String,  required: true  , lowercase:true, unique: true, trim: true,index:true},
     password:           { type: String,  required: [true , 'What is your password?'] },
     email:              { type: String,  required: [true , 'What is your email?'], lowercase:true, unique: true, trim: true,index:true},
     enabled:            { type: Boolean, required: true  , default:0 },
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
-    lastName:           { type: String,  required: true },
-    homeNumber:         { type: Number,  required: true  },
-    blockNumber:        { type: Number,  required: true  },
+    lastName:           { type: String },
+    documentId:         { type: Number,  required: [true , 'What is your id number?']   },
     phone:              { type: String,  required: [true , 'What is your contact number?'] },
-    neighborhoodcode:   { type: String,  required: [true , 'What is your neighborhoodcode?'] },
-    points:             { type: Number,  required: true  , trim: true, default:5 },
     resetPasswordToken: { type: String,  required: false},
     resetPasswordExpires:{type: Date,    required: false},
     isVerified:         { type: Boolean, default:0 },
-    isOwner:            { type: Boolean, default:0 },
-    code:               { type:String} ,
+
+    neighborhoodcode:   { type: String,  required: [true , 'What is your neighborhoodcode?'] },
+    code:               { type:String} ,    
+    homeNumber:         { type: Number,  required: true  },
+    blockNumber:        { type: Number,  required: true  },
+    points:             { type: Number,  required: true  , trim: true, default:5 },  
+    isOwner:            { type: Boolean, default:0 },   
     debt:               { type:String  , default:null} ,
     payOnTime:          { type: Boolean, default:false},
     count:              { type:Number, default:1} ,
@@ -30,12 +31,14 @@ const UserSchema = new Schema({
         ref:"neighborhood",
         autopopulate:{ select: ['username','address' ]}
     },
+
 }, {timestamps: true});
+
 UserSchema.path('email').validate(function (email) {
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     return emailRegex.test(email); // Assuming email has a text attribute
  }, 'The e-mail field cannot be empty or with out email structure.')
-UserSchema.methods.toJSON = function () {
+ UserSchema.methods.toJSON = function () {
     let user = this.toObject();
     delete user.password;
     return user;
@@ -80,4 +83,4 @@ UserSchema.methods.generatePasswordReset = function() {
 };
 mongoose.set('useFindAndModify', false);
 UserSchema.plugin(require("mongoose-autopopulate"))
-module.exports = mongoose.model('user', UserSchema);
+module.exports =  mongoose.model('user',UserSchema);

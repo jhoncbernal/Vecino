@@ -14,6 +14,25 @@ async function readHTMLFile(path, callback) {
         }
     });
 }
+async function HTMLReplace(htmlpath,replacements){
+    try {
+        return htmlToSend = await new Promise((resolve, reject) => {
+     
+            readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
+                var template = handlebars.compile(html);
+                
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(template(replacements));
+                }
+            });
+        });
+    }catch(err){
+        throw error
+    }
+}
 async function sendEmail(user, subject, text, htmlpath, mailtrap = true) {
     try {
         htmlToSend = await new Promise((resolve, reject) => {
@@ -79,4 +98,4 @@ async function sendEmail(user, subject, text, htmlpath, mailtrap = true) {
         throw error
     }
 }
-module.exports = sendEmail;
+module.exports = {sendEmail,HTMLReplace};

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Bootstrap CSS -->
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+    integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+    crossorigin="anonymous"></script>
+  <title>Verify</title>
+</head>
+
+
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Vecino</a>
+      </div>
+
+        <div class="my-2 my-lg-0">
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="">Sign Out</button>
+        </div>
+  </nav>
+ <div class="card" style="width: 40rem; margin: 0 auto;float: none;margin-bottom: 10px;margin-top: 10px;">
+    <div class="card-body">
+      <h5 class="card-title">Actualizar datos</h5>
+      <h6 class="card-subtitle mb-2 text-muted">
+        <p>notamos que no tienes todos tus datos, por favor diligencia el formulario a continuacion para continuar con inciar tu experiencia en la aplicacion Vecino.
+        </p>
+      </h6>
+      <form class="form" action="/v1/api/auth/signinUpdate" method="POST" accept-charset="ISO-8859-1" >
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input type="email" class="form-control" name="email" id="inputEmail4" placeholder="Email" value="{{email}}" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Password</label>
+            <input type="password" class="form-control" name="password" id="inputPassword4" placeholder="Password" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputName">Nombre Completo</label>
+          <input type="text" class="form-control" name="firstName" id="inputName" placeholder="Conjunto Parque Residencial Nuevo P.H." value="{{name}}" required>
+        </div>
+        <div class="form-group">
+          <label for="inputAddress">Direccion</label>
+          <input type="text" class="form-control" name="address" id="inputAddress" placeholder="Calle 8 Sur # 10-12, Madrid, Cundinamarca" value="{{address}}" required>
+        </div>
+        <div class="form-group">
+          <label for="inputPhone">Telefono</label>
+          <input type="number" class="form-control" name="phone" id="inputPhone" placeholder="1234567" value="{{phone}}" required>
+        </div>
+        <div class="form-group">
+          <label for="inputNit">C.C o Nit sin digito de verificacion</label>
+          <input type="number" class="form-control" name="documentId" id="inputNit" placeholder="11338854" required value="={{documentId}}">
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+  
+  </div>
+
+
+
+</body>
+
+</html>

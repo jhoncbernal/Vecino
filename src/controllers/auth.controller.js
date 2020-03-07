@@ -1,8 +1,8 @@
-let _authService = null
-
+let _authService, _userService = null
 class AuthController {
-    constructor({ AuthService }) {
+    constructor({ AuthService, UserService }) {
         _authService = AuthService;
+        _userService = UserService;
     }
     async signUp(req, res) {
         const { body } = req;
@@ -18,7 +18,7 @@ class AuthController {
                     });
             }).catch((error) => {
                 return res.status(500).send({ "error": error.message });
-            });;
+            });
 
 
     }
@@ -33,11 +33,30 @@ class AuthController {
         const createdNeighborhood = await _authService.signUpNeighborhood(body)
         return res.status(200).send(createdNeighborhood);
     }
+    async signInAndUpdate(req, res) {
+        try {
+            const { body } = req;            
+            const result= await _authService.signIn(body);
+            delete body.password;
+            const updateUser = await _userService.update(result.user._id, body).then((user)=>{
+                 //Set the new values
+                 user.isVerified = true;
+                 user.resetPasswordToken = undefined;
+                 user.resetPasswordExpires = undefined;
+                 // Save
+                 return user.save()
+            });
+            return res.send("Actualizacion de datos exitosa");
+        } catch (e) {
+            return res.status(500).send(e.message);
+        }
+    }
     async signInNeighborhood(req, res) {
         const { body } = req;
         const creds = await _authService.signInNeighborhood(body)
         return res.status(200).send(creds);
     }
+
 
     async recover(req, res) {
         try {
@@ -65,7 +84,7 @@ class AuthController {
         try {
             const { body } = req;
             const { baseUrl } = req;
-            const host = req.headers.host + baseUrl;
+            let host = req.headers.host + baseUrl;
             await _authService.verifyEmail(body, host).then((successMessage) => {
                 return res.status(200).send(successMessage);
             }).catch((error) => { throw error });
@@ -75,8 +94,10 @@ class AuthController {
     }
     async verify(req, res) {
         const { token } = req.params;
-        const resetUser = await _authService.verify(token)
+        const resetUser = await _authService.verify(token);
+
         return res.status(200).send(resetUser);
     }
+
 }
 module.exports = AuthController;

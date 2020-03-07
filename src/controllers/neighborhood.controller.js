@@ -1,7 +1,8 @@
-let _neighborhoodService=null;
+let _neighborhoodService,_authService=null;
 class NeighborhoodController{
-constructor({NeighborhoodService}) {
+constructor({NeighborhoodService,AuthService}) {
     _neighborhoodService=NeighborhoodService;
+    _authService=AuthService;
 }
 async get(req,res){
     const{neighborhoodId}=req.params;
@@ -33,8 +34,21 @@ async delete(req,res){
 }
 async create(req,res){
     const{body}=req;
-    const createdNeighborhood = await _neighborhoodService.create(body);
-    return res.send(createdNeighborhood);
+    const { baseUrl } = req;
+    let host = req.headers.host + baseUrl;
+    if(host.includes('neighborhood')){
+        host=  host.replace('neighborhood','auth');
+      }
+    await _neighborhoodService.create(body).then((userService) => {
+        return _authService.verifyEmail(userService, host)
+            .then((sendVerifyUser) => {
+                return res.status(200).send({ userService, ...{ "emailResult": sendVerifyUser } });
+            }).catch((error) => {
+                return res.status(500).send({ userService, ...{ "emailResult": error.message } });
+            });
+    }).catch((error) => {
+        return res.status(500).send({ "error": error.message });
+    });
 }
 
 }

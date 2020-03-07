@@ -1,6 +1,6 @@
 const { generateToken, generateTokenAdmin, generateTokenOwner } = require('../helpers/jwt.helper');
 const { SECRET_OWNER } = require('../config');
-const { sendEmail } = require('../helpers');
+const { sendEmail, HTMLReplace } = require('../helpers');
 
 let _userService = null;
 let _neighborhoodService = null;
@@ -38,7 +38,7 @@ class AuthService {
                 error.message = "Invalid secretKey";
                 throw error;
             }
-            return _userService.create({ ...userBody})
+            return _userService.create({ ...userBody })
                 .catch((error) => {
                     if (error.message.includes("duplicate key")) {
                         const error = new Error();
@@ -191,7 +191,7 @@ class AuthService {
                     throw err;
                 }
                 //Set the new password
-                user.password = body.password; 1
+                user.password = body.password; 
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
 
@@ -247,6 +247,7 @@ class AuthService {
 
     }
     async verify(token) {
+        let replacements = null;
         const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token, true);
         return await userExist.service.verify(token)
             .then((user) => {
@@ -255,25 +256,49 @@ class AuthService {
                     err.status = 401;
                     err.message = 'Verify token is invalid or has expired.';
                     throw err;
-                }
-                if (!user.isVerified) { user.enabled = true };
+                } if (user.email.length <5 ||
+                    user.firstName.length <3 ||
+                    user.phone.length <8 ||
+                    user.documentId.toString().length <8){
+                    replacements = {
+                        email: user.email,
+                        name: user.firstName,
+                        address: user.address,
+                        phone: user.phone,
+                        documentId: user.documentId
+                    };
+                }else{
+                
                 //Set the new values
                 user.isVerified = true;
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
+                }
+                if (!user.isVerified) { user.enabled = true };
                 // Save
-                return user.save()
-            })
-            .then(user => {
-                return sendEmail(user,
-                    "Your email has been verified", `
-                Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
-                    ('../public/pages/changeconfirmation.html'))
-                    .then((result) => {
-                        return { ...{ "message": "Your email has been verified" }, ... { "email": { "aceptado por": result.accepted, "rechazado por": result.rejected } } };
-                    }).catch((error) => {
-                        throw error;
-                    })
+               return user.save().then((user)=>{
+                    return sendEmail(user,
+                        "Your email has been verified", `
+                    Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
+                        ('../public/pages/changeconfirmation.html')).then(()=>{
+                        
+
+                if(replacements!=null){
+                    return HTMLReplace(('../public/pages/verifyform.html'), replacements).then((result) => { return result });
+                    }
+                    else{
+                        replacements = {
+                            username: user.firstName,
+                            link: `Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `
+                        };
+                      return  HTMLReplace(('../public/pages/changeconfirmation.html'), replacements).then((result) => { return result });
+                    }
+                }).catch((error) => {
+                    throw error;
+                });
+                
+                });
+          
             })
             .catch((error) => {
                 throw error

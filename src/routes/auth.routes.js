@@ -14,5 +14,6 @@ router.post('/reset/:token',AuthController.resetPassword);
 
 router.post('/verify',AuthController.verifyEmail);
 router.get('/verify/:token',AuthController.verify);
+router.post('/signinUpdate',AuthController.signInAndUpdate);
 return router;
 }

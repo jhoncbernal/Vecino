@@ -10,7 +10,7 @@ const UserSchema= new Schema({
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
     lastName:           { type: String },
-    documentId:         { type: Number,  required: [true , 'What is your id number?']   },
+    documentId:         { type: Number,  required: [true , 'What is your id number?'] , unique: true  },
     phone:              { type: String,  required: [true , 'What is your contact number?'] },
     resetPasswordToken: { type: String,  required: false},
     resetPasswordExpires:{type: Date,    required: false},
@@ -29,7 +29,7 @@ const UserSchema= new Schema({
     neighborhood:{
         type:Schema.Types.ObjectId,
         ref:"neighborhood",
-        autopopulate:{ select: ['username','address' ]}
+        autopopulate:{ select: ['firstName','username','address' ]}
     },
 
 }, {timestamps: true});

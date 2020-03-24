@@ -10,7 +10,7 @@ const NeighborhoodSchema = new Schema({
     enabled:            { type: Boolean, required: true, default:0 },
     roles:              [{type: String,  required: true  , lowercase:false }],
     firstName:          { type: String,  required: true },
-    documentId:         { type: Number,  required: [true , 'What is your id number?']   },
+    documentId:         { type: Number,  required: [true , 'What is your id number?'], unique: true   },
     phone:              { type: String,  required: [true, 'What is your contact number?'] },
     address:            { type: String,  required: true },
     neighborhoodcode:   { type: String,  required: [true, 'What is your neighborhoodcode?'], unique: true,index:true},

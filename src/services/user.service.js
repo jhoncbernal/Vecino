@@ -18,8 +18,8 @@ class UserService extends BaseService {
     async getUsersByPoints(propName, value,pageSize,pageNum){
         return await _userRepository.getUsersByPoints(propName, value,pageSize,pageNum);
     }
-    async recover(body){
-        return await _userRepository.recover(body);
+    async recover(propName, value){
+        return await _userRepository.recover(propName, value);
     }
     async reset(token){
         return await _userRepository.reset(token);

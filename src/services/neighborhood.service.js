@@ -14,8 +14,8 @@ class NeighborhoodService extends BaseService {
     async getNeighborhoodByProperty(propName,value){
         return await _neighborhoodRepository.getNeighborhoodByProperty(propName,value);
     }
-    async recover(body){
-        return await _neighborhoodRepository.recover(body);
+    async recover(propName, value){
+        return await _neighborhoodRepository.recover(propName, value);
     }
     async reset(token){
         return await _neighborhoodRepository.reset(token);

@@ -137,9 +137,18 @@ class AuthService {
     }
 
     async recover(body, host) {
-        const userExist = await selectNeighborhoodOrUserProperty("email", body.email);
+        const { username, email } = body;
+        let propName, value = null;
+        if (username) {
+            propName = "username",
+                value = username
+        } else {
+            propName = "email",
+                value = email
+        }
+        const userExist = await selectNeighborhoodOrUserProperty(propName, value);
 
-        return await userExist.service.recover(body, host)
+        return await userExist.service.recover(propName, value)
             .then(user => {
                 if (!user) {
                     const err = new Error();
@@ -157,7 +166,7 @@ class AuthService {
                     `http://${host}/reset/${user.resetPasswordToken}`,
                     ('../public/pages/recoverypassword.html'))
                     .then((result) => {
-                        return { ...{ "message": "Password change request" }, ... { "email": { result } } };
+                        return { ...{ "message": "Password change request" }, ... { "emailResult": { result } } };
                     }).catch((error) => {
                         throw error;
                     })

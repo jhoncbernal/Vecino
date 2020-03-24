@@ -14,9 +14,9 @@ async getNeighborhoodByUsername(username){
 async getNeighborhoodByProperty(propName, value) {
     return await _neighborhood.findOne({[propName]: value });
 }
-async recover(body) {
+async recover(propName, value) {
     try {
-        return await _neighborhood.findOne({ email: body.email })
+        return await _neighborhood.findOne({ [propName]: value })
     } catch (error) {
         const err = new Error();
         err.status = 500;

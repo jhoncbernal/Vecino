@@ -110,9 +110,9 @@ class UserRepository extends BaseRepository {
     async getUserByProperty(propName, value) {
         return await _user.findOne({ [propName]: value });
     }
-    async recover(body) {
+    async recover(propName, value) {
         try {
-            return await _user.findOne({ email: body.email })
+            return await _user.findOne({ [propName]: value })
         } catch (error) {
             const err = new Error();
             err.status = 500;

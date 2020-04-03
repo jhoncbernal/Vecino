@@ -5,11 +5,11 @@ module.exports=function({ParkingSpaceController}){
     const router=Router();
 
     //positions
-    router.get('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.getAllParkingPositionEmptySpaceByVehicleType);
-    router.get('/:parkingspaceId/:positionnumber',AuthMiddlewareAdmin,ParkingSpaceController.getParkingPositionByPosNumber);
-    router.patch('/:parkingspaceId/:positionnumber',AuthMiddlewareAdmin,ParkingSpaceController.updateParkingPositionByPosnumber);
-    router.delete('/:parkingspaceId/:positionnumber',AuthMiddlewareAdmin,ParkingSpaceController.deleteParkingPositionByPosnumber);
-    router.post('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.createParkingPositions)
+    router.get('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.getAllParkingPositionEmptySpaceByVehicleType);
+    router.get('/:parkingname/:positionnumber',AuthMiddlewareAdmin,ParkingSpaceController.getParkingPositionByPosNumber);
+    router.patch('/:parkingname/:positionnumber',AuthMiddlewareAdmin,ParkingSpaceController.updateParkingPositionByPosnumber);
+    router.delete('/:parkingname/:positionnumber',AuthMiddlewareAdmin,ParkingSpaceController.deleteParkingPositionByPosnumber);
+    router.post('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.createParkingPositions)
 
    
    

@@ -5,146 +5,209 @@ class ParkingSpaceController {
         _neighborhoodService = NeighborhoodService;
         _vehicleService = VehicleService
     }
+
     async get(req, res) {
-        const { parkingspaceId } = req.params;
-        await _parkingSpaceService.get(parkingspaceId).then(parkingSpace => {
-            if (!parkingSpace) {
-                return res.status(404).send({
-                    message: "parkingSpace not found with id " + req.params.parkingspaceId
+        try {
+            const { parkingname } = req.params;
+            const { id: neighborhoodId } = req.user;
+            await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId).then(parkingSpace => {
+                if (!parkingSpace) {
+                    return res.status(404).send({
+                        message: "parkingSpace not found with name " + req.params.parkingname
+                    });
+                }
+                res.send(parkingSpace);
+            }).catch(err => {
+                if (err.kind === 'ObjectId') {
+                    return res.status(404).send({
+                        message: "parkingSpace not found with name " + req.params.parkingname
+                    });
+                }
+                return res.status(500).send({
+                    message: "Error retrieving parkingSpace with name " + req.params.parkingname
                 });
-            }
-            res.send(parkingSpace);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).send({
-                    message: "parkingSpace not found with id " + req.params.parkingspaceId
-                });
-            }
-            return res.status(500).send({
-                message: "Error retrieving parkingSpace with id " + req.params.parkingspaceId
             });
-        });
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async getAll(req, res) {
-        const { id: neighborhoodId } = req.user;
-        const { pageSize, pageNum } = req.query;
-        const parkingSpace = await _parkingSpaceService.getAll('neighborhood', neighborhoodId, pageSize, pageNum);
-        return res.send(parkingSpace);
+        try {
+            const { id: neighborhoodId } = req.user;
+            const { pageSize, pageNum } = req.query;
+            const parkingSpace = await _parkingSpaceService.getAll('neighborhood', neighborhoodId, pageSize, pageNum);
+            return res.send(parkingSpace);
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async update(req, res) {
-        const { body } = req;
-        const { parkingspaceId } = req.params;
-        _parkingSpaceService.update(parkingspaceId, body).then(parkingSpace => {
-            if (!parkingSpace) {
-                return res.status(404).send({
-                    message: "parkingSpace not found with id " + req.params.parkingspaceId
-                });
-            }
-            res.send(parkingSpace);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).send({
-                    message: "parkingSpace not found with id " + req.params.parkingspaceId
-                });
-            }
-            return res.status(500).send({
-                message: "Error updating parkingSpace with id " + req.params.parkingspaceId
-            });
-        });
+        try {
+            const { body } = req;
+            const { parkingname } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
 
+            _parkingSpaceService.update(parking._id, body).then(parkingSpace => {
+                if (!parkingSpace) {
+                    return res.status(404).send({
+                        message: "parkingSpace not found with name " + req.params.parkingname
+                    });
+                }
+                res.send(parkingSpace);
+            }).catch(err => {
+                if (err.kind === 'ObjectId') {
+                    return res.status(404).send({
+                        message: "parkingSpace not found with name " + req.params.parkingname
+                    });
+                }
+                return res.status(500).send({
+                    message: "Error updating parkingSpace with name " + req.params.parkingname
+                });
+            });
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async delete(req, res) {
-        const { parkingspaceId } = req.params;
-        await _parkingSpaceService.delete(parkingspaceId).then(parkingSpace => {
-            if (!parkingSpace) {
-                return res.status(404).send({
-                    message: "parkingSpace not found with id " + req.params.parkingSpaced
+        try {
+            const { parkingname } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+
+            await _parkingSpaceService.delete(parking._id).then(parkingSpace => {
+                if (!parkingSpace) {
+                    return res.status(404).send({
+                        message: "parkingSpace not found with id " + req.params.parkingSpaced
+                    });
+                }
+                res.send({ message: "parkingSpace deleted successfully!" });
+            }).catch(err => {
+                if (err.kind === 'ObjectId' || err.name === 'NotFound') {
+                    return res.status(404).send({
+                        message: "parkingSpace not found with name " + req.params.parkingname
+                    });
+                }
+                return res.status(500).send({
+                    message: "Could not delete parkingSpace with name " + req.params.parkingname
                 });
-            }
-            res.send({ message: "parkingSpace deleted successfully!" });
-        }).catch(err => {
-            if (err.kind === 'ObjectId' || err.name === 'NotFound') {
-                return res.status(404).send({
-                    message: "parkingSpace not found with id " + req.params.parkingspaceId
-                });
-            }
-            return res.status(500).send({
-                message: "Could not delete parkingSpace with id " + req.params.parkingspaceId
             });
-        });
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async create(req, res) {
-        const { body } = req;
-        const { id: neighborhoodId } = req.user;
-        body.neighborhood = neighborhoodId;
-        const parkingSpace = await _parkingSpaceService.create(body);
-        return res.send(parkingSpace);
+        try {
+            const { body } = req;
+            const { id: neighborhoodId } = req.user;
+            body.neighborhood = neighborhoodId;
+            const parkingSpace = await _parkingSpaceService.create(body);
+            return res.send(parkingSpace);
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async getAllParkingPositionEmptySpaceByVehicleType(req, res) {
-        const { parkingspaceId } = req.params;
-        let { vehicletype = "Car", available = "true" } = req.query;
-        const parkingSpace = await _parkingSpaceService.getAllParkingPositionEmptySpaceByVehicleType(parkingspaceId, vehicletype, available);
-        return res.send(parkingSpace);
+        try {
+            const { parkingname } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+
+            let { vehicletype = "Car", available = "true" } = req.query;
+            const parkingSpace = await _parkingSpaceService.getAllParkingPositionEmptySpaceByVehicleType(parking._id, vehicletype, available);
+            return res.send(parkingSpace);
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async getParkingPositionByPosNumber(req, res) {
-        const { parkingspaceId, positionnumber } = req.params;
-        const parkingSpace = await _parkingSpaceService.getParkingPositionByPosNumber(parkingspaceId, positionnumber);
-        return res.send(parkingSpace);
+        try {
+            const { parkingname, positionnumber } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+
+            const parkingSpace = await _parkingSpaceService.getParkingPositionByPosNumber(parking._id, positionnumber);
+            return res.send(parkingSpace);
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
+
     async updateParkingPositionByPosnumber(req, res) {
+        try {
+            const { parkingname, positionnumber } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
 
-        const { parkingspaceId, positionnumber } = req.params;
-        const { body } = req;
-        const vehicleExist = await _vehicleService.getUserByVehicleByPlate(body.plate)
-        if (vehicleExist) {
-            const posVehicle = await _parkingSpaceService.getAll("positions.vehicle",vehicleExist._id)
+            const { body } = req;
+            const vehicleExist = await _vehicleService.getUserByVehicleByPlate(body.plate)
+            if (vehicleExist) {
+                const posVehicle = await _parkingSpaceService.getAll("positions.vehicle.plate", vehicleExist.plate);
+                if (posVehicle.length != 0) {
+                    const err = new Error();
+                    err.status = 500;
+                    err.message = `the plate ${body.plate} is already asigned to some position`;
+                    throw err;
+                }
+                body.vehicle = vehicleExist;
+            }
+            const parkingSpace = await _parkingSpaceService.updateParkingPositionByPosnumber(parking._id, positionnumber, body)
+                .then((vehicleExist) => {
+                    if (vehicleExist == null) {
+                        const err = new Error();
+                        err.status = 404;
+                        err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
+                        throw err;
+                    }
 
-        if (posVehicle.length!=0) {
-            const err = new Error();
-            err.status = 500;
-            err.message = `the plate ${body.plate} is already asigned to some position`;
-            throw err;                
+                    return res.status(200).send(vehicleExist);
+                });
+            return res.send(parkingSpace);
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
         }
-        
-            body.vehicle = vehicleExist._id;
-        }
-        const parkingSpace = await _parkingSpaceService.updateParkingPositionByPosnumber(parkingspaceId, positionnumber, body)
-        .then((vehicleExist) => {
-            if (vehicleExist == null) {
-                const err = new Error();
-                err.status = 404;
-                err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parkingspaceId} not found!`;
-                throw err;                }
-
-            return res.status(200).send(vehicleExist);
-        });
-        return res.send(parkingSpace);
     }
+
     async deleteParkingPositionByPosnumber(req, res) {
         try {
-            const { parkingspaceId, positionnumber } = req.params;
-            return _parkingSpaceService.deleteParkingPositionByPosnumber(parkingspaceId, positionnumber)
-            .then((parkingSpace) => {
-                if (parkingSpace == null) {
-                    const err = new Error();
-                    err.status = 404;
-                    err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parkingspaceId} not found!`;
-                    throw err;                }
+            const { parkingname, positionnumber } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
 
-                return res.status(200).send(parkingSpace);
-            });
-        }
-        catch (error) {
-            return res.status(500).send(error);
+            return _parkingSpaceService.deleteParkingPositionByPosnumber(parking._id, positionnumber)
+                .then((parkingSpace) => {
+                    if (parkingSpace == null) {
+                        const err = new Error();
+                        err.status = 404;
+                        err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
+                        throw err;
+                    }
+
+                    return res.status(200).send(parkingSpace);
+                });
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
         }
     }
+
     async createParkingPositions(req, res) {
-        try{
-        const { body } = req;
-        const { parkingspaceId } = req.params;
-        const parkingSpace = await _parkingSpaceService.createParkingPositions(parkingspaceId, body)
-        return res.send(parkingSpace);
-    }catch(err){return res.send(err);}
+        try {
+            const { body } = req;
+            const { parkingname } = req.params;
+            const { id: neighborhoodId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+
+            const parkingSpace = await _parkingSpaceService.createParkingPositions(parking._id, body)
+            return res.send(parkingSpace);
+        } catch (e) {
+            res.status(500).send({ "ErrorMessage": e.message });
+        }
     }
 }
 

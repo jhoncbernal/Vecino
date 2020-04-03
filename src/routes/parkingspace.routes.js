@@ -3,7 +3,7 @@ const {AuthMiddlewareAdmin,ParseIntMiddleware,CacheMiddleware}=require('../middl
 const {CACHE_TIME} = require('../helpers')
 module.exports=function({ParkingSpaceController}){
     const router=Router();
-    router.get('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.get);
+    router.get('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.get);
     router.get('',[AuthMiddlewareAdmin,ParseIntMiddleware,CacheMiddleware(CACHE_TIME.ONE_HOUR)],ParkingSpaceController.getAll);
     router.patch('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.update);
     router.delete('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.delete);

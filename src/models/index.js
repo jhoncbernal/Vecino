@@ -1,7 +1,7 @@
 module.exports={
     User:           require('./user.model'),
     Neighborhood:   require('./neighborhood.model'),
-    Vehicle:        require('./vehicle.model'),
+    Vehicle:        require('./vehicle.model').Vehicle,
     ParkingSpace:   require('./parkingspace.model').ParkingSpace,
     Positions:      require('./parkingspace.model').Positions,
     Prices:         require('./parkingspace.model').Prices,

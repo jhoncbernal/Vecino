@@ -51,6 +51,7 @@ UserSchema.pre('save', function(next) {
     this.code = this.blockNumber.toString()+this.homeNumber.toString();
     next();
 });
+
 UserSchema.pre('save', async function (next) {
     const user = this;
     if (!user.isModified("password")) {

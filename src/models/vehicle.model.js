@@ -28,4 +28,6 @@ const VehicleSchema = new Schema({
 
 
 VehicleSchema.plugin(require("mongoose-autopopulate"))
-module.exports = mongoose.model('vehicle', VehicleSchema);
+module.exports = {
+    Vehicle: mongoose.model('vehicle', VehicleSchema),
+    VehicleSchema: VehicleSchema}

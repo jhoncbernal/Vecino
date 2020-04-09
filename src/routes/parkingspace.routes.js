@@ -5,8 +5,8 @@ module.exports=function({ParkingSpaceController}){
     const router=Router();
     router.get('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.get);
     router.get('',[AuthMiddlewareAdmin,ParseIntMiddleware,CacheMiddleware(CACHE_TIME.ONE_HOUR)],ParkingSpaceController.getAll);
-    router.patch('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.update);
-    router.delete('/:parkingspaceId',AuthMiddlewareAdmin,ParkingSpaceController.delete);
+    router.patch('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.update);
+    router.delete('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.delete);
     router.post('',AuthMiddlewareAdmin,ParkingSpaceController.create)
    
     return router;

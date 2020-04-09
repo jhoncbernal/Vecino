@@ -8,5 +8,6 @@ module.exports=function({NeighborhoodController}){
     router.patch('/:neighborhoodId',AuthMiddlewareAdmin,NeighborhoodController.update);
     router.delete('/:neighborhoodId',AuthMiddlewareOwner,NeighborhoodController.delete);
     router.post('/',AuthMiddlewareOwner,NeighborhoodController.create)
+    router.get('/names/1',NeighborhoodController.getAllNames);
     return router;
 };

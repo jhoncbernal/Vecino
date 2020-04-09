@@ -50,6 +50,11 @@ async create(req,res){
         return res.status(500).send({ "error": error.message });
     });
 }
+async getAllNames(req,res){
+    const {pageSize,pageNum}=req.query;
+    const neighborhoods = await _neighborhoodService.getAllNeighborhoodNames(pageSize,pageNum);
+    return res.send(neighborhoods);
+}
 
 }
 module.exports=NeighborhoodController

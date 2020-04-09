@@ -14,6 +14,12 @@ async getNeighborhoodByUsername(username){
 async getNeighborhoodByProperty(propName, value) {
     return await _neighborhood.findOne({[propName]: value });
 }
+async getAllNeighborhoodNames(pageSize,pageNum){
+    const skips=pageSize*(pageNum-1);
+    return await _neighborhood.find({},{'firstName':1,'neighborhoodcode':1,'_id':0})   
+        .skip(skips)
+        .limit(pageSize);
+}
 async recover(propName, value) {
     try {
         return await _neighborhood.findOne({ [propName]: value })
@@ -24,6 +30,8 @@ async recover(propName, value) {
         throw err;
     }
 }
+
+
 async reset(token) {
     return await _neighborhood.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } })
 

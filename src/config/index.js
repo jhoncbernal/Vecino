@@ -12,5 +12,9 @@ module.exports={
     PSWD_EMAIL:process.env.PSWD_EMAIL,
     FROM_EMAIL:process.env.FROM_EMAIL,
     SECRET_OWNER:process.env.SECRET_OWNER,
-    BLNMAILTRAP:process.env.BLNMAILTRAP
+    BLNMAILTRAP:process.env.BLNMAILTRAP,
+    AWSACCESSKEYID:process.env.AWSACCESSKEYID,
+    AWSSECRETACCESSKEY:process.env.AWSSECRETACCESSKEY,
+    AWSREGION:process.env.AWSREGION,
+    AWSBUCKETIMG:process.env.AWSBUCKETIMG,
 }

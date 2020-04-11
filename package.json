@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "awilix": "^4.2.3",
+    "aws-sdk": "^2.656.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -19,7 +20,7 @@
     "express-async-errors": "^3.1.1",
     "express-fileupload": "^1.1.6",
     "fast-csv": "^4.1.1",
-    "handlebars": "^4.7.3",
+    "handlebars": "^4.7.6",
     "helmet": "^3.21.2",
     "json2csv": "^4.5.4",
     "jsonwebtoken": "^8.5.1",
@@ -28,6 +29,7 @@
     "mongoose-autopopulate": "^0.12.0",
     "nodemailer": "^6.4.3",
     "npm": "^6.14.3",
+    "sharp": "^0.25.2",
     "update": "^0.7.4",
     "xlsx": "^0.15.5"
   },

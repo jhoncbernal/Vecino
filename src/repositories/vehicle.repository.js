@@ -1,7 +1,7 @@
 const BaseRepository = require('./base.repository')
 let _vehicle, _user = null;
 class VehicleRepository extends BaseRepository {
-    constructor({ Vehicle,User }) {
+    constructor({ Vehicle, User }) {
         super(Vehicle);
         _vehicle = Vehicle;
         _user = User;
@@ -17,7 +17,7 @@ class VehicleRepository extends BaseRepository {
     }
     async getVehicleByPlate(plate, userId) {
         const vehicle = await _vehicle.findOne({ "plate": plate });
-        const user = await _user.findOne({ "neighborhood": userId, "_id": vehicle.user });
+        const user = await _user.findOne({ "admin": userId, "_id": vehicle.user });
         if (user) { return vehicle }
         else { throw ("Vehicle is not asociate") }
     }

@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 const BaseRepository = require('./base.repository');
-let _parkingspace,_positions = null;
+let _parkingspace, _positions = null;
 class ParkingSpaceRepository extends BaseRepository {
-    constructor({ ParkingSpace,Positions }) {
-        super(ParkingSpace,Positions);
+    constructor({ ParkingSpace, Positions }) {
+        super(ParkingSpace, Positions);
         _parkingspace = ParkingSpace,
-        _positions = Positions
+            _positions = Positions
     }
     async getAllParkingPositionEmptySpaceByVehicleType(parkingspaceId, vehicletype, available) {
         return await _parkingspace.aggregate([
@@ -69,92 +69,93 @@ class ParkingSpaceRepository extends BaseRepository {
             { parkingname: 1, "positions.$": 1 });
     }
     async updateParkingPositionByPosnumber(parkingspaceId, positionnumber, body) {
-        try{
-        let message=null;
-        if (!body.vehicle) {
-            body.vehicle = null;
-            body.available = true;
-            message=`the position: ${positionnumber} now is available`
-        }
-        else {
-            body.available = false;
-            message=`the position: ${positionnumber} was occupied by the vehicle : ${body.plate} now not available`
-        }
-        return await new Promise((resolve, reject) => {
-         _parkingspace.findOneAndUpdate({
-            _id: parkingspaceId, positions: {
-                $elemMatch: {
-                    posnumber: positionnumber
-                }
+        try {
+            let message = null;
+            if (!body.vehicle) {
+                body.vehicle = null;
+                body.available = true;
+                message = `the position: ${positionnumber} now is available`
             }
-        }, {
-            $set: {
-                'positions.$.available': body.available,
-                'positions.$.vehicle': body.vehicle
+            else {
+                body.available = false;
+                message = `the position: ${positionnumber} was occupied by the vehicle : ${body.plate} now not available`
             }
-        }, {
-            select: {
-                positions: {
-                    $elemMatch: {
-                        posnumber: positionnumber
+            return await new Promise((resolve, reject) => {
+                _parkingspace.findOneAndUpdate({
+                    _id: parkingspaceId, positions: {
+                        $elemMatch: {
+                            posnumber: positionnumber
+                        }
                     }
-                }
-            }
-            , new: true},function(err, result) {
-                if(err) reject(err);
-                 resolve(({...{"status":message},...{result}}));
-                 }).catch(error=>{reject(error)});
-                });
-            }catch(err){throw err}
+                }, {
+                    $set: {
+                        'positions.$.available': body.available,
+                        'positions.$.vehicle': body.vehicle
+                    }
+                }, {
+                    select: {
+                        positions: {
+                            $elemMatch: {
+                                posnumber: positionnumber
+                            }
+                        }
+                    }
+                    , new: true
+                }, function (err, result) {
+                    if (err) reject(err);
+                    resolve(({ ...{ "status": message }, ...{ result } }));
+                }).catch(error => { reject(error) });
+            });
+        } catch (err) { throw err }
     }
     async deleteParkingPositionByPosnumber(parkingspaceId, positionnumber) {
-        try{
-        return await new Promise((resolve, reject) => {
-       _parkingspace.findOneAndUpdate({
-            _id: parkingspaceId,
-            positions: {
-                $elemMatch: {
-                    posnumber: positionnumber
-                }
-            }
-        },{
-            $pull: {
-                positions:
-                {
-                    posnumber: positionnumber
-                }
-            }
-        }, {new: true},function(err, result) {
-           if(err) reject(err);
-            resolve(result.positions);
-            })
-    
-    });
-}catch(err){throw err}
+        try {
+            return await new Promise((resolve, reject) => {
+                _parkingspace.findOneAndUpdate({
+                    _id: parkingspaceId,
+                    positions: {
+                        $elemMatch: {
+                            posnumber: positionnumber
+                        }
+                    }
+                }, {
+                    $pull: {
+                        positions:
+                        {
+                            posnumber: positionnumber
+                        }
+                    }
+                }, { new: true }, function (err, result) {
+                    if (err) reject(err);
+                    resolve(result.positions);
+                })
+
+            });
+        } catch (err) { throw err }
     }
-    async getParkingSpaceByname(parkingname, neighborhoodId) {
-        return await _parkingspace.findOne({ "parkingname": parkingname, "neighborhood": neighborhoodId });
+    async getParkingSpaceByname(parkingname, adminId) {
+        return await _parkingspace.findOne({ "parkingname": parkingname, "admin": adminId });
     }
     async createParkingPositions(parkingspaceId, body) {
-        try{
-            const parkingspace = await _parkingspace.findOne({"_id":parkingspaceId});
-            const newposition  = await _positions.create({
-                                                            "posnumber": body.posnumber,
-                                                            "available": body.available,
-                                                            "vehicletype": body.vehicletype
-                                                        })
+        try {
+            const parkingspace = await _parkingspace.findOne({ "_id": parkingspaceId });
+            const newposition = await _positions.create({
+                "posnumber": body.posnumber,
+                "available": body.available,
+                "vehicletype": body.vehicletype
+            })
             return await new Promise((resolve, reject) => {
                 parkingspace.positions.push(newposition);
                 parkingspace.save(function (err) {
-                            if (!err) {
-                                resolve({"status":"created",...newposition._doc})
-                            }
-                            if(err){
-                                reject(err);
-                            }
-                            });
-                        });
-                }catch(err){throw err}
+                    if (!err) {
+                        resolve({ "status": "created", ...newposition._doc })
+                    }
+                    if (err) {
+                        reject(err);
+                    }
+                });
+            });
+        } catch (err) { throw err }
     }
 }
 module.exports = ParkingSpaceRepository;

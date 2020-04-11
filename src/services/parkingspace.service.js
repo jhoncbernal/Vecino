@@ -13,8 +13,8 @@ class ParkinSpaceService extends BaseService {
         return await _parkingspaceRepository.getParkingPositionByPosNumber(parkingspaceId, positionnumber);
     }
 
-    async getParkingSpaceByname(parkingname, neighborhoodId) {
-        return await _parkingspaceRepository.getParkingSpaceByname(parkingname, neighborhoodId);
+    async getParkingSpaceByname(parkingname, adminId) {
+        return await _parkingspaceRepository.getParkingSpaceByname(parkingname, adminId);
     }
     async updateParkingPositionByPosnumber(parkingspaceId, positionnumber, body) {
         if (!parkingspaceId || !positionnumber) {

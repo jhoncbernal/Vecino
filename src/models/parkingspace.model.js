@@ -1,39 +1,39 @@
 const mongoose = require('mongoose');
-const  VehicleSchema= require('./vehicle.model').VehicleSchema;
+const VehicleSchema = require('./vehicle.model').VehicleSchema;
 const { Schema } = mongoose;
 let PositionsSchema = new Schema({
-    posnumber:      { type: String,  required: true ,index:true},
-    available:      { type: String,  required: true },
-    vehicletype:    { type: String,  required: [true , 'What kind of vehicle? ["Car", "Bike", "Motorcycle"]'] , enum: ['Car', 'Bike', 'Motorcycle']},
-    vehicle:        VehicleSchema
+    posnumber: { type: String, required: true, index: true },
+    available: { type: String, required: true },
+    vehicletype: { type: String, required: [true, 'What kind of vehicle? ["Car", "Bike", "Motorcycle"]'], enum: ['Car', 'Bike', 'Motorcycle'] },
+    vehicle: VehicleSchema
 });
 let PricesSchema = new Schema({
-    kind:           { type: String,  required: true },
-    value:          { type: String,  required: true }
+    kind: { type: String, required: true },
+    value: { type: String, required: true }
 });
 let ScheduleSchema = new Schema({
-    rank:           { type: String,  required: true },
-    value:          { type: String,  required: true }
+    rank: { type: String, required: true },
+    value: { type: String, required: true }
 });
-const ParkingSpaceSchema = new Schema({    
-    parkingname:        { type: String ,  required: true,   unique: true },
-    enabled:            { type: Boolean,  default: true },
-    address:            { type: String},
-    totalspace:         { type: Number ,  required: true },
-    prices:             [PricesSchema]        ,
-    positions:          [PositionsSchema]     ,
-    schedule:           [ScheduleSchema]      ,
-    neighborhood:{
-        type:       Schema.Types.ObjectId,
-        ref:        "neighborhood",
-        required:   true,
-        autopopulate:{ select: ['username','address','phone' ]}
+const ParkingSpaceSchema = new Schema({
+    parkingname: { type: String, required: true, unique: true },
+    enabled: { type: Boolean, default: true },
+    address: { type: String },
+    totalspace: { type: Number, required: true },
+    prices: [PricesSchema],
+    positions: [PositionsSchema],
+    schedule: [ScheduleSchema],
+    admin: {
+        type: Schema.Types.ObjectId,
+        ref: "admin",
+        required: true,
+        autopopulate: { select: ['username', 'address', 'phone'] }
     }
-},{timestamps: true});
+}, { timestamps: true });
 
 module.exports = {
-    ParkingSpace:   mongoose.model('parkingspace',  ParkingSpaceSchema),
-    Positions:      mongoose.model('positions',     PositionsSchema),
-    Prices:         mongoose.model('prices',        PricesSchema),
-    Schedule:       mongoose.model('schedule',      ScheduleSchema)
+    ParkingSpace: mongoose.model('parkingspace', ParkingSpaceSchema),
+    Positions: mongoose.model('positions', PositionsSchema),
+    Prices: mongoose.model('prices', PricesSchema),
+    Schedule: mongoose.model('schedule', ScheduleSchema)
 }

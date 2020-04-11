@@ -1,16 +1,16 @@
-let _parkingSpaceService, _neighborhoodService, _vehicleService = null;
+let _parkingSpaceService, _adminService, _vehicleService = null;
 class ParkingSpaceController {
-    constructor({ ParkingSpaceService, NeighborhoodService, VehicleService }) {
+    constructor({ ParkingSpaceService, AdminService, VehicleService }) {
         _parkingSpaceService = ParkingSpaceService;
-        _neighborhoodService = NeighborhoodService;
+        _adminService = AdminService;
         _vehicleService = VehicleService
     }
 
     async get(req, res) {
         try {
             const { parkingname } = req.params;
-            const { id: neighborhoodId } = req.user;
-            await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId).then(parkingSpace => {
+            const { id: adminId } = req.user;
+            await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId).then(parkingSpace => {
                 if (!parkingSpace) {
                     return res.status(404).send({
                         message: "parkingSpace not found with name " + req.params.parkingname
@@ -34,9 +34,9 @@ class ParkingSpaceController {
 
     async getAll(req, res) {
         try {
-            const { id: neighborhoodId } = req.user;
+            const { id: adminId } = req.user;
             const { pageSize, pageNum } = req.query;
-            const parkingSpace = await _parkingSpaceService.getAll('neighborhood', neighborhoodId, pageSize, pageNum);
+            const parkingSpace = await _parkingSpaceService.getAll('admin', adminId, pageSize, pageNum);
             return res.send(parkingSpace);
         } catch (e) {
             res.status(500).send({ "ErrorMessage": e.message });
@@ -47,8 +47,8 @@ class ParkingSpaceController {
         try {
             const { body } = req;
             const { parkingname } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             _parkingSpaceService.update(parking._id, body).then(parkingSpace => {
                 if (!parkingSpace) {
@@ -75,8 +75,8 @@ class ParkingSpaceController {
     async delete(req, res) {
         try {
             const { parkingname } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             await _parkingSpaceService.delete(parking._id).then(parkingSpace => {
                 if (!parkingSpace) {
@@ -103,8 +103,8 @@ class ParkingSpaceController {
     async create(req, res) {
         try {
             const { body } = req;
-            const { id: neighborhoodId } = req.user;
-            body.neighborhood = neighborhoodId;
+            const { id: adminId } = req.user;
+            body.admin = adminId;
             const parkingSpace = await _parkingSpaceService.create(body);
             return res.send(parkingSpace);
         } catch (e) {
@@ -115,8 +115,8 @@ class ParkingSpaceController {
     async getAllParkingPositionEmptySpaceByVehicleType(req, res) {
         try {
             const { parkingname } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             let { vehicletype = "Car", available = "true" } = req.query;
             const parkingSpace = await _parkingSpaceService.getAllParkingPositionEmptySpaceByVehicleType(parking._id, vehicletype, available);
@@ -129,8 +129,8 @@ class ParkingSpaceController {
     async getParkingPositionByPosNumber(req, res) {
         try {
             const { parkingname, positionnumber } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             const parkingSpace = await _parkingSpaceService.getParkingPositionByPosNumber(parking._id, positionnumber);
             return res.send(parkingSpace);
@@ -142,8 +142,8 @@ class ParkingSpaceController {
     async updateParkingPositionByPosnumber(req, res) {
         try {
             const { parkingname, positionnumber } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             const { body } = req;
             const vehicleExist = await _vehicleService.getUserByVehicleByPlate(body.plate)
@@ -177,8 +177,8 @@ class ParkingSpaceController {
     async deleteParkingPositionByPosnumber(req, res) {
         try {
             const { parkingname, positionnumber } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             return _parkingSpaceService.deleteParkingPositionByPosnumber(parking._id, positionnumber)
                 .then((parkingSpace) => {
@@ -200,8 +200,8 @@ class ParkingSpaceController {
         try {
             const { body } = req;
             const { parkingname } = req.params;
-            const { id: neighborhoodId } = req.user;
-            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, neighborhoodId);
+            const { id: adminId } = req.user;
+            const parking = await _parkingSpaceService.getParkingSpaceByname(parkingname, adminId);
 
             const parkingSpace = await _parkingSpaceService.createParkingPositions(parking._id, body)
             return res.send(parkingSpace);

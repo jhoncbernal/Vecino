@@ -36,11 +36,11 @@ class AuthController {
         }
     }
 
-    async signUpNeighborhood(req, res) {
+    async signUpAdmin(req, res) {
         try {
             const { body } = req;
-            const createdNeighborhood = await _authService.signUpNeighborhood(body)
-            return res.status(200).send(createdNeighborhood);
+            const createdAdmin = await _authService.signUpAdmin(body)
+            return res.status(200).send(createdAdmin);
         } catch (e) {
             res.status(500).send({ "ErrorMessage": e.message });
         }
@@ -68,10 +68,10 @@ class AuthController {
             res.status(500).send({ "ErrorMessage": e.message });
         }
     }
-    async signInNeighborhood(req, res) {
+    async signInAdmin(req, res) {
         try {
             const { body } = req;
-            const creds = await _authService.signInNeighborhood(body)
+            const creds = await _authService.signInAdmin(body)
             return res.status(200).send(creds);
         } catch (e) {
             res.status(500).send({ "ErrorMessage": e.message });

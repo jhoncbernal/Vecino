@@ -3,23 +3,23 @@ const { SECRET_OWNER } = require('../config');
 const { sendEmail, HTMLReplace } = require('../helpers');
 
 let _userService = null;
-let _neighborhoodService = null;
+let _adminService = null;
 
 class AuthService {
-    constructor({ UserService, NeighborhoodService }) {
+    constructor({ UserService, AdminService }) {
         _userService = UserService;
-        _neighborhoodService = NeighborhoodService;
+        _adminService = AdminService;
     }
-    async signUpNeighborhood(neighborhood) {
-        const { username } = neighborhood;
-        const neighborhoodExist = await _neighborhoodService.getNeighborhoodByUsername(username);
-        if (neighborhoodExist) {
+    async signUpAdmin(admin) {
+        const { username } = admin;
+        const adminExist = await _adminService.getAdminByUsername(username);
+        if (adminExist) {
             const error = new Error();
             error.status = 409;
-            error.message = "Neighborhood already exists";
+            error.message = "Admin already exists";
             throw error;
         }
-        return await _neighborhoodService.create(neighborhood);
+        return await _adminService.create(admin);
     }
     async signUp(userBody) {
         const { neighborhoodcode } = userBody;
@@ -49,9 +49,9 @@ class AuthService {
                     if (error) throw error;
                 });
         } else {
-            userExist = await selectNeighborhoodOrUserProperty("neighborhoodcode", neighborhoodcode, true).catch(err => { throw err });
+            userExist = await selectAdminOrUserProperty("neighborhoodcode", neighborhoodcode, true).catch(err => { throw err });
             if (userBody.roles.includes("ROLE_USER_ACCESS")) {
-                return _userService.create({ ...userBody, neighborhood: userExist.user._id })
+                return _userService.create({ ...userBody, admin: userExist.user._id })
                     .catch((error) => {
                         if (error.message.includes("duplicate key")) {
                             const error = new Error();
@@ -63,7 +63,7 @@ class AuthService {
                     });
             }
             if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") && !userExist.user.isVerified) {
-                return _neighborhoodService.update(userExist.user._id, userBody)
+                return _adminService.update(userExist.user._id, userBody)
                     .then((user) => { return user.save(); }
                     );
             } else {
@@ -75,7 +75,7 @@ class AuthService {
         }
 
     }
-    async signIn(user,singUp=false) {
+    async signIn(user, singUp = false) {
         const { username, email, password, secretKey } = user;
         let propName, value = null;
         if (username) {
@@ -85,7 +85,7 @@ class AuthService {
             propName = "email",
                 value = email
         }
-        return await selectNeighborhoodOrUserProperty(propName, value,singUp)
+        return await selectAdminOrUserProperty(propName, value, singUp)
             .then((userExist) => {
                 let validPassword;
                 let token;
@@ -118,11 +118,11 @@ class AuthService {
                         token = generateTokenOwner(userToEncode);
                     }
                     if (userExist.user.roles.includes("ROLE_ADMINISTRATION_ACCESS") && validPassword) {
-                        const neighborhoodToEncode = {
+                        const adminToEncode = {
                             username: userExist.user.email,
                             id: userExist.user._id
                         };
-                        token = generateTokenAdmin(neighborhoodToEncode);
+                        token = generateTokenAdmin(adminToEncode);
                     }
                 }
                 if (!token) {
@@ -146,7 +146,7 @@ class AuthService {
             propName = "email",
                 value = email
         }
-        const userExist = await selectNeighborhoodOrUserProperty(propName, value);
+        const userExist = await selectAdminOrUserProperty(propName, value);
 
         return await userExist.service.recover(propName, value)
             .then(user => {
@@ -176,7 +176,7 @@ class AuthService {
             });
     }
     async reset(token) {
-        const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token);
+        const userExist = await selectAdminOrUserProperty("resetPasswordToken", token);
         return await userExist.service.reset(token)
             .then((user) => {
                 if (!user) {
@@ -190,7 +190,7 @@ class AuthService {
             .catch(err => { throw err });
     }
     async resetPassword(token, body) {
-        const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token);
+        const userExist = await selectAdminOrUserProperty("resetPasswordToken", token);
         return await userExist.service.resetPassword(token)
             .then((user) => {
                 if (!user) {
@@ -200,7 +200,7 @@ class AuthService {
                     throw err;
                 }
                 //Set the new password
-                user.password = body.password; 
+                user.password = body.password;
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
 
@@ -223,7 +223,7 @@ class AuthService {
             });
     }
     async verifyEmail(body, host) {
-        return await selectNeighborhoodOrUserProperty("email", body.email, true)
+        return await selectAdminOrUserProperty("email", body.email, true)
             .then((userExist) => {
                 return userExist.service.verifyEmail(body)
                     .then(user => {
@@ -257,7 +257,7 @@ class AuthService {
     }
     async verify(token) {
         let replacements = null;
-        const userExist = await selectNeighborhoodOrUserProperty("resetPasswordToken", token, true);
+        const userExist = await selectAdminOrUserProperty("resetPasswordToken", token, true);
         return await userExist.service.verify(token)
             .then((user) => {
                 if (!user) {
@@ -265,10 +265,10 @@ class AuthService {
                     err.status = 401;
                     err.message = 'Verify token is invalid or has expired.';
                     throw err;
-                } if (user.email.length <5 ||
-                    user.firstName.length <3 ||
-                    user.phone.length <8 ||
-                    user.documentId.toString().length <8){
+                } if (user.email.length < 5 ||
+                    user.firstName.length < 3 ||
+                    user.phone.length < 8 ||
+                    user.documentId.toString().length < 8) {
                     replacements = {
                         email: user.email,
                         name: user.firstName,
@@ -276,39 +276,39 @@ class AuthService {
                         phone: user.phone,
                         documentId: user.documentId
                     };
-                }else{
-               if (!user.isVerified) { user.enabled = true };
-                //Set the new values
-                user.isVerified = true;
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
-             
+                } else {
+                    if (!user.isVerified) { user.enabled = true };
+                    //Set the new values
+                    user.isVerified = true;
+                    user.resetPasswordToken = undefined;
+                    user.resetPasswordExpires = undefined;
+
                 }
-                
+
                 // Save
-               return user.save().then((user)=>{
+                return user.save().then((user) => {
                     return sendEmail(user,
                         "Your email has been verified", `
                     Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
-                        ('../public/pages/changeconfirmation.html')).then(()=>{
-                        
+                        ('../public/pages/changeconfirmation.html')).then(() => {
 
-                if(replacements!=null){
-                    return HTMLReplace(('../public/pages/verifyform.html'), replacements).then((result) => { return result });
-                    }
-                    else{
-                        replacements = {
-                            username: user.firstName,
-                            link: `Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `
-                        };
-                      return  HTMLReplace(('../public/pages/changeconfirmation.html'), replacements).then((result) => { return result });
-                    }
-                }).catch((error) => {
-                    throw error;
+
+                            if (replacements != null) {
+                                return HTMLReplace(('../public/pages/verifyform.html'), replacements).then((result) => { return result });
+                            }
+                            else {
+                                replacements = {
+                                    username: user.firstName,
+                                    link: `Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `
+                                };
+                                return HTMLReplace(('../public/pages/changeconfirmation.html'), replacements).then((result) => { return result });
+                            }
+                        }).catch((error) => {
+                            throw error;
+                        });
+
                 });
-                
-                });
-          
+
             })
             .catch((error) => {
                 throw error
@@ -316,10 +316,10 @@ class AuthService {
     }
 
 }
-async function selectNeighborhoodOrUserProperty(propName, value, signUp = false) {
+async function selectAdminOrUserProperty(propName, value, signUp = false) {
     const userExist = await _userService.getUserByProperty(propName, value);
-    const neighborhoodExist = await _neighborhoodService.getNeighborhoodByProperty(propName, value);
-    if (!userExist && !neighborhoodExist) {
+    const adminExist = await _adminService.getAdminByProperty(propName, value);
+    if (!userExist && !adminExist) {
         const error = new Error();
         error.status = 404;
         error.message = `${propName} does not exist`;
@@ -328,9 +328,9 @@ async function selectNeighborhoodOrUserProperty(propName, value, signUp = false)
 
     let _service = null;
     let _user = null;
-    if (neighborhoodExist) {
-        _service = _neighborhoodService;
-        _user = neighborhoodExist;
+    if (adminExist) {
+        _service = _adminService;
+        _user = adminExist;
     } else {
         _service = _userService;
         _user = userExist;

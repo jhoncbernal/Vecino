@@ -1,7 +1,7 @@
-module.exports={
-    UserRepository:require('./user.repository'),
-    NeighborhoodRepository:require('./neighborhood.repository'),
-    VehicleRepository:require('./vehicle.repository'),
-    ParkingSpaceRepository:require('./parkingspace.repository'),
-    FileRepository:require('./file.repository'),
+module.exports = {
+    UserRepository: require('./user.repository'),
+    AdminRepository: require('./admin.repository'),
+    VehicleRepository: require('./vehicle.repository'),
+    ParkingSpaceRepository: require('./parkingspace.repository'),
+    FileRepository: require('./file.repository'),
 }

@@ -21,20 +21,16 @@ const ProductSchema = new Schema({
         ref: "provider",
         autopopulate: {
             select: [
-                'firstName',
-                'lastName',
-                'phone',
-                'email',
-                'HomeNumber',
-                'BlockNumber',
-                'admin username']
+                'companyName',
+                'address',
+                'phone']
         }
     }
 }, { timestamps: true });
 
 
-VehicleSchema.plugin(require("mongoose-autopopulate"))
+ProductSchema.plugin(require("mongoose-autopopulate"))
 module.exports = {
-    Vehicle: mongoose.model('vehicle', VehicleSchema),
-    VehicleSchema: VehicleSchema
+    Product: mongoose.model('vehicle', ProductSchema),
+    Product: ProductSchema
 }

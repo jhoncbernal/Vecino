@@ -23,9 +23,9 @@ const ParkingSpaceSchema = new Schema({
     prices: [PricesSchema],
     positions: [PositionsSchema],
     schedule: [ScheduleSchema],
-    admin: {
+    neighborhood: {
         type: Schema.Types.ObjectId,
-        ref: "admin",
+        ref: "neighborhood",
         required: true,
         autopopulate: { select: ['username', 'address', 'phone'] }
     }

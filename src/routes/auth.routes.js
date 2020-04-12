@@ -5,8 +5,6 @@ module.exports = function ({ AuthController }) {
 
     router.post('/signup', AuthController.signUp);
     router.post('/signin', AuthController.signIn);
-    router.post('/signupadmin', AuthController.signUpAdmin);
-    router.post('/signinadmin', AuthController.signInAdmin);
 
     router.post('/recover', AuthController.recover);
     router.get('/reset/:token', AuthController.reset);

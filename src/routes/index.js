@@ -11,6 +11,7 @@ module.exports = function ({
     UserRoutes,
     AuthRoutes,
     AdminRoutes,
+    ProviderRoutes,
     VehicleRoutes,
     ParkingSpaceRoutes,
     PositionsRoutes,
@@ -31,6 +32,7 @@ module.exports = function ({
     apiRoutes.use('/user', UserRoutes);
     apiRoutes.use('/auth', AuthRoutes);
     apiRoutes.use('/admin', AdminRoutes);
+    apiRoutes.use('/provider', ProviderRoutes);
     apiRoutes.use('/vehicle', VehicleRoutes);
     apiRoutes.use('/parkingspace', ParkingSpaceRoutes);
     apiRoutes.use('/parkingspace/positions', PositionsRoutes);

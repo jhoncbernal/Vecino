@@ -11,10 +11,10 @@ const ProductSchema = new Schema({
     urlImage:       { type: String, required: true},
     keyImage:       { type: String, required: true},
     enabled:        { type: Boolean, default: true },
-    promotionPrice: { type: Number, required: true },
+    promotionPrice: { type: Number, required: false },
     promotionToken: { type: String, required: false },
     promotionExpires: { type: Date, required: false },
-    totalAmount:    { type: Number },
+    totalAmount:    { type: Number, required: true },
     messureType:    { type: String,required: [true, 'What kind of measure has the product? ["Lb", "Kg", "Und"]'] },
     provider: {
         type: Schema.Types.ObjectId,

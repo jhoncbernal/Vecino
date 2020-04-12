@@ -13,7 +13,7 @@ const AdminSchema = new Schema({
     documentId: { type: Number, required: [true, 'What is your id number?'], unique: true },
     phone: { type: String, required: [true, 'What is your contact number?'] },
     address: { type: String, required: true },
-    neighborhoodcode: { type: String, required: [true, 'What is your neighborhoodcode?'], unique: true, index: true },
+    uniquecode: { type: String, required: [true, 'What is your uniquecode?'], unique: true, index: true },
     totalNumberOfUsers: { type: Number, required: true },
     registeredUsers: { type: String, max: this.totalNumberOfUsers },
     resetPasswordToken: { type: String, required: false },
@@ -64,4 +64,4 @@ AdminSchema.methods.generatePasswordReset = function () {
     this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
     this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
 };
-module.exports = mongoose.model('admin', AdminSchema);
+module.exports = mongoose.model('neighborhood', AdminSchema);

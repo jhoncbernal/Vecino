@@ -19,7 +19,7 @@ class FileController {
             }
             const result = await _fileService.uploadFileCSV(req.files.file.data).catch((err) => { throw err });
             if (result) {
-                await _userService.updateUserPoints('neighborhoodcode', admin.neighborhoodcode).catch((err) => { throw err });
+                await _userService.updateUserPoints('uniquecode', admin.uniquecode).catch((err) => { throw err });
                 return res.status(200).send('Updated');
             }
 

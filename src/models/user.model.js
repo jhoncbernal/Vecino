@@ -16,7 +16,7 @@ const UserSchema = new Schema({
     resetPasswordExpires: { type: Date, required: false },
     isVerified: { type: Boolean, default: 0 },
 
-    neighborhoodcode: { type: String, required: [true, 'What is your neighborhoodcode?'] },
+    uniquecode: { type: String, required: [true, 'What is your uniquecode?'] },
     code: { type: String },
     homeNumber: { type: Number, required: true },
     blockNumber: { type: Number, required: true },
@@ -26,9 +26,9 @@ const UserSchema = new Schema({
     payOnTime: { type: Boolean, default: false },
     count: { type: Number, default: 1 },
     averagePoints: { type: Number, default: 0 },
-    admin: {
+    neighborhood: {
         type: Schema.Types.ObjectId,
-        ref: "admin",
+        ref: "neighborhood",
         autopopulate: { select: ['firstName', 'username', 'address'] }
     },
 

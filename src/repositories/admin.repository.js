@@ -5,8 +5,8 @@ class AdminRepository extends BaseRepository {
         super(Admin);
         _admin = Admin;
     }
-    async getAdminByneighborhoodcode(neighborhoodcode) {
-        return await _admin.findOne({ neighborhoodcode });
+    async getAdminByuniquecode(uniquecode) {
+        return await _admin.findOne({ uniquecode });
     }
     async getAdminByUsername(username) {
         return await _admin.findOne({ username });
@@ -16,7 +16,7 @@ class AdminRepository extends BaseRepository {
     }
     async getAllAdminNames(pageSize, pageNum) {
         const skips = pageSize * (pageNum - 1);
-        return await _admin.find({}, { 'firstName': 1, 'neighborhoodcode': 1, '_id': 0 })
+        return await _admin.find({}, { 'firstName': 1, 'uniquecode': 1, '_id': 0 })
             .skip(skips)
             .limit(pageSize);
     }

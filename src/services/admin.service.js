@@ -6,8 +6,8 @@ class AdminService extends BaseService {
         _adminRepository = AdminRepository;
     }
 
-    async getAdminByneighborhoodcode(neighborhoodcode) {
-        return await _adminRepository.getAdminByneighborhoodcode(neighborhoodcode);
+    async getAdminByuniquecode(uniquecode) {
+        return await _adminRepository.getAdminByuniquecode(uniquecode);
     }
 
     async getAdminByUsername(username) {

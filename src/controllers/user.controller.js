@@ -13,7 +13,7 @@ class UserController {
         const { id: userId } = req.user;
         const { pageSize, pageNum } = req.query;
         const admin = await _adminService.get(userId);
-        const users = await _userService.getAll('neighborhoodcode', admin.neighborhoodcode, pageSize, pageNum);
+        const users = await _userService.getAll('uniquecode', admin.uniquecode, pageSize, pageNum);
         return res.send(users);
     }
     async update(req, res) {
@@ -34,7 +34,7 @@ class UserController {
             const admin = await _adminService.get(userId).catch((err) => {
                 return res.status(500).send(err);
             });
-            const users = await _userService.getUsersByPoints('neighborhoodcode', admin.neighborhoodcode, pageSize, pageNum);
+            const users = await _userService.getUsersByPoints('uniquecode', admin.uniquecode, pageSize, pageNum);
             return res.send(users);
         } catch (err) {
             return res.status(500).send(err);

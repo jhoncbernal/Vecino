@@ -2,27 +2,17 @@ const { generateToken, generateTokenAdmin, generateTokenOwner } = require('../he
 const { SECRET_OWNER } = require('../config');
 const { sendEmail, HTMLReplace } = require('../helpers');
 
-let _userService = null;
-let _adminService = null;
+let _userService, _providerService, _adminService = null;
 
 class AuthService {
-    constructor({ UserService, AdminService }) {
+    constructor({ UserService, AdminService, ProviderService }) {
         _userService = UserService;
         _adminService = AdminService;
+        _providerService = ProviderService;
     }
-    async signUpAdmin(admin) {
-        const { username } = admin;
-        const adminExist = await _adminService.getAdminByUsername(username);
-        if (adminExist) {
-            const error = new Error();
-            error.status = 409;
-            error.message = "Admin already exists";
-            throw error;
-        }
-        return await _adminService.create(admin);
-    }
+
     async signUp(userBody) {
-        const { neighborhoodcode } = userBody;
+        const { uniquecode } = userBody;
         userBody.enabled = false;
         let userExist;
         if ((userBody.roles.includes("ROLE_OWNER_ACCESS"))) {
@@ -49,9 +39,9 @@ class AuthService {
                     if (error) throw error;
                 });
         } else {
-            userExist = await selectAdminOrUserProperty("neighborhoodcode", neighborhoodcode, true).catch(err => { throw err });
+            userExist = await selectServiceByProperty("uniquecode", uniquecode, true).catch(err => { throw err });
             if (userBody.roles.includes("ROLE_USER_ACCESS")) {
-                return _userService.create({ ...userBody, admin: userExist.user._id })
+                return _userService.create({ ...userBody, neighborhood: userExist.user._id })
                     .catch((error) => {
                         if (error.message.includes("duplicate key")) {
                             const error = new Error();
@@ -62,8 +52,13 @@ class AuthService {
                         if (error) throw error;
                     });
             }
-            if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") && !userExist.user.isVerified) {
+            else if (userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") && !userExist.user.isVerified) {
                 return _adminService.update(userExist.user._id, userBody)
+                    .then((user) => { return user.save(); }
+                    );
+            }
+            else if (userBody.roles.includes("ROLE_PROVIDER_ACCESS") && !userExist.user.isVerified) {
+                return _providerService.update(userExist.user._id, userBody)
                     .then((user) => { return user.save(); }
                     );
             } else {
@@ -73,8 +68,8 @@ class AuthService {
                 throw error;
             }
         }
-
     }
+
     async signIn(user, singUp = false) {
         const { username, email, password, secretKey } = user;
         let propName, value = null;
@@ -85,7 +80,7 @@ class AuthService {
             propName = "email",
                 value = email
         }
-        return await selectAdminOrUserProperty(propName, value, singUp)
+        return await selectServiceByProperty(propName, value, singUp)
             .then((userExist) => {
                 let validPassword;
                 let token;
@@ -124,6 +119,13 @@ class AuthService {
                         };
                         token = generateTokenAdmin(adminToEncode);
                     }
+                    if (userExist.user.roles.includes("ROLE_PROVIDER_ACCESS") && validPassword) {
+                        const providerToEncode = {
+                            username: userExist.user.email,
+                            id: userExist.user._id
+                        };
+                        token = generateTokenAdmin(providerToEncode);
+                    }
                 }
                 if (!token) {
                     const error = new Error();
@@ -146,7 +148,7 @@ class AuthService {
             propName = "email",
                 value = email
         }
-        const userExist = await selectAdminOrUserProperty(propName, value);
+        const userExist = await selectServiceByProperty(propName, value);
 
         return await userExist.service.recover(propName, value)
             .then(user => {
@@ -175,8 +177,9 @@ class AuthService {
                 throw error
             });
     }
+
     async reset(token) {
-        const userExist = await selectAdminOrUserProperty("resetPasswordToken", token);
+        const userExist = await selectServiceByProperty("resetPasswordToken", token);
         return await userExist.service.reset(token)
             .then((user) => {
                 if (!user) {
@@ -189,8 +192,9 @@ class AuthService {
             })
             .catch(err => { throw err });
     }
+
     async resetPassword(token, body) {
-        const userExist = await selectAdminOrUserProperty("resetPasswordToken", token);
+        const userExist = await selectServiceByProperty("resetPasswordToken", token);
         return await userExist.service.resetPassword(token)
             .then((user) => {
                 if (!user) {
@@ -222,8 +226,9 @@ class AuthService {
                 throw error
             });
     }
+
     async verifyEmail(body, host) {
-        return await selectAdminOrUserProperty("email", body.email, true)
+        return await selectServiceByProperty("email", body.email, true)
             .then((userExist) => {
                 return userExist.service.verifyEmail(body)
                     .then(user => {
@@ -255,9 +260,10 @@ class AuthService {
             });
 
     }
+
     async verify(token) {
         let replacements = null;
-        const userExist = await selectAdminOrUserProperty("resetPasswordToken", token, true);
+        const userExist = await selectServiceByProperty("resetPasswordToken", token, true);
         return await userExist.service.verify(token)
             .then((user) => {
                 if (!user) {
@@ -314,12 +320,26 @@ class AuthService {
                 throw error
             });
     }
+    async signInAndUpdate(loginUser,body) {
+        let _service =await selectServiceByProperty("email",loginUser.email,true);
+        console.log(_service);
+        const updateUser = await  _service.service.update(loginUser._id, body).then((user) => {
+            //Set the new values
+            user.enabled = true;
+            user.isVerified = true;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+            // Save
+            return user.save()
+        });
 
+    }
 }
-async function selectAdminOrUserProperty(propName, value, signUp = false) {
+ async function selectServiceByProperty(propName, value, signUp = false) {
     const userExist = await _userService.getUserByProperty(propName, value);
     const adminExist = await _adminService.getAdminByProperty(propName, value);
-    if (!userExist && !adminExist) {
+    const providerExist = await _providerService.getProviderByProperty(propName, value);
+    if (!userExist && !adminExist && !providerExist) {
         const error = new Error();
         error.status = 404;
         error.message = `${propName} does not exist`;
@@ -331,9 +351,12 @@ async function selectAdminOrUserProperty(propName, value, signUp = false) {
     if (adminExist) {
         _service = _adminService;
         _user = adminExist;
-    } else {
+    } else if (userExist) {
         _service = _userService;
         _user = userExist;
+    } else {
+        _service = _providerService;
+        _user = providerExist;
     }
     if ((!_user.isVerified) && !signUp) {
         const error = new Error();

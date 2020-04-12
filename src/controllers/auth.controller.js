@@ -4,6 +4,11 @@ class AuthController {
         _authService = AuthService;
         _userService = UserService;
     }
+    /**
+     * SignUp for user and AdminNeigboorhood
+     * @param {*} req 
+     * @param {*} res 
+     */
     async signUp(req, res) {
         try {
             const { body } = req;
@@ -22,6 +27,7 @@ class AuthController {
             res.status(500).send({ "ErrorMessage": e.message });
         }
     }
+
     async signIn(req, res) {
         try {
             const { body } = req;
@@ -36,11 +42,11 @@ class AuthController {
         }
     }
 
-    async signUpAdmin(req, res) {
+    async signUpProvider(req, res) {
         try {
             const { body } = req;
-            const createdAdmin = await _authService.signUpAdmin(body)
-            return res.status(200).send(createdAdmin);
+            const createdProvider = await _authService.signUpProvider(body)
+            return res.status(200).send(createdProvider);
         } catch (e) {
             res.status(500).send({ "ErrorMessage": e.message });
         }
@@ -53,17 +59,10 @@ class AuthController {
                 delete body.email;
             }
             const result = await _authService.signIn(body, true);
+ 
             delete body.password;
-            const updateUser = await _userService.update(result.user._id, body).then((user) => {
-                //Set the new values
-                user.enabled = true;
-                user.isVerified = true;
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
-                // Save
-                return user.save()
-            });
-            return res.redirect('https://vecinoo.firebaseapp.com/')//send("Actualizacion de datos exitosa");
+            await _authService.signInAndUpdate(result.user,body);
+            return res.redirect('https://vecinofront.herokuapp.com/login')//send("Actualizacion de datos exitosa");
         } catch (e) {
             res.status(500).send({ "ErrorMessage": e.message });
         }

@@ -36,7 +36,7 @@ class ParkingSpaceController {
         try {
             const { id: adminId } = req.user;
             const { pageSize, pageNum } = req.query;
-            const parkingSpace = await _parkingSpaceService.getAll('admin', adminId, pageSize, pageNum);
+            const parkingSpace = await _parkingSpaceService.getAll('neighborhood', adminId, pageSize, pageNum);
             return res.send(parkingSpace);
         } catch (e) {
             res.status(500).send({ "ErrorMessage": e.message });

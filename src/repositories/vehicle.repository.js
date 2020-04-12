@@ -17,7 +17,7 @@ class VehicleRepository extends BaseRepository {
     }
     async getVehicleByPlate(plate, userId) {
         const vehicle = await _vehicle.findOne({ "plate": plate });
-        const user = await _user.findOne({ "admin": userId, "_id": vehicle.user });
+        const user = await _user.findOne({ "neighborhood": userId, "_id": vehicle.user });
         if (user) { return vehicle }
         else { throw ("Vehicle is not asociate") }
     }

@@ -134,7 +134,7 @@ class ParkingSpaceRepository extends BaseRepository {
         } catch (err) { throw err }
     }
     async getParkingSpaceByname(parkingname, adminId) {
-        return await _parkingspace.findOne({ "parkingname": parkingname, "admin": adminId });
+        return await _parkingspace.findOne({ "parkingname": parkingname, "neighborhood": adminId });
     }
     async createParkingPositions(parkingspaceId, body) {
         try {

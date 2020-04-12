@@ -104,7 +104,7 @@ class ParkingSpaceController {
         try {
             const { body } = req;
             const { id: adminId } = req.user;
-            body.admin = adminId;
+            body.neighborhood = adminId;
             const parkingSpace = await _parkingSpaceService.create(body);
             return res.send(parkingSpace);
         } catch (e) {

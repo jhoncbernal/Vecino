@@ -3,10 +3,10 @@ const { Schema } = mongoose;
 
 const ProductSchema = new Schema({
     productType:    { type: String, required: [true, 'What kind of product is? ["Cleaning", "food", "Health"]'] },
-    productName:    { type: String, required: [true, 'What is the name of the product? ["Soap", "Rice", "Pills"]']},
+    productName:    { type: String, required: [true, 'What is the name of the product? ["Soap", "Rice", "Pills"]'], unique: true, index: true },
     code:           { type: Number, unique: true, index: true },
     brand:          { type: String, lowercase: true },
-    freatures:      { type: String, required: true },
+    features:      { type: String, required: true },
     price:          { type: Number, required: true },
     urlImage:       { type: String, required: true},
     keyImage:       { type: String, required: true},
@@ -15,13 +15,13 @@ const ProductSchema = new Schema({
     promotionToken: { type: String, required: false },
     promotionExpires: { type: Date, required: false },
     totalAmount:    { type: Number, required: true },
-    messureType:    { type: String,required: [true, 'What kind of measure has the product? ["Lb", "Kg", "Und"]'] },
+    measureType:    { type: String,required: [true, 'What kind of measure has the product? ["Lb", "Kg", "Und"]'] },
     provider: {
         type: Schema.Types.ObjectId,
         ref: "provider",
         autopopulate: {
             select: [
-                'companyName',
+                'firstName',
                 'address',
                 'phone']
         }
@@ -30,7 +30,4 @@ const ProductSchema = new Schema({
 
 
 ProductSchema.plugin(require("mongoose-autopopulate"))
-module.exports = {
-    Product: mongoose.model('vehicle', ProductSchema),
-    Product: ProductSchema
-}
+module.exports =  mongoose.model('product', ProductSchema);

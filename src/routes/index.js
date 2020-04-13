@@ -15,7 +15,8 @@ module.exports = function ({
     VehicleRoutes,
     ParkingSpaceRoutes,
     PositionsRoutes,
-    FileRoutes
+    FileRoutes,
+    ProductRoutes
 }) {
     const router = express.Router();
     const apiRoutes = express.Router();
@@ -37,6 +38,7 @@ module.exports = function ({
     apiRoutes.use('/parkingspace', ParkingSpaceRoutes);
     apiRoutes.use('/parkingspace/positions', PositionsRoutes);
     apiRoutes.use('/file', FileRoutes);
+    apiRoutes.use('/product', ProductRoutes);
 
 
 

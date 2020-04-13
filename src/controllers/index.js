@@ -6,4 +6,5 @@ module.exports = {
     VehicleController: require('./vehicle.controller'),
     ParkingSpaceController: require('./parkingspace.controller'),
     FileController: require('./file.controller'),
+    ProductController: require('./product.controller'),
 }

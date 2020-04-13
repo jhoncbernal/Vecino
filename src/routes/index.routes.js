@@ -6,5 +6,6 @@ module.exports = {
     VehicleRoutes: require('./vehicle.routes'),
     ParkingSpaceRoutes: require('./parkingspace.routes'),
     PositionsRoutes: require('./positions.routes'),
-    FileRoutes: require('./file.routes')
+    FileRoutes: require('./file.routes'),
+    ProductRoutes:require('./product.routes'),
 }

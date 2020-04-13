@@ -7,5 +7,5 @@ module.exports = {
     VehicleService: require('./vehicle.service'),
     ParkingSpaceService: require('./parkingspace.service'),
     FileService: require('./file.service'),
-
+    ProductService: require('./product.service'),
 }

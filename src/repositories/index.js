@@ -5,4 +5,5 @@ module.exports = {
     VehicleRepository: require('./vehicle.repository'),
     ParkingSpaceRepository: require('./parkingspace.repository'),
     FileRepository: require('./file.repository'),
+    ProductRepository: require('./product.repository'),
 }

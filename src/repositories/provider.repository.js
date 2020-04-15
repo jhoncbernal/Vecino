@@ -16,7 +16,7 @@ class ProviderRepository extends BaseRepository {
     }
     async getAllProviderNames(pageSize, pageNum) {
         const skips = pageSize * (pageNum - 1);
-        return await _provider.find({}, { 'firstName': 1, 'uniquecode': 1, '_id': 0 })
+        return await _provider.find({}, { 'firstName': 1, 'uniquecode': 1, 'category': 1 })
             .skip(skips)
             .limit(pageSize);
     }

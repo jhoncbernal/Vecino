@@ -15,9 +15,9 @@ const UserSchema = new Schema({
     resetPasswordToken: { type: String, required: false },
     resetPasswordExpires: { type: Date, required: false },
     isVerified: { type: Boolean, default: 0 },
+    fireToken:{ type: String },
 
     uniquecode: { type: String, required: [true, 'What is your uniquecode?'] },
-    code: { type: String },
     homeNumber: { type: Number, required: true },
     blockNumber: { type: Number, required: true },
     points: { type: Number, required: true, trim: true, default: 5 },

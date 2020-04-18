@@ -24,7 +24,7 @@ class BillController {
             message: "bill not found with id " + req.params.billId,
           });
         }
-        return res.status(500).send({
+        return res.status(error.status).send({
           message: "Error retrieving bill with id " + req.params.billId,
         });
       });
@@ -33,7 +33,7 @@ class BillController {
   async getAll(req, res) {
     const { id: userId } = req.user;
     const bills = await _billService.getBillsByProvider(userId);
-     bills = await _billService.getBillsByUser(userId);
+    bills = await _billService.getBillsByUser(userId);
     return res.send(bills);
   }
 
@@ -56,7 +56,7 @@ class BillController {
             message: "bill not found with id " + req.params.billId,
           });
         }
-        return res.status(500).send({
+        return res.status(error.status).send({
           message: "Error updating bill with id " + req.params.billId,
         });
       });
@@ -80,7 +80,7 @@ class BillController {
             message: "bill not found with id " + req.params.billId,
           });
         }
-        return res.status(500).send({
+        return res.status(error.status).send({
           message: "Could not delete bill with id " + req.params.billId,
         });
       });
@@ -89,7 +89,7 @@ class BillController {
   async create(req, res) {
     let { body } = req;
     const { id: userId } = req.user;
-    body.user=userId;
+    body.user = userId;
 
     let shopingCart = await _productService.getProductsTotalPrice(
       body.products
@@ -97,13 +97,13 @@ class BillController {
 
     if (shopingCart !== {}) {
       body.products = shopingCart.products;
-     
+
       body.subTotal = shopingCart.total;
-      body.Total = shopingCart.total+body.valueDelivery;
-      if(body.cashValue){
-        body.change=body.cashValue-body.Total
+      body.Total = shopingCart.total + body.valueDelivery;
+      if (body.cashValue) {
+        body.change = body.cashValue - body.Total;
       }
-      
+
       const bill = await _billService.create(body);
       return res.send(bill);
     }

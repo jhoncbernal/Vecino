@@ -10,7 +10,10 @@ class ProductService extends BaseService {
         return await _productRepository.getProductsByProvider(providerId);
     }
     async getProductByProperty(propName, value){
-        return await await _productRepository.getProductByProperty(propName, value);
+        return  await _productRepository.getProductByProperty(propName, value);
+    }
+    async getProductsTotalPrice(products){
+        return  await _productRepository.getProductsTotalPrice(products);
     }
 
 }

@@ -74,6 +74,27 @@ async delete(req,res){
         });
     });
 }
+async getProductsTotalPrice(req,res){
+    const {productsIds}=req.query;
+    await _productService.getProductsTotalPrice(productsIds).then(product => {
+        if(!product) {
+            return res.status(404).send({
+                message: "products not found with ids " + productsIds
+            });
+        }
+        res.send(product);
+    }).catch(err => {
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+                message: "products not found with body " + productsIds
+            });                
+        }
+        return res.status(500).send({
+            message: err
+        });
+    });
+}
+
 
 async create(req,res){
     const {body}=req;
@@ -91,6 +112,7 @@ async create(req,res){
     const product= await _productService.create(body);
     return res.send(product);
 }
+
 
 }
 module.exports=ProductController

@@ -8,4 +8,5 @@ module.exports = {
     ParkingSpaceService: require('./parkingspace.service'),
     FileService: require('./file.service'),
     ProductService: require('./product.service'),
+    BillService: require('./bill.service'),
 }

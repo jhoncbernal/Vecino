@@ -8,4 +8,5 @@ module.exports = {
     PositionsRoutes: require('./positions.routes'),
     FileRoutes: require('./file.routes'),
     ProductRoutes:require('./product.routes'),
+    BillRoutes:require('./bill.routes'),
 }

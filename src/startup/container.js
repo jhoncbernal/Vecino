@@ -4,18 +4,18 @@ const config = require('../config');
 const app = require('.')
 
 //services
-const { UserService, AuthService, AdminService,ProviderService, VehicleService, ParkingSpaceService, FileService,ProductService } = require('../services');
+const { UserService, AuthService, AdminService,ProviderService, VehicleService, ParkingSpaceService, FileService,ProductService,BillService } = require('../services');
 //controllers
-const { UserController, AuthController, AdminController,ProviderController, VehicleController, ParkingSpaceController, FileController,ProductController } = require('../controllers');
+const { UserController, AuthController, AdminController,ProviderController, VehicleController, ParkingSpaceController, FileController,ProductController,BillController } = require('../controllers');
 //routes
-const { UserRoutes, AuthRoutes, AdminRoutes,ProviderRoutes, VehicleRoutes, ParkingSpaceRoutes, PositionsRoutes, FileRoutes,ProductRoutes } = require('../routes/index.routes');
+const { UserRoutes, AuthRoutes, AdminRoutes,ProviderRoutes, VehicleRoutes, ParkingSpaceRoutes, PositionsRoutes, FileRoutes,ProductRoutes,BillRoutes } = require('../routes/index.routes');
 const Routes = require('../routes');
 
 
 //models
-const { User, Admin,Provider, Vehicle, ParkingSpace, Positions, File,Product } = require('../models')
+const { User, Admin,Provider, Vehicle, ParkingSpace, Positions, File,Product,Bill } = require('../models')
 //repositories
-const { UserRepository, AdminRepository,ProviderRepository, VehicleRepository, ParkingSpaceRepository, FileRepository,ProductRepository } = require('../repositories')
+const { UserRepository, AdminRepository,ProviderRepository, VehicleRepository, ParkingSpaceRepository, FileRepository,ProductRepository,BillRepository } = require('../repositories')
 
 const container = createContainer();
 container
@@ -33,6 +33,7 @@ container
         ParkingSpaceService: asClass(ParkingSpaceService).singleton(),
         FileService: asClass(FileService).singleton(),
         ProductService: asClass(ProductService).singleton(),
+        BillService: asClass(BillService).singleton(),
     })
     .register({
         UserController: asClass(UserController.bind(UserController)).singleton(),
@@ -42,7 +43,8 @@ container
         VehicleController: asClass(VehicleController.bind(VehicleController)).singleton(),
         ParkingSpaceController: asClass(ParkingSpaceController.bind(ParkingSpaceController)).singleton(),
         FileController: asClass(FileController.bind(FileController)).singleton(),
-        ProductController: asClass(ProductController.bind(ProductController)).singleton()
+        ProductController: asClass(ProductController.bind(ProductController)).singleton(),
+        BillController: asClass(BillController.bind(BillController)).singleton(),
     })
     .register({
         UserRoutes: asFunction(UserRoutes).singleton(),
@@ -54,6 +56,7 @@ container
         PositionsRoutes: asFunction(PositionsRoutes).singleton(),
         FileRoutes: asFunction(FileRoutes).singleton(),
         ProductRoutes: asFunction(ProductRoutes).singleton(),
+        BillRoutes: asFunction(BillRoutes).singleton(),
     }).register({
         User: asValue(User),
         Admin: asValue(Admin),
@@ -63,6 +66,7 @@ container
         Positions: asValue(Positions),
         File: asValue(File),
         Product: asValue(Product),
+        Bill: asValue(Bill),
     }).register({
         UserRepository: asClass(UserRepository).singleton(),
         AdminRepository: asClass(AdminRepository).singleton(),
@@ -71,6 +75,8 @@ container
         ParkingSpaceRepository: asClass(ParkingSpaceRepository).singleton(),
         FileRepository: asClass(FileRepository).singleton(),
         ProductRepository: asClass(ProductRepository).singleton(),
+        BillRepository: asClass(BillRepository).singleton(),
+
 
     });
 

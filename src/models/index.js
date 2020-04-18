@@ -9,4 +9,5 @@ module.exports = {
     Schedule: require('./parkingspace.model').Schedule,
     File: require('./file.model'),
     Product: require('./product.model'),
+    Bill: require('./bill.model'),
 }

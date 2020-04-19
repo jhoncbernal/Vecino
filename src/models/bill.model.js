@@ -33,6 +33,7 @@ const BillSchema = new Schema(
     valueDelivery: { type: Number, required: true },
     MethodOfPayment: { type: String, lowercase: true, required: true },
     subTotal: { type: Number, required: true },
+    DeliverySchedule:{ type: String, lowercase: true, required: true},
     Total: { type: Number, required: true },
     cashValue: { type: Number },
     change: { type: Number },

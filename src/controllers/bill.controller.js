@@ -103,7 +103,8 @@ class BillController {
       if (body.cashValue) {
         body.change = body.cashValue - body.Total;
       }
-
+      body.state='start';
+      body.code=Math.floor(Math.random()*16777215).toString(16).toUpperCase();
       const bill = await _billService.create(body);
       return res.send(bill);
     }

@@ -37,6 +37,8 @@ const BillSchema = new Schema(
     cashValue: { type: Number },
     change: { type: Number },
     enabled: { type: Boolean, default: true },
+    state:{ type: String, lowercase: true, required: true},
+    code:{ type: String, required: true,unique:true,index:true},
     products: [ProductSchema],
     user: {
       type: Schema.Types.ObjectId,

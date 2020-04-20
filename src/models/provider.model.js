@@ -23,6 +23,7 @@ const ProviderSchema = new Schema({
     resetPasswordExpires: { type: Date, required: false },
     isVerified: { type: Boolean, default: 0 },
     deliveryCharge: { type: Number, required: true },
+    deliveryExtraCharge: { type: Number, required: true },
     schedule:[ScheduleSchema],
 }, { timestamps: true });
 

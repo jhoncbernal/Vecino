@@ -22,7 +22,8 @@ class ProductRepository extends BaseRepository {
     if (!productsObj) {
       productsObj = products;
     }
-    let total = 0;
+    let total=0;
+    let salvings = 0;
     let productsArray = Object.keys(productsObj).map(function (product) {
       return mongoose.Types.ObjectId(product);
     });
@@ -80,10 +81,11 @@ class ProductRepository extends BaseRepository {
         products = newProductsArray.map(function (product) {
           total = product.price * productsObj[product._id] + total;
           product.salving = productsObj[product._id] * product.salving;
+          salvings =  product.salving + salvings;
           product.quantity = productsObj[product._id];
           return product;
         });
-        return { products, ...{ total: total } };
+        return { products, ...{salvings:salvings, total: total } };
       })
       .catch((err) => {
         throw err;

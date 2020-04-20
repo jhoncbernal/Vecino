@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
-
+let ScheduleSchema = new Schema({
+    days: [{ type: String, required: [true, 'Which days? ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]'], lowercase: true }],
+    open: { type: Date, required: [true, 'Which hour did you open? 13:00'], lowercase: true },
+    close: { type: Date, required: [true, 'Which hour did you close? 24:00'], lowercase: true }
+});
 const ProviderSchema = new Schema({
     username: { type: String, required: [true, 'What is your username?'], lowercase: true, unique: true, trim: true, index: true },
     password: { type: String, required: [true, 'What is your password?'] },
@@ -18,6 +22,8 @@ const ProviderSchema = new Schema({
     resetPasswordToken: { type: String, required: false },
     resetPasswordExpires: { type: Date, required: false },
     isVerified: { type: Boolean, default: 0 },
+    deliveryCharge: { type: Number, required: true },
+    schedule:[ScheduleSchema],
 }, { timestamps: true });
 
 ProviderSchema.path('email').validate(function (email) {

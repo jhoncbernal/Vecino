@@ -29,7 +29,7 @@ const UserSchema = new Schema({
     neighborhood: {
         type: Schema.Types.ObjectId,
         ref: "neighborhood",
-        autopopulate: { select: ['firstName', 'username', 'address'] }
+        autopopulate: { select: ['firstName', 'address'] }
     },
 
 }, { timestamps: true });

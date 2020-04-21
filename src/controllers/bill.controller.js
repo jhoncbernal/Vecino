@@ -97,12 +97,13 @@ class BillController {
       body.products
     );
    const provider=await _providerService.getProviderByProperty('_id',body.provider)
-    if (shopingCart !== {}) {
+    if (shopingCart !== {}&&provider) {
       body.products = shopingCart.products;
       body.deliveryCharge= provider.deliveryCharge;
       body.subTotal = shopingCart.total;
-      body.Total = body.subTotal + body.deliveryCharge;
-   
+      body.Total = body.subTotal + body.deliveryCharge+body.tip;
+      body.billType=provider.billType;
+
       if(body.flagExtraCharge){
         body.deliveryExtraCharge = provider.deliveryExtraCharge;
         body.Total=body.Total + body.deliveryExtraCharge;

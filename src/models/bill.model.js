@@ -37,6 +37,7 @@ const BillSchema = new Schema(
     DeliverySchedule:{ type: String, lowercase: true, required: true},
     Total: { type: Number, required: true },
     cashValue: { type: Number },
+    tip: { type: Number },
     change: { type: Number },
     enabled: { type: Boolean, default: true },
     state:{ type: String, lowercase: true, required: true},

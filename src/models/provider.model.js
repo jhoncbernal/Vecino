@@ -25,6 +25,7 @@ const ProviderSchema = new Schema({
     deliveryCharge: { type: Number, required: true },
     deliveryExtraCharge: { type: Number, required: true },
     schedule:[ScheduleSchema],
+    billType:{ type: String, required: true }
 }, { timestamps: true });
 
 ProviderSchema.path('email').validate(function (email) {

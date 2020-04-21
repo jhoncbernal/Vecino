@@ -1,9 +1,11 @@
 let _billService,
-  _productService = null;
+  _productService,
+  _providerService = null;
 class BillController {
-  constructor({ BillService, ProductService }) {
+  constructor({ BillService, ProductService,ProviderService }) {
     _billService = BillService;
     _productService = ProductService;
+    _providerService = ProviderService;
   }
 
   async get(req, res) {
@@ -94,12 +96,18 @@ class BillController {
     let shopingCart = await _productService.getProductsTotalPrice(
       body.products
     );
-
+   const provider=await _providerService.getProviderByProperty('_id',body.provider)
     if (shopingCart !== {}) {
       body.products = shopingCart.products;
-
+      body.deliveryCharge= provider.deliveryCharge;
       body.subTotal = shopingCart.total;
-      body.Total = shopingCart.total + body.valueDelivery;
+      body.Total = body.subTotal + body.deliveryCharge;
+   
+      if(body.flagExtraCharge){
+        body.deliveryExtraCharge = provider.deliveryExtraCharge;
+        body.Total=body.Total + body.deliveryExtraCharge;
+      }
+      
       if (body.cashValue) {
         body.change = body.cashValue - body.Total;
       }

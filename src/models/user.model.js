@@ -18,6 +18,7 @@ const UserSchema = new Schema({
     fireToken:{ type: String },
 
     uniquecode: { type: String, required: [true, 'What is your uniquecode?'] },
+    code:{ type: String },
     homeNumber: { type: Number, required: true },
     blockNumber: { type: Number, required: true },
     points: { type: Number, required: true, trim: true, default: 5 },

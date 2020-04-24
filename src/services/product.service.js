@@ -15,6 +15,10 @@ class ProductService extends BaseService {
     async getProductsTotalPrice(products){
         return  await _productRepository.getProductsTotalPrice(products);
     }
+    async updateProductsQuantity(products){
+        return  await _productRepository.updateProductsQuantity(products);
+    }
+    
 
 }
 module.exports = ProductService;

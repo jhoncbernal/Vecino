@@ -87,6 +87,28 @@ class ProductController {
         });
       });
   }
+  async updateProductsQuantity(req, res) {
+    const { body } = req;
+    const productsIds=body;
+    await _productService
+      .updateProductsQuantity(productsIds)
+      .then((product) => {
+        if (!product) {
+          return res.status(404).send({
+            message: "products not found with ids " + productsIds,
+          });
+        }
+        res.send(product);
+      })
+      .catch((err) => {
+        if (err.kind === "ObjectId" || err.name === "NotFound") {
+          return res.status(404).send({
+            message: "products not found with body " + productsIds,
+          });
+        }
+        return res.status(error.status).send( err.message);
+      });
+  }
   async getProductsTotalPrice(req, res) {
     const { productsIds } = req.query;
     await _productService

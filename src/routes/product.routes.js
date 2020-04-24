@@ -7,6 +7,7 @@ module.exports = function ({ ProductController }) {
     router.get('/productsPrice/1',AuthMiddleware,ProductController.getProductsTotalPrice);
     router.get('', ParseIntMiddleware, ProductController.getAll);
     router.patch('/:productId', AuthMiddlewareAdmin, ProductController.update);
+    router.patch('/productsPrice/1',AuthMiddlewareAdmin, ProductController.updateProductsQuantity);
     router.delete('/:productId', AuthMiddlewareAdmin, ProductController.delete);
     router.post('/', AuthMiddlewareAdmin, ProductController.create)
     return router;

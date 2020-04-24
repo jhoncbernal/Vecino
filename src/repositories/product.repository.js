@@ -12,17 +12,61 @@ class ProductRepository extends BaseRepository {
   async getProductByProperty(propName, value) {
     return await _product.findOne({ [propName]: value });
   }
+  async updateProductsQuantity(products) {
+    let productsObj = null;
+    if (!productsObj) {
+      productsObj = products;
+    }
+
+    return await Promise.all(
+      Object.keys(productsObj).map(async function (product) {
+        let quantity = products[product];
+        return await _product
+          .findOneAndUpdate(
+            {
+              _id: mongoose.Types.ObjectId(product),
+            },
+            [
+              {
+                $set: {
+                  totalAmount: {
+                    $cond: {
+                      if: {
+                        $gte: ["$totalAmount", quantity],
+                      },
+                      then: { $subtract: ["$totalAmount", quantity] },
+                      else: 0,
+                    },
+                  },
+                },
+                
+              }
+            ],{new:true}
+          )
+          .then((result) => {
+            return result;
+          })
+          .catch((e) => {
+            return e;
+          });
+      })
+    );
+  }
   async getProductsTotalPrice(products) {
     let productsObj = null;
     try {
       productsObj = JSON.parse(products);
     } catch (e) {
-      console.error("getProductsTotalPrice handleError", e);
+      console.error("getProductsTotalPrice handleError");
     }
+    if (!productsObj && !products) {
+      return { products: [], salvings: 0, total: 0 };
+    }
+
     if (!productsObj) {
       productsObj = products;
     }
-    let total=0;
+    let total = 0;
     let salvings = 0;
     let productsArray = Object.keys(productsObj).map(function (product) {
       return mongoose.Types.ObjectId(product);
@@ -40,6 +84,7 @@ class ProductRepository extends BaseRepository {
             urlImage: 1,
             productName: 1,
             measureType: 1,
+
             price: {
               $cond: {
                 if: {
@@ -57,6 +102,7 @@ class ProductRepository extends BaseRepository {
                 else: "$price",
               },
             },
+            totalAmount: 1,
             salving: {
               $cond: {
                 if: {
@@ -79,13 +125,16 @@ class ProductRepository extends BaseRepository {
       ])
       .then((newProductsArray) => {
         products = newProductsArray.map(function (product) {
-          total = product.price * productsObj[product._id] + total;
-          product.salving = productsObj[product._id] * product.salving;
-          salvings =  product.salving + salvings;
-          product.quantity = productsObj[product._id];
+          product.quantity =
+            product.totalAmount >= productsObj[product._id]
+              ? productsObj[product._id]
+              : product.totalAmount;
+          product.salving = product.quantity * product.salving;
+          total = product.price * product.quantity + total;
+          salvings = product.salving + salvings;
           return product;
         });
-        return { products, ...{salvings:salvings, total: total } };
+        return { products, ...{ salvings: salvings, total: total } };
       })
       .catch((err) => {
         throw err;

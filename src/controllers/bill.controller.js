@@ -2,7 +2,7 @@ let _billService,
   _productService,
   _providerService = null;
 class BillController {
-  constructor({ BillService, ProductService,ProviderService }) {
+  constructor({ BillService, ProductService, ProviderService }) {
     _billService = BillService;
     _productService = ProductService;
     _providerService = ProviderService;
@@ -96,24 +96,33 @@ class BillController {
     let shopingCart = await _productService.getProductsTotalPrice(
       body.products
     );
-   const provider=await _providerService.getProviderByProperty('_id',body.provider)
-    if (shopingCart !== {}&&provider) {
+    let updateProducts = await _productService.updateProductsQuantity(
+      body.products
+    );
+    const provider = await _providerService.getProviderByProperty(
+      "_id",
+      body.provider
+    );
+    if (shopingCart !== {} && provider) {
       body.products = shopingCart.products;
-      body.deliveryCharge= provider.deliveryCharge;
+      body.deliveryCharge = provider.deliveryCharge;
       body.subTotal = shopingCart.total;
-      body.Total = body.subTotal + body.deliveryCharge+body.tip;
-      body.billType=provider.billType;
+      body.Total = body.subTotal + body.deliveryCharge + body.tip;
+      body.billType = provider.billType;
 
-      if(body.flagExtraCharge){
+      if (body.flagExtraCharge) {
         body.deliveryExtraCharge = provider.deliveryExtraCharge;
-        body.Total=body.Total + body.deliveryExtraCharge;
+        body.Total = body.Total + body.deliveryExtraCharge;
       }
-      
+
       if (body.cashValue) {
         body.change = body.cashValue - body.Total;
       }
-      body.state='start';
-      body.code=Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+      body.state = "start";
+      body.code = Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .toUpperCase();
+    
       const bill = await _billService.create(body);
       return res.send(bill);
     }

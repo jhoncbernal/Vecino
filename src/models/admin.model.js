@@ -11,6 +11,8 @@ const AdminSchema = new Schema({
     roles: [{ type: String, required: true, lowercase: false }],
     firstName: { type: String, required: true },
     documentId: { type: Number, required: [true, 'What is your id number?'], unique: true },
+    fireToken:{ type: String },
+    acceptPolicity:{type: Boolean, required: [true, 'you have to accept the policity'], default: false},
     phone: { type: String, required: [true, 'What is your contact number?'] },
     address: { type: String, required: true },
     uniquecode: { type: String, required: [true, 'What is your uniquecode?'], unique: true, index: true },

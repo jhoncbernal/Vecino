@@ -34,7 +34,7 @@ class AuthService {
         error.message = "Invalid secretKey";
         throw error;
       }
-      return _userService.create({ ...userBody }).catch((error) => {
+      return await _userService.create({ ...userBody }).catch((error) => {
         if (error.message.includes("duplicate key")) {
           const error = new Error();
           error.status = 500;
@@ -52,7 +52,7 @@ class AuthService {
         throw err;
       });
       if (userBody.roles.includes("ROLE_USER_ACCESS")) {
-        return _userService
+        return await _userService
           .create({ ...userBody, neighborhood: userExist.user._id })
           .catch((error) => {
             if (error.message.includes("duplicate key")) {
@@ -67,7 +67,7 @@ class AuthService {
         userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") &&
         !userExist.user.isVerified
       ) {
-        return _adminService
+        return await _adminService
           .update(userExist.user._id, userBody)
           .then((user) => {
             return user.save();
@@ -76,7 +76,7 @@ class AuthService {
         userBody.roles.includes("ROLE_PROVIDER_ACCESS") &&
         !userExist.user.isVerified
       ) {
-        return _providerService
+        return await _providerService
           .update(userExist.user._id, userBody)
           .then((user) => {
             return user.save();

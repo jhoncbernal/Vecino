@@ -34,15 +34,20 @@ class AuthService {
         error.message = "Invalid secretKey";
         throw error;
       }
-      return await _userService.create({ ...userBody }).catch((error) => {
-        if (error.message.includes("duplicate key")) {
-          const error = new Error();
-          error.status = 500;
-          error.message = "username or email alredy exists";
+      return await _userService
+        .create({ ...userBody })
+        .then((res) => {
+          return res;
+        })
+        .catch((error) => {
+          if (error.message.includes("duplicate key")) {
+            const error = new Error();
+            error.status = 500;
+            error.message = "username or email alredy exists";
+            throw error;
+          }
           throw error;
-        }
-        if (error) throw error;
-      });
+        });
     } else {
       userExist = await selectServiceByProperty(
         "uniquecode",
@@ -54,6 +59,7 @@ class AuthService {
       if (userBody.roles.includes("ROLE_USER_ACCESS")) {
         return await _userService
           .create({ ...userBody, neighborhood: userExist.user._id })
+          .then((res)=>{return res})
           .catch((error) => {
             if (error.message.includes("duplicate key")) {
               const error = new Error();
@@ -61,7 +67,7 @@ class AuthService {
               error.message = "username or email alredy exists";
               throw error;
             }
-            if (error) throw error;
+            throw error;
           });
       } else if (
         userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") &&

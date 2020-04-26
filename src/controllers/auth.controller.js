@@ -23,11 +23,7 @@ class AuthController {
             .send({ userService, ...{ emailResult: sendVerifyUser } });
         })
         .catch((error) => {
-          return res.status(error.status).send({
-            userService,
-            ...{ emailResult: error.message },
-            ...{ message: error.message },
-          });
+          return res.status(500).send(error);
         });
     });
   }

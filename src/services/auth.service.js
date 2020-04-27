@@ -3,7 +3,7 @@ const {
   generateTokenAdmin,
   generateTokenOwner,
 } = require("../helpers/jwt.helper");
-const { SECRET_OWNER } = require("../config");
+const { SECRET_OWNER, HOST, API } = require("../config");
 const { sendEmail, HTMLReplace } = require("../helpers");
 
 let _userService,
@@ -43,7 +43,7 @@ class AuthService {
           if (error.message.includes("duplicate key")) {
             const error = new Error();
             error.status = 500;
-            error.message = "username or email alredy exists";
+            error.message = "username or email already exists";
             throw error;
           }
           throw error;
@@ -59,12 +59,14 @@ class AuthService {
       if (userBody.roles.includes("ROLE_USER_ACCESS")) {
         return await _userService
           .create({ ...userBody, neighborhood: userExist.user._id })
-          .then((res)=>{return res})
+          .then((res) => {
+            return res;
+          })
           .catch((error) => {
             if (error.message.includes("duplicate key")) {
               const error = new Error();
               error.status = 500;
-              error.message = "username or email alredy exists";
+              error.message = "username or email already exists";
               throw error;
             }
             throw error;
@@ -90,7 +92,7 @@ class AuthService {
       } else {
         const error = new Error();
         error.status = 400;
-        error.message = "User alredy exist";
+        error.message = "User already exist";
         throw error;
       }
     }
@@ -194,9 +196,7 @@ class AuthService {
           const err = new Error();
           err.status = 404;
           err.message =
-            "The email address " +
-            body.email +
-            " is not associated with any account. Double-check your email address and try again.";
+            "The email address is not associated with any account. Double-check your email address and try again.";
           throw err;
         }
         //Generate and set password reset token
@@ -302,9 +302,7 @@ class AuthService {
               const err = new Error();
               err.status = 404;
               err.message =
-                "The email address " +
-                body.email +
-                " is not associated with any account. Double-check your email address and try again.";
+                "The email address is not associated with any account. Double-check your email address and try again.";
               throw err;
             }
             //Generate and set password reset token
@@ -461,10 +459,26 @@ async function selectServiceByProperty(propName, value, signUp = false) {
     _user = providerExist;
   }
   if (!_user.isVerified && !signUp) {
-    const error = new Error();
-    error.status = 400;
-    error.message = "User has not been verified";
-    throw error;
+    await _user.generatePasswordReset();
+    throw await _user.save().then((user) => {
+      return sendEmail(
+        user,
+        "Please Verify your Vecino Account",
+        `${HOST}/${API}/auth/verify/${user.resetPasswordToken}`,
+        "../public/pages/verifyemail.html"
+      )
+        .then((result) => {
+          return {
+            ...{ message: "Verify account email" },
+            ...{ email: { result } },
+          };
+        })
+        .catch((error) => {
+          error.status = 400;
+          error.message = "User has not been verified";
+          throw error;
+        });
+    });
   }
   if (!_user.enabled && !signUp) {
     const error = new Error();

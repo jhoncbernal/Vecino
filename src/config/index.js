@@ -17,4 +17,6 @@ module.exports={
     AWSSECRETACCESSKEY:process.env.AWSSECRETACCESSKEY,
     AWSREGION:process.env.AWSREGION,
     AWSBUCKETIMG:process.env.AWSBUCKETIMG,
+    HOST:process.env.HOST,
+    API:process.env.API
 }

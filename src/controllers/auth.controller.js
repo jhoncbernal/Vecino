@@ -14,8 +14,8 @@ class AuthController {
     const { body } = req;
     const { baseUrl } = req;
     const host = req.headers.host + baseUrl;
-    await _authService.signUp(body).then((userService) => {
-      return _authService
+    await _authService.signUp(body).then(async(userService) => {
+      return await _authService
         .verifyEmail(userService, host)
         .then((sendVerifyUser) => {
           return res

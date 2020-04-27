@@ -175,7 +175,7 @@ class ParkingSpaceController {
       if (posVehicle.length != 0) {
         const err = new Error();
         err.status = 500;
-        err.message = `the plate ${body.plate} is already asigned to some position`;
+        err.message = `the plate is already asigned to other position`;
         throw err;
       }
       body.vehicle = vehicleExist;
@@ -186,7 +186,7 @@ class ParkingSpaceController {
         if (vehicleExist == null) {
           const err = new Error();
           err.status = 404;
-          err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
+          err.message = `positionnumber or parkingspaceId not found!`;//`positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
           throw err;
         }
 
@@ -209,7 +209,7 @@ class ParkingSpaceController {
         if (parkingSpace == null) {
           const err = new Error();
           err.status = 404;
-          err.message = `positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
+          err.message =`positionnumber or parkingspaceId not found!`; //`positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
           throw err;
         }
 

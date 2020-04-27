@@ -40,7 +40,10 @@ const BillSchema = new Schema(
     tip: { type: Number },
     change: { type: Number },
     enabled: { type: Boolean, default: true },
-    state:{ type: String, lowercase: true, required: true},
+    states:[{
+      start:{ type: Date, default:new Date()},
+      state:{ type: String, lowercase: true, required: true}}
+    ],
     code:{ type: String, required: true,unique:true,index:true},
     otherAddress: { type: String },
     products: [ProductSchema],

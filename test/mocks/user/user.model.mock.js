@@ -1,6 +1,7 @@
 module.exports = {
 	user: {
 		"_id": "5e4d80d38f71b670471d30d6",
+		"acceptPolicity": false,
 		"code": "1101",
 		"isOwner": true,
 		"blockNumber": 1,
@@ -25,6 +26,7 @@ module.exports = {
 	},
 	users: [{
 		"_id": "5e4d80d38f71b670471d30d6",
+		"acceptPolicity": false,
 		"code": "1101",
 		"isOwner": true,
 		"blockNumber": 1,
@@ -49,6 +51,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e4dd8e1fafd55a1149bb9d5",
+		"acceptPolicity": false,
 		"code": "1203",
 		"isOwner": false,
 		"blockNumber": 1,
@@ -73,6 +76,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e543deae39bc700172dccc5",
+		"acceptPolicity": false,
 		"code": "2309",
 		"isOwner": true,
 		"blockNumber": 2,
@@ -97,6 +101,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e554dd0e7cf9e10e77aaf04",
+		"acceptPolicity": false,
 		"code": "1408",
 		"isOwner": false,
 		"blockNumber": 1,
@@ -121,6 +126,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e580fd382eec9001797922a",
+		"acceptPolicity": false,
 		"code": "3517",
 		"isOwner": true,
 		"blockNumber": 3,
@@ -145,6 +151,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e5812f082eec9001797922b",
+		"acceptPolicity": false,
 		"code": "3619",
 		"isOwner": true,
 		"blockNumber": 3,
@@ -169,6 +176,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e58183f82eec9001797922d",
+		"acceptPolicity": false,
 		"code": "4726",
 		"isOwner": false,
 		"blockNumber": 4,
@@ -193,6 +201,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e59452882544a18db1aad98",
+		"acceptPolicity": false,
 		"code": "4825",
 		"isOwner": true,
 		"blockNumber": 4,
@@ -217,6 +226,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e59c3b6429a930017c2bcb3",
+		"acceptPolicity": false,
 		"code": "5933",
 		"isOwner": true,
 		"blockNumber": 5,
@@ -241,6 +251,7 @@ module.exports = {
 	},
 	{
 		"_id": "5e5ac9e48bea55736812f911",
+		"acceptPolicity": false,
 		"code": "10173",
 		"isOwner": false,
 		"blockNumber": 10,

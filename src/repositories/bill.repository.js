@@ -6,10 +6,10 @@ class BillRepository extends BaseRepository {
         _bill = Bill;
     }
     async getBillsByUser(userId){
-        return await _bill.find({'user':userId});
+        return await _bill.find({'user':userId}).sort({'enabled':-1,'updatedAt':-1});
     }
     async getBillsByProvider(providerId){
-        return await _bill.find({'provider':providerId});
+        return await _bill.find({'provider':providerId}).sort({'enabled':-1,'updatedAt':-1});
     }
     async getBillByProperty(propName, value){
         return await await _bill.findOne({ [propName]: value });

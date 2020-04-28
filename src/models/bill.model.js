@@ -31,20 +31,27 @@ const BillSchema = new Schema(
       ],
     },
     deliveryCharge: { type: Number, required: true },
-    deliveryExtraCharge: { type: Number, required: false ,default:0},
+    deliveryExtraCharge: { type: Number, required: false, default: 0 },
     MethodOfPayment: { type: String, lowercase: true, required: true },
     subTotal: { type: Number, required: true },
-    DeliverySchedule:{ type: String, lowercase: true, required: true},
+    DeliverySchedule: { type: String, lowercase: true, required: true },
     Total: { type: Number, required: true },
     cashValue: { type: Number },
     tip: { type: Number },
     change: { type: Number },
     enabled: { type: Boolean, default: true },
-    states:[{
-      start:{ type: Date, default:new Date()},
-      state:{ type: String, lowercase: true, required: true}}
+    states: [
+      { _id : false,
+        start: {
+          type: String,
+          default: new Date().toLocaleString("en-US", {
+            timeZone: "America/Bogota",
+          }),
+        },
+        state: { type: String, lowercase: true, required: true },
+      },
     ],
-    code:{ type: String, required: true,unique:true,index:true},
+    code: { type: String, required: true, unique: true, index: true },
     otherAddress: { type: String },
     products: [ProductSchema],
     user: {

@@ -73,7 +73,7 @@ const BillSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "provider",
       required: true,
-      autopopulate: { select: ["firstName", "documentId", "address"] },
+      autopopulate: { select: ["firstName", "documentId", "address","schedule","deliveryCharge","deliveryExtraCharge","billType"] },
     },
   },
   { timestamps: true }

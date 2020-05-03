@@ -53,7 +53,7 @@ class AuthController {
 
     delete body.password;
     await _authService.signInAndUpdate(result.user, body);
-    return res.redirect("https://vecinofront.herokuapp.com/login"); //send("Actualizacion de datos exitosa");
+    return res.redirect("https://vecinoo.herokuapp.com/login"); //send("Actualizacion de datos exitosa");
   }
   async signInAdmin(req, res) {
     const { body } = req;

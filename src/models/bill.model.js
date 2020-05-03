@@ -66,6 +66,7 @@ const BillSchema = new Schema(
           "homeNumber",
           "blockNumber",
           "neighborhood",
+          "address"
         ],
       },
     },

@@ -17,7 +17,7 @@ class AdminRepository extends BaseRepository {
   async getAllAdminNames(pageSize, pageNum) {
     const skips = pageSize * (pageNum - 1);
     return await _admin
-      .find({}, { firstName: 1, uniquecode: 1, _id: 0 })
+      .find({}, { firstName: 1, uniquecode: 1, _id: 1 })
       .skip(skips)
       .limit(pageSize);
   }

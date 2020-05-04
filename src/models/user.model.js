@@ -21,6 +21,7 @@ const UserSchema = new Schema({
     code:{ type: String },
     homeNumber: { type: Number },
     blockNumber: { type: Number},
+    city:{type:String, required: true},
     points: { type: Number, required: true, trim: true, default: 5 },
     isOwner: { type: Boolean, default: 0 },
     debt: { type: String, default: null },

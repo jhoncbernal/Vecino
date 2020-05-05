@@ -237,10 +237,23 @@ class AuthService {
         if (!user) {
           const err = new Error();
           err.status = 401;
-          err.message = "Password reset token is invalid or has expired.";
+          err.message = "El restablecimiento de contraseña no es válido o ha expirado.";
           throw err;
         }
-        return { reset: { user } };
+       const replacements = {
+          email: user.email,
+          name: user.firstName,
+          token:token
+        };
+        if (replacements != null) {
+          return HTMLReplace(
+            "../public/pages/changePassword.html",
+            replacements
+          ).then((result) => {
+            return result;
+          });
+        }
+        
       })
       .catch((err) => {
         throw err;
@@ -278,10 +291,18 @@ class AuthService {
           "../public/pages/changeconfirmation.html"
         )
           .then((result) => {
-            return {
-              ...{ message: "Your password has been changed" },
-              ...{ email: { result } },
+            const replacements = {
+              username: user.firstName,
+              link:`El dia de hoy, se realizo exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email}`
             };
+            if (replacements != null) {
+              return HTMLReplace(
+                "../public/pages/changeconfirmation.html",
+                replacements
+              ).then((result) => {
+                return result;
+              });
+            }
           })
           .catch((error) => {
             throw error;

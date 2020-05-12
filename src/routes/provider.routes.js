@@ -8,6 +8,6 @@ module.exports = function ({ ProviderController }) {
     router.patch('/:providerId', AuthMiddlewareAdmin, ProviderController.update);
     router.delete('/:providerId', AuthMiddlewareOwner, ProviderController.delete);
     router.post('/', AuthMiddlewareOwner, ProviderController.create)
-    router.get('/names/1', ProviderController.getAllNames);
+    router.get('/names/:city', ProviderController.getAllNames);
     return router;
 };

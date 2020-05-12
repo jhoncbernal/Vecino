@@ -66,8 +66,9 @@ class ProviderController {
       });
   }
   async getAllNames(req, res) {
+    const { city } = req.params;
     const { pageSize, pageNum } = req.query;
-    const providers = await _providerService.getAllProviderNames(
+    const providers = await _providerService.getAllProviderNames(city,
       pageSize,
       pageNum
     );

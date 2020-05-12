@@ -28,6 +28,7 @@ const ProviderSchema = new Schema({
     deliveryExtraCharge: { type: Number, required: true },
     schedule:[ScheduleSchema],
     billType:{ type: String, required: true },
+    city:{type:String, required: true},
     urlImage:{ type: String, required: true }
 }, { timestamps: true });
 

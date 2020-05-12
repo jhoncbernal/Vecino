@@ -14,10 +14,10 @@ class ProviderRepository extends BaseRepository {
   async getProviderByProperty(propName, value) {
     return await _provider.findOne({ [propName]: value });
   }
-  async getAllProviderNames(pageSize, pageNum) {
+  async getAllProviderNames(city,pageSize, pageNum) {
     const skips = pageSize * (pageNum - 1);
     return await _provider
-      .find({}, { firstName: 1, uniquecode: 1, category: 1 ,deliveryCharge:1,deliveryExtraCharge:1,schedule:1,billType:1,urlImage:1})
+      .find({city:city}, { firstName: 1, uniquecode: 1, category: 1 ,deliveryCharge:1,deliveryExtraCharge:1,schedule:1,billType:1,urlImage:1})
       .skip(skips)
       .limit(pageSize);
   }

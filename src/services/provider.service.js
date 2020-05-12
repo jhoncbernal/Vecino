@@ -18,8 +18,8 @@ class ProviderService extends BaseService {
         return await _providerRepository.getProviderByProperty(propName, value);
     }
 
-    async getAllProviderNames(pageSize, pageNum) {
-        return await _providerRepository.getAllProviderNames(pageSize, pageNum);
+    async getAllProviderNames(city,pageSize, pageNum) {
+        return await _providerRepository.getAllProviderNames(city,pageSize, pageNum);
     }
 
     async recover(propName, value) {

@@ -29,6 +29,7 @@ const ProviderSchema = new Schema({
     paymentMethod:{type:[String],required: true,lowercase: true, trim: true},
     schedule:[ScheduleSchema],
     billType:{ type: String, required: true },
+    promoBanner:{ type: String },
     city:{type:String, required: true},
     urlImage:{ type: String, required: true }
 }, { timestamps: true });

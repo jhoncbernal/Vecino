@@ -9,5 +9,6 @@ module.exports = function ({ ProviderController }) {
     router.delete('/:providerId', AuthMiddlewareOwner, ProviderController.delete);
     router.post('/', AuthMiddlewareOwner, ProviderController.create)
     router.get('/names/:city', ProviderController.getAllNames);
+    router.get('/cities/1', ProviderController.getAllCities);
     return router;
 };

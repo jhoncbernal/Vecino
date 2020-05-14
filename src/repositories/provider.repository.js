@@ -17,10 +17,19 @@ class ProviderRepository extends BaseRepository {
   async getAllProviderNames(city,pageSize, pageNum) {
     const skips = pageSize * (pageNum - 1);
     return await _provider
-      .find({city:city}, { firstName: 1, uniquecode: 1, category: 1 ,deliveryCharge:1,deliveryExtraCharge:1,schedule:1,billType:1,urlImage:1})
+      .find({city:city}, { firstName: 1, uniquecode: 1, category: 1 ,deliveryCharge:1,deliveryExtraCharge:1,schedule:1,billType:1,urlImage:1,paymentMethod:1})
       .skip(skips)
       .limit(pageSize);
   }
+  async getAllCities(pageSize, pageNum) {
+    const skips = pageSize * (pageNum - 1);
+    return await _provider
+      .find()
+      .skip(skips)
+      .limit(pageSize)
+      .distinct("city");
+  }
+  
   async recover(propName, value) {
     return await _provider.findOne({ [propName]: value });
   }

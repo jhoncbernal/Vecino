@@ -57,21 +57,27 @@ class ProviderController {
           })
           .catch((error) => {
             return res
-              .status(error.status)
+              .status(error.status ? error.status : 500)
               .send({ userService, ...{ emailResult: error.message } });
           });
       })
       .catch((error) => {
-        return res.status(error.status).send(error);
+        return res.status(error.status?error.status:500).send(error);
       });
   }
   async getAllNames(req, res) {
     const { city } = req.params;
     const { pageSize, pageNum } = req.query;
-    const providers = await _providerService.getAllProviderNames(city,
+    const providers = await _providerService.getAllProviderNames(
+      city,
       pageSize,
       pageNum
     );
+    return res.send(providers);
+  }
+  async getAllCities(req, res) {
+    const { pageSize, pageNum } = req.query;
+    const providers = await _providerService.getAllCities(pageSize, pageNum);
     return res.send(providers);
   }
 }

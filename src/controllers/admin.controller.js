@@ -57,12 +57,12 @@ class AdminController {
           })
           .catch((error) => {
             return res
-              .status(error.status)
+              .status(error.status ? error.status : 500)
               .send({ userService, ...{ emailResult: error.message } });
           });
       })
       .catch((error) => {
-        return res.status(error.status).send(error);
+        return res.status(error.status ? error.status : 500).send(error);
       });
   }
   async getAllNames(req, res) {

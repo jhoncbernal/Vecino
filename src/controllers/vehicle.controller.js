@@ -23,7 +23,7 @@ class VehicleController {
             message: "vehicle not found with id " + req.params.vehicleId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Error retrieving vehicle with id " + req.params.vehicleId,
         });
       });
@@ -58,7 +58,7 @@ class VehicleController {
             message: "vehicle not found with id " + req.params.vehicleId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Error updating vehicle with id " + req.params.vehicleId,
         });
       });
@@ -81,7 +81,7 @@ class VehicleController {
             message: "vehicle not found with id " + req.params.vehicleId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Could not delete vehicle with id " + req.params.vehicleId,
         });
       });

@@ -26,7 +26,7 @@ class BillController {
             message: "bill not found with id " + req.params.billId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Error retrieving bill with id " + req.params.billId,
         });
       });
@@ -58,7 +58,7 @@ class BillController {
             message: "bill not found with id " + req.params.billId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Error updating bill with id " + req.params.billId,
         });
       });
@@ -82,7 +82,7 @@ class BillController {
             message: "bill not found with id " + req.params.billId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Could not delete bill with id " + req.params.billId,
         });
       });
@@ -118,13 +118,18 @@ class BillController {
       if (body.cashValue) {
         body.change = body.cashValue - body.Total;
       }
-      body.states = [{start:new Date().toLocaleString("en-US", {
-        timeZone: "America/Bogota"
-      }),state:"start"}];
+      body.states = [
+        {
+          start: new Date().toLocaleString("en-US", {
+            timeZone: "America/Bogota",
+          }),
+          state: "start",
+        },
+      ];
       body.code = Math.floor(Math.random() * 16777215)
         .toString(16)
         .toUpperCase();
-    
+
       const bill = await _billService.create(body);
       return res.send(bill);
     }

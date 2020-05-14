@@ -22,7 +22,7 @@ class ProductController {
             message: "product not found with id " + req.params.productId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Error retrieving product with id " + req.params.productId,
         });
       });
@@ -58,7 +58,7 @@ class ProductController {
             message: "product not found with id " + req.params.productId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Error updating product with id " + req.params.productId,
         });
       });
@@ -82,14 +82,14 @@ class ProductController {
             message: "product not found with id " + req.params.productId,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: "Could not delete product with id " + req.params.productId,
         });
       });
   }
   async updateProductsQuantity(req, res) {
     const { body } = req;
-    const productsIds=body;
+    const productsIds = body;
     await _productService
       .updateProductsQuantity(productsIds)
       .then((product) => {
@@ -106,7 +106,7 @@ class ProductController {
             message: "products not found with body " + productsIds,
           });
         }
-        return res.status(error.status).send( err.message);
+        return res.status(error.status ? error.status : 500).send(err.message);
       });
   }
   async getProductsTotalPrice(req, res) {
@@ -127,7 +127,7 @@ class ProductController {
             message: "products not found with body " + productsIds,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message: err,
         });
       });

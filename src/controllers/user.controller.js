@@ -38,7 +38,7 @@ class UserController {
       const { id: userId } = req.user;
       const { pageSize, pageNum } = req.query;
       const admin = await _adminService.get(userId).catch((err) => {
-        return res.status(error.status).send(err);
+        return res.status(error.status ? error.status : 500).send(err);
       });
       const users = await _userService.getUsersByPoints(
         "uniquecode",
@@ -48,7 +48,7 @@ class UserController {
       );
       return res.send(users);
     } catch (err) {
-      return res.status(error.status).send(err);
+      return res.status(error.status ? error.status : 500).send(err);
     }
   }
 }

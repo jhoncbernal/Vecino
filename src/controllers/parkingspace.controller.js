@@ -29,7 +29,7 @@ class ParkingSpaceController {
               "parkingSpace not found with name " + req.params.parkingname,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message:
             "Error retrieving parkingSpace with name " + req.params.parkingname,
         });
@@ -75,7 +75,7 @@ class ParkingSpaceController {
               "parkingSpace not found with name " + req.params.parkingname,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message:
             "Error updating parkingSpace with name " + req.params.parkingname,
         });
@@ -108,7 +108,7 @@ class ParkingSpaceController {
               "parkingSpace not found with name " + req.params.parkingname,
           });
         }
-        return res.status(error.status).send({
+        return res.status(error.status ? error.status : 500).send({
           message:
             "Could not delete parkingSpace with name " + req.params.parkingname,
         });
@@ -186,7 +186,7 @@ class ParkingSpaceController {
         if (vehicleExist == null) {
           const err = new Error();
           err.status = 404;
-          err.message = `positionnumber or parkingspaceId not found!`;//`positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
+          err.message = `positionnumber or parkingspaceId not found!`; //`positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
           throw err;
         }
 
@@ -209,7 +209,7 @@ class ParkingSpaceController {
         if (parkingSpace == null) {
           const err = new Error();
           err.status = 404;
-          err.message =`positionnumber or parkingspaceId not found!`; //`positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
+          err.message = `positionnumber or parkingspaceId not found!`; //`positionnumber :${positionnumber} or parkingspaceId: ${parking._id} not found!`;
           throw err;
         }
 

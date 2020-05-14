@@ -4,8 +4,8 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
 let ScheduleSchema = new Schema({
     days: [{ type: String, required: [true, 'Which days? ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]'], lowercase: true }],
-    open: { type: Date, required: [true, 'Which hour did you open? 13:00'], lowercase: true },
-    close: { type: Date, required: [true, 'Which hour did you close? 24:00'], lowercase: true }
+    open: { type: String, required: [true, 'Which hour did you open? 13:00'], lowercase: true },
+    close: { type: String, required: [true, 'Which hour did you close? 24:00'], lowercase: true }
 });
 const ProviderSchema = new Schema({
     username: { type: String, required: [true, 'What is your username?'], lowercase: true, unique: true, trim: true, index: true },
@@ -26,6 +26,7 @@ const ProviderSchema = new Schema({
     isVerified: { type: Boolean, default: 0 },
     deliveryCharge: { type: Number, required: true },
     deliveryExtraCharge: { type: Number, required: true },
+    paymentMethod:{type:[String],required: true,lowercase: true, trim: true},
     schedule:[ScheduleSchema],
     billType:{ type: String, required: true },
     city:{type:String, required: true},

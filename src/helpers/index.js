@@ -4,4 +4,5 @@ module.exports={
     HTMLReplace:require('./send-email.helper').HTMLReplace,
     sendEmail:require('./send-email.helper').sendEmail,
     uploadImage:require('./s3Image.helper').uploadImage,
+    deleteImage:require('./s3Image.helper').deleteImage,
 }

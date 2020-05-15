@@ -36,5 +36,31 @@ async function uploadImage(bufferImage) {
     });
 });
 }
+async function deleteImage( myKey) {
 
-module.exports = { uploadImage }
+
+    AWS.config.update({
+        secretAccessKey: AWSSECRETACCESSKEY,
+        accessKeyId: AWSACCESSKEYID,
+        region: AWSREGION
+    });
+    let s3 = new AWS.S3();
+    let myBucket = AWSBUCKETIMG;
+
+    let params = {
+        Bucket: myBucket,
+        Key: myKey
+    };
+  return await new Promise((resolve, reject) => {
+   s3.deleteObject(params, function (err, data) {
+        if (err) {
+            console.log(err);
+            reject(err) ;
+        }
+        else {
+            resolve(`Successfully delete data to ${myBucket}/${myKey}`);
+        }
+    });
+});
+}
+module.exports = { uploadImage,deleteImage }

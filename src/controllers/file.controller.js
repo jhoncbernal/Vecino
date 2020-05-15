@@ -1,4 +1,4 @@
-const { uploadImage } = require("../helpers");
+const { uploadImage,deleteImage } = require("../helpers");
 
 let _fileService,
   _userService,
@@ -35,6 +35,16 @@ class FileController {
       return res.status(400).send("No images were uploaded.");
     }
     await uploadImage(req.files.image)
+      .then((response) => {
+        res.status(200).send(response);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+  async deleteFileImage(req, res) {
+    const { KeyId } = req.params;
+    await deleteImage(KeyId)
       .then((response) => {
         res.status(200).send(response);
       })

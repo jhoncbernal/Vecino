@@ -4,7 +4,7 @@ const { AuthMiddlewareAdmin, AuthMiddlewareOwner, ParseIntMiddleware, CacheMiddl
 module.exports = function ({ ProviderController }) {
     const router = Router();
     router.get('/:providerId', AuthMiddlewareAdmin, ProviderController.get);
-    router.get('', [AuthMiddlewareOwner, ParseIntMiddleware, CacheMiddleware(CACHE_TIME.ONE_HOUR)], ProviderController.getAll);
+    router.get('', [AuthMiddlewareOwner, ParseIntMiddleware], ProviderController.getAll);
     router.patch('/:providerId', AuthMiddlewareAdmin, ProviderController.update);
     router.delete('/:providerId', AuthMiddlewareOwner, ProviderController.delete);
     router.post('/', AuthMiddlewareOwner, ProviderController.create)

@@ -4,8 +4,8 @@ const { compareSync, hashSync, genSaltSync } = require('bcryptjs');
 const crypto = require('crypto');
 let ScheduleSchema = new Schema({
     days: [{ type: String, required: [true, 'Which days? ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]'], lowercase: true }],
-    open: { type: String, required: [true, 'Which hour did you open? 13:00'], lowercase: true },
-    close: { type: String, required: [true, 'Which hour did you close? 24:00'], lowercase: true }
+    open: { type: Date, required: [true, 'Which hour did you open? 13:00']},
+    close: { type: Date, required: [true, 'Which hour did you close? 24:00'] }
 });
 const ProviderSchema = new Schema({
     username: { type: String, required: [true, 'What is your username?'], lowercase: true, unique: true, trim: true, index: true },
@@ -20,6 +20,7 @@ const ProviderSchema = new Schema({
     phone: { type: String, required: [true, 'What is your contact number?'] },
     address: { type: String, required: true },
     category: { type: String, required: [true, 'What is your category?'] },
+    categories:{type:[String],required:[true, 'Witch categories do you have?']},
     uniquecode:{ type: String, required: [true, 'What is your unique code?'] },
     resetPasswordToken: { type: String, required: false },
     resetPasswordExpires: { type: Date, required: false },

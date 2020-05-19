@@ -4,7 +4,7 @@ const { AuthMiddlewareAdmin, AuthMiddlewareOwner, ParseIntMiddleware, CacheMiddl
 module.exports = function ({ AdminController }) {
     const router = Router();
     router.get('/:adminId', AuthMiddlewareAdmin, AdminController.get);
-    router.get('', [AuthMiddlewareOwner, ParseIntMiddleware, CacheMiddleware(CACHE_TIME.ONE_HOUR)], AdminController.getAll);
+    router.get('', [AuthMiddlewareOwner, ParseIntMiddleware], AdminController.getAll);
     router.patch('/:adminId', AuthMiddlewareAdmin, AdminController.update);
     router.delete('/:adminId', AuthMiddlewareOwner, AdminController.delete);
     router.post('/', AuthMiddlewareOwner, AdminController.create)

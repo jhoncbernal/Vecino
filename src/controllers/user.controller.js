@@ -13,7 +13,12 @@ class UserController {
   async getAll(req, res) {
     const { id: userId } = req.user;
     const { pageSize, pageNum } = req.query;
-    const admin = await _adminService.get(userId);
+    let admin;
+     await _adminService.get(userId).then((result)=>{admin=result}).catch(async()=>{
+      admin = await _userService.get(userId);
+    });
+   
+  
     const users = await _userService.getAll(
       "uniquecode",
       admin.uniquecode,

@@ -1,4 +1,4 @@
-const { uploadImage,deleteImage } = require("../helpers");
+const { uploadImage, deleteImage } = require("../helpers");
 
 let _fileService,
   _userService,
@@ -10,14 +10,14 @@ class FileController {
     _adminService = AdminService;
   }
 
-  async uploadFileCSV(req, res) {
+  async uploadFilePortfolioUsers(req, res) {
     const { id: userId } = req.user;
     const admin = await _adminService.get(userId);
     if (!req.files) {
       return res.status(400).send("No files were uploaded.");
     }
     const result = await _fileService
-      .uploadFileCSV(req.files.file.data)
+      .uploadFilePortfolioUsers(req.files.file.data)
       .catch((err) => {
         throw err;
       });
@@ -29,6 +29,18 @@ class FileController {
         });
       return res.status(200).send("Updated");
     }
+  }
+  async uploadFileUsers(req, res) {
+    if (!req.files) {
+      return res.status(400).send("No files were uploaded.");
+    }
+    await _fileService
+      .uploadFileUsers(req.files.file.data)
+      .catch((err) => {
+        throw err;
+      });
+      return res.status(200).send("Updated");
+
   }
   async uploadFileImage(req, res) {
     if (!req.files) {
@@ -51,6 +63,16 @@ class FileController {
       .catch((err) => {
         throw err;
       });
+  }
+  async getUserByDocumentId(req, res) {
+    const { documentId } = req.params;
+    const user = await _fileService.getUserByDocumentId(documentId);
+    return res.status(200).send(user);
+  }
+  async delete(req, res) {
+    const { Id } = req.params;
+    const deleteUser = await _fileService.delete(Id);
+    return res.send(deleteUser);
   }
 }
 module.exports = FileController;

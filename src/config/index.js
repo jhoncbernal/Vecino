@@ -18,5 +18,6 @@ module.exports={
     AWSREGION:process.env.AWSREGION,
     AWSBUCKETIMG:process.env.AWSBUCKETIMG,
     HOST:process.env.HOST,
-    API:process.env.API
+    API:process.env.API,
+    FRONT:process.env.FRONT,
 }

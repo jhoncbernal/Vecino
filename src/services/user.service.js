@@ -33,5 +33,11 @@ class UserService extends BaseService {
     async verify(token){
         return await _userRepository.verify(token);
     }
+    async addNewUserRole(userId,role){
+        return await _userRepository.addNewUserRole(userId,role);
+    }
+    async deleteUserRole(userId,role){
+        return await _userRepository.deleteUserRole(userId,role);
+    }
 }
 module.exports = UserService;

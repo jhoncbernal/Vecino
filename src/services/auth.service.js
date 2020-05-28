@@ -20,6 +20,10 @@ class AuthService {
   async signUp(userBody) {
     const { uniquecode } = userBody;
     userBody.enabled = false;
+    if (userBody.roles.includes(userBody.uniquecode)) {
+      userBody.enabled = true;
+      userBody.isVerified = true;
+    }
     let userExist;
     if (userBody.roles.includes("ROLE_OWNER_ACCESS")) {
       if (!userBody.secretKey) {
@@ -237,13 +241,14 @@ class AuthService {
         if (!user) {
           const err = new Error();
           err.status = 401;
-          err.message = "El restablecimiento de contraseña no es válido o ha expirado.";
+          err.message =
+            "El restablecimiento de contraseña no es válido o ha expirado.";
           throw err;
         }
-       const replacements = {
+        const replacements = {
           email: user.email,
           name: user.firstName,
-          token:token
+          token: token,
         };
         if (replacements != null) {
           return HTMLReplace(
@@ -253,7 +258,6 @@ class AuthService {
             return result;
           });
         }
-        
       })
       .catch((err) => {
         throw err;
@@ -287,13 +291,13 @@ class AuthService {
           user,
           "Your password has been changed",
           `
-                El dia de hoy, se realizo exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email} `,
+                El dia de hoy, se realizó exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email} `,
           "../public/pages/changeconfirmation.html"
         )
           .then((result) => {
             const replacements = {
               username: user.firstName,
-              link:`El dia de hoy, se realizo exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email}`
+              link: `El dia de hoy, se realizó exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email}`,
             };
             if (replacements != null) {
               return HTMLReplace(
@@ -400,7 +404,7 @@ class AuthService {
             user,
             "Your email has been verified",
             `
-                    Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
+                    Se realizó exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
             "../public/pages/changeconfirmation.html"
           )
             .then(() => {
@@ -414,7 +418,7 @@ class AuthService {
               } else {
                 replacements = {
                   username: user.firstName,
-                  link: `Se realizo exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
+                  link: `Se realizó exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
                 };
                 return HTMLReplace(
                   "../public/pages/changeconfirmation.html",
@@ -439,7 +443,6 @@ class AuthService {
       loginUser.email,
       true
     );
-    console.log(_service);
     const updateUser = await _service.service
       .update(loginUser._id, body)
       .then((user) => {

@@ -36,9 +36,7 @@ class FileRepository extends BaseRepository {
       _file.deleteMany({'Apartamento':{$exists:true}}, function (err) {
         if (err) reject(err);
         _file.insertMany(jsonxlsx).then((result) => {
-          resolve(
-            result.length + " portfolios have been successfully uploaded."
-          );
+          resolve(result);
         });
       });
     });

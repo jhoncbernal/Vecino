@@ -186,6 +186,17 @@ class UserRepository extends BaseRepository {
       resetPasswordExpires: { $gt: Date.now() },
     });
   }
+
+  async addNewUserRole(userId,role) {
+    return await _user.findOneAndUpdate({
+      _id: userId},{$push: {roles: role}}
+    );
+  }
+  async deleteUserRole(userId,role) {
+    return await _user.findOneAndUpdate({
+      _id: userId},{$pull: {roles: role}}
+    );
+  }
 }
 
 module.exports = UserRepository;

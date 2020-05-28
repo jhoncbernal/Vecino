@@ -7,7 +7,7 @@ const FileSchema = new Schema(
     Apellidos: { type: String ,lowercase:true},
     Correo: { type: String },
     Telefono: { type: Number },
-    Identification: { type: Number },
+    Identificacion: { type: Number },
     Apartamento: { type: Number },
     Torre: { type: Number },
     Propietario: { type: String, default: "no" ,lowercase:true},

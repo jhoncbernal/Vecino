@@ -25,23 +25,7 @@ class ProductRepository extends BaseRepository {
           .findOneAndUpdate(
             {
               _id: mongoose.Types.ObjectId(product),
-            },
-            [
-              {
-                $set: {
-                  totalAmount: {
-                    $cond: {
-                      if: {
-                        $gte: ["$totalAmount", quantity],
-                      },
-                      then: { $subtract: ["$totalAmount", quantity] },
-                      else: 0,
-                    },
-                  },
-                },
-                
-              }
-            ],{new:true}
+            },{ $inc: { totalAmount: -quantity }},{new:true}
           )
           .then((result) => {
             return result;

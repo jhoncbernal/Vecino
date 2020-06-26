@@ -1,3 +1,4 @@
+const { sendEmail } = require("../helpers");
 let _billService,
   _productService,
   _providerService = null;
@@ -131,6 +132,11 @@ class BillController {
         .toUpperCase();
 
       const bill = await _billService.create(body);
+      try{
+        await sendEmail(provider.email, `Nuevo pedido programado para ${bill.DeliverySchedule} #${bill.code}` , "", "../public/pages/newDeliver.html")
+      }catch(e){
+        console.log(e)
+      }
       return res.send(bill);
     }
   }

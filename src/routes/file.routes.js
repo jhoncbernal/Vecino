@@ -9,7 +9,6 @@ module.exports = function ({ FileController }) {
   router.post("/FileUsers/", FileController.uploadFileUsers);
   router.post(
     "/images/upload",
-    AuthMiddlewareAdmin,
     FileController.uploadFileImage
   );
   router.delete("/images/delete/:KeyId", FileController.deleteFileImage);

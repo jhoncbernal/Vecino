@@ -52,7 +52,8 @@ class AuthService {
           }
           throw error;
         });
-    } else {
+    } else  {
+      if(!userBody.roles.includes("ROLE_PROVIDER_ACCESS")){
       userExist = await selectServiceByProperty(
         "uniquecode",
         uniquecode,
@@ -60,6 +61,7 @@ class AuthService {
       ).catch((err) => {
         throw err;
       });
+    }
       if (userBody.roles.includes("ROLE_USER_ACCESS")) {
         return await _userService
           .create({ ...userBody, neighborhood: userExist.user._id })
@@ -85,11 +87,10 @@ class AuthService {
             return user.save();
           });
       } else if (
-        userBody.roles.includes("ROLE_PROVIDER_ACCESS") &&
-        !userExist.user.isVerified
+        userBody.roles.includes("ROLE_PROVIDER_ACCESS") 
       ) {
         return await _providerService
-          .update(userExist.user._id, userBody)
+          .create(userBody)
           .then((user) => {
             return user.save();
           });

@@ -1,0 +1,99 @@
+version: "3.8"
+services:
+  app:
+    profiles: ["app"]
+    container_name: node-${PROJECT_NAME}
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    networks:
+      - vecinoo
+    links:
+      - mongodb
+      - redis
+    depends_on:
+      - mongodb
+      - redis
+    logging:
+      driver: "local"
+      options:
+        max-size: 10m
+  mongodb:
+    container_name: mongodb-${PROJECT_NAME}
+    image: mongo:4.4.6-bionic
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE}
+    ports:
+      - ${MONGODB_PORT}:27017
+    volumes:
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
+      - mongodb:/data/mongodb
+    networks:
+      - vecinoo
+    logging:
+      driver: "local"
+      options:
+        max-size: 10m
+  redis:
+    container_name: redis-${PROJECT_NAME}
+    image: bitnami/redis:6.2.7
+    restart: always
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis:/var/lib/redis
+      - redis-config:/usr/local/etc/redis/redis.conf
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - vecinoo
+  redis-commander:
+    container_name: redis-commander-${PROJECT_NAME}
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      REDIS_HOSTS: redis-${PROJECT_NAME}
+      REDIS_HOST: redis-${PROJECT_NAME}
+      REDIS_PORT: redis:${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      HTTP_USER: ${REDIS_COMMANDER_USER}
+      HTTP_PASSWORD: ${REDIS_COMMANDER_PASSWORD}
+    ports:
+      - ${REDIS_COMMANDER_PORT}:8081
+    networks:
+      - vecinoo
+  datadog:
+    container_name: datadog-${PROJECT_NAME}
+    image: gcr.io/datadoghq/agent:7
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=${DD_SITE}
+      - DD_HOSTNAME=${DD_HOSTNAME}
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      - DD_CONTAINER_EXCLUDE=image:gcr.io/datadoghq/agent*
+      - DD_CONTAINER_EXCLUDE_METRICS=image:gcr.io/datadoghq/agent*
+      - DD_CONTAINER_EXCLUDE_LOGS=image:gcr.io/datadoghq/agent*
+      - DD_LOGS_INJECTION=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+    ports:
+      - ${DD_PORT}:8126
+volumes:
+  redis:
+  redis-config:
+  mongodb:
+
+networks:
+  vecinoo:
+    driver: bridge

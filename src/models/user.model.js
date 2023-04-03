@@ -85,6 +85,5 @@ UserSchema.methods.generatePasswordReset = function () {
     this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
     this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
 };
-mongoose.set('useFindAndModify', false);
 UserSchema.plugin(require("mongoose-autopopulate"))
 module.exports = mongoose.model('user', UserSchema);

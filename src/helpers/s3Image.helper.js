@@ -1,66 +1,116 @@
-var AWS = require('aws-sdk');
-const sharp = require('sharp');
-var { AWSSECRETACCESSKEY, AWSREGION, AWSACCESSKEYID, AWSBUCKETIMG } = require('../config');
-
+const {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
+const sharp = require("sharp");
+var {
+  AWSSECRETACCESSKEY,
+  AWSREGION,
+  AWSACCESSKEYID,
+  AWSBUCKETIMG,
+} = require("../config");
+const s3 = new S3Client({
+  region: AWSREGION,
+  credentials: {
+    accessKeyId: AWSACCESSKEYID,
+    secretAccessKey: AWSSECRETACCESSKEY,
+  },
+});
 async function uploadImage(bufferImage) {
+  const roundedCornerResizer = sharp(bufferImage.data);
+  const bufferImageResizer = await roundedCornerResizer
+    .jpeg({
+      quality: 50,
+      chromaSubsampling: "4:2:0",
+    })
+    .resize(Math.round(1000 * 0.5))
+    .toBuffer();
 
-    const roundedCornerResizer =sharp(bufferImage.data);
-    const bufferImageResizer= await roundedCornerResizer.jpeg({
-        quality: 50,
-        chromaSubsampling: '4:2:0'
-      }).resize(Math.round(1000 * 0.5));
-     
-    AWS.config.update({
-        secretAccessKey: AWSSECRETACCESSKEY,
-        accessKeyId: AWSACCESSKEYID,
-        region: AWSREGION
-    });
-    let s3 = new AWS.S3();
-    let myBucket = AWSBUCKETIMG;
+  let myKey = `${Date.now()}.jpeg`;
 
-    let myKey = `${Date.now()}.jpeg`;
-    let params = {
-        Bucket: myBucket, Key: myKey, Body: bufferImageResizer,
-        ContentType: 'image/jpeg', ACL: 'public-read'
-    };
-  return await new Promise((resolve, reject) => {
-   s3.upload(params, function (err, data) {
-        if (err) {
-            console.log(err);
-            reject(err) ;
-        }
-        else {
-            console.log("Successfully uploaded data to myBucket/myKey");
-            resolve(data);
-        }
-    });
-});
+  const command = new PutObjectCommand({
+    Bucket: AWSBUCKETIMG,
+    Key: myKey,
+    Body: bufferImageResizer,
+    ContentType: "image/jpeg",
+    ACL: "public-read",
+  });
+
+  try {
+    const response = await s3.send(command);
+    console.log("Successfully uploaded data to myBucket/myKey");
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 }
-async function deleteImage( myKey) {
 
 
-    AWS.config.update({
-        secretAccessKey: AWSSECRETACCESSKEY,
-        accessKeyId: AWSACCESSKEYID,
-        region: AWSREGION
-    });
-    let s3 = new AWS.S3();
-    let myBucket = AWSBUCKETIMG;
+async function getImageUrl(myKey) {
+  AWS.config.update({
+    credentials: {
+      secretAccessKey: AWSSECRETACCESSKEY,
+      accessKeyId: AWSACCESSKEYID,
+    },
+    region: AWSREGION,
+  });
 
-    let params = {
-        Bucket: myBucket,
-        Key: myKey
-    };
-  return await new Promise((resolve, reject) => {
-   s3.deleteObject(params, function (err, data) {
-        if (err) {
-            console.log(err);
-            reject(err) ;
-        }
-        else {
-            resolve(`Successfully delete data to ${myBucket}/${myKey}`);
-        }
-    });
-});
+  const s3 = new AWS.S3();
+  const myBucket = AWSBUCKETIMG;
+
+  const params = {
+    Bucket: myBucket,
+    Key: myKey,
+  };
+
+  const url = await s3.getSignedUrlPromise("getObject", params);
+  return url;
 }
-module.exports = { uploadImage,deleteImage }
+
+async function deleteImage(myKey) {
+  const command = new DeleteObjectCommand({
+    Bucket: AWSBUCKETIMG,
+    Key: myKey,
+  });
+
+  try {
+    const response = await s3.send(command);
+    console.log(`Successfully delete data to ${AWSBUCKETIMG}/${myKey}`);
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+
+async function listImages() {
+  AWS.config.update({
+    credentials: {
+      secretAccessKey: AWSSECRETACCESSKEY,
+      accessKeyId: AWSACCESSKEYID,
+    },
+    region: AWSREGION,
+  });
+
+  const s3 = new AWS.S3();
+  const myBucket = AWSBUCKETIMG;
+
+  const params = {
+    Bucket: myBucket,
+  };
+
+  const data = await s3.listObjectsV2(params).promise();
+  const images = data.Contents.map((image) => {
+    return {
+      key: image.Key,
+      lastModified: image.LastModified,
+      size: image.Size,
+    };
+  });
+  return images;
+}
+
+module.exports = { uploadImage, getImageUrl, deleteImage, listImages };

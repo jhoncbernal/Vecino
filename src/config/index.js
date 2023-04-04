@@ -3,6 +3,16 @@ if (process.env.NODE_ENV !== "production") {
 }
 module.exports = {
   PORT: process.env.PORT,
+  PROJECT: {
+    name: process.env.PROJECT_NAME,
+    mode: process.env.PROJECT_MODE,
+    environment: process.env.PROJECT_MODE,
+    version: process.env.PROJECT_VERSION,
+  },
+  SERVER: {
+    hostname: process.env.SERVER_HOSTNAME,
+    port: process.env.SERVER_PORT,
+  },
   MONGO_DB: {
     hostname: process.env.MONGODB_HOSTNAME,
     port: process.env.MONGODB_PORT,

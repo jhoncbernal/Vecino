@@ -10,9 +10,13 @@ class Server {
     }
     start(){
         return new Promise(resolve => {
-            _express.listen(_config.PORT, () => {
-                console.log(_config.APPLICATION_NAME + " API running on port " + _config.PORT);
-                resolve();
+            _express.listen(_config.SERVER.port, () => {
+              console.log(
+                _config.APPLICATION_NAME +
+                  " API running on port " +
+                  _config.SERVER.port
+              );
+              resolve();
             });    
         });
     }

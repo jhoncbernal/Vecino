@@ -1,281 +1,160 @@
-<td align="center" style="vertical-align:top;font-size-adjust:none!important;padding:0px">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Verify Your Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Reset styles */
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      table,
+      td {
+        border-collapse: collapse;
+      }
+      img {
+        border: none;
+        display: block;
+        max-width: 100%;
+      }
 
-    <table style="width:600px;min-width:600px;max-width:600px;border-collapse:collapse;background-color:#f0f0f0">
-        <tbody>
-            <tr>
-                <td align="left" style="vertical-align:top;padding:0px">
+      /* Main styles */
+      body {
+        background-color: #f2f2f2;
+      }
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px #888888;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #444444;
+      }
+      .subtitle {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #444444;
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0px 0px;
+      }
+      p {
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: left;
+      }
+      .button {
+        display: inline-block;
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+      .footer {
+        background-color: #f5f5f5;
+        color: #777;
+        font-size: 12px;
+        padding: 10px;
+        text-align: left;
+      }
 
-                    <table
-                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px;background-color:#ffffff">
-                        <tbody>
-                            <tr>
-                                <td style="vertical-align:top;padding:30px 0px 0px 0px">
-                                    <table
-                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px;border-top:2px solid #5b6770;border-bottom:3px solid #b3b3b3;background-color:#ffffff">
-                                        <tbody>
-                                            <tr>
-                                                <td align="center" style="vertical-align:top;padding:10px 0px">
-                                                    <table style="border-collapse:collapse;border-spacing:0px 0px">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="vertical-align:top;padding:0px">
+      /* Media Queries */
+      @media only screen and (max-width: 480px) {
+        .container {
+          padding: 10px;
+        }
+        p {
+          font-size: 14px;
+        }
+        .button {
+          font-size: 16px;
+        }
+        .footer {
+          font-size: 12px;
+        }
+      }
+      .container {
+        background-image: url("https://drive.google.com/uc?export=view&id=1wFsLvKXJOBMkpZoMVBcqGyGy5UwmtuDb");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        animation-name: moveBackground;
+        animation-duration: 60s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
 
-                                                                    <img src="https://drive.google.com/uc?export=view&id=1ZyIa6S4-qgL1FpdhzYrbC8EEYhe1G7P0"
-                                                                        width="300" height="100" alt="Fast Delivery" border="0"
-                                                                        style="border:none;display:block;outline:none;text-decoration:none"
-                                                                        class="CToWUd">
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+      @keyframes moveBackground {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: 100% 0;
+        }
+      }
+      .terms {
+        font-size: 14px;
+        margin-top: 20px;
+        text-align: justify;
+      }
 
-                    <table
-                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                        <tbody>
-                            <tr>
-                                <td style="vertical-align:top;padding:0px 1px">
-                                    <table
-                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px;background-color:#ffffff">
-                                        <tbody
-                                            style="background: url('https://drive.google.com/uc?export=view&id=1wFsLvKXJOBMkpZoMVBcqGyGy5UwmtuDb')">
-                                            <tr>
-                                                <td style="vertical-align:top;padding:10px 15px">
+      .terms a {
+        color: #007bff;
+        text-decoration: none;
+      }
 
-
-
-                                                    <table
-                                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="vertical-align:top;padding:15px 15px 10px">
-                                                                    <table
-                                                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td
-                                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:20px;font-size:16px;color:#414042;padding:10px 0px 20px 0px">
-                                                                                    <font
-                                                                                        style="vertical-align: inherit;">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-
-                                                                                            <h3
-                                                                                                style="vertical-align: inherit;">
-                                                                                                ¡Verifique
-                                                                                                su correo electrónico y
-                                                                                                estará
-                                                                                                listo para usar su
-                                                                                                cuenta
-                                                                                                Fast Delivery!
-                                                                                            </h3>
-                                                                                            <br />¡Casi ahí! Gracias por
-                                                                                            crear su cuenta  Fast Delivery.
-                                                                                        </font>
-                                                                                    </font>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td
-                                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:20px;font-size:16px;color:#414042;padding:10px 0px 20px 0px">
-                                                                                    <font
-                                                                                        style="vertical-align: inherit;">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            Seleccione </font>
-                                                                                    </font><span
-                                                                                        style="font-weight:900">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            <font
-                                                                                                style="vertical-align: inherit;">
-                                                                                                CONTINUAR</font>
-                                                                                        </font>
-                                                                                    </span>
-                                                                                    <font
-                                                                                        style="vertical-align: inherit;">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            para completar la
-                                                                                            verificación de su cuenta
-                                                                                        </font>
-                                                                                    </font>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td
-                                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:20px;font-size:16px;color:#414042;padding:10px 0px 10px 0px">
-                                                                                    <a href={{link}}
-                                                                                        style="background:#3880ff;color:#ffffff;display:block;font-weight:600;text-align:center;text-decoration:none;width:100px;line-height:25px;border-radius:3px;padding:3px 1px"
-                                                                                        target="_blank" <font
-                                                                                        style="vertical-align: inherit;">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            CONTINUAR
-                                                                                        </font>
-                                                                                        </font>
-                                                                                    </a>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td
-                                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:20px;font-size:16px;color:#414042;padding:20px 0px 10px 0px">
-                                                                                    <font
-                                                                                        style="vertical-align: inherit;">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            El enlace de arriba solo se
-                                                                                            puede usar una vez. </font>
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            Caducará en una hora,
-                                                                                            después
-                                                                                            de lo cual deberá comenzar
-                                                                                            una nueva solicitud para
-                                                                                            verificar su cuenta.
-                                                                                        </font>
-                                                                                    </font>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td
-                                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:20px;font-size:16px;color:#414042;padding:20px 0px 10px 0px">
-                                                                                    <font
-                                                                                        style="vertical-align: inherit;">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            Si no realizó esta
-                                                                                            solicitud, puede ignorar
-                                                                                            este correo electrónico.
-                                                                                        </font>
-                                                                                    </font>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                    <table
-                                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="vertical-align:top;padding:10px 15px 0">
-                                                                    <table
-                                                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px;border-top:1px solid #6b6b6b">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td
-                                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:21px;padding:20px 0px">
-                                                                                    <span
-                                                                                        style="font-size:18px;font-weight:600">
-                                                                                        <font
-                                                                                            style="vertical-align: inherit;">
-                                                                                            <font
-                                                                                                style="vertical-align: inherit;">
-                                                                                                ¿Alguna pregunta?
-                                                                                            </font>
-                                                                                        </font>
-                                                                                    </span>&nbsp;&nbsp;&nbsp;
-                                                                                    <a style="text-decoration:none"
-                                                                                        href={{link}} target="_blank"
-                                                                                        data-saferedirecturl={{link}}><span
-                                                                                            style="font-size:15px;color:#0277bd;font-weight:500">
-                                                                                            <font
-                                                                                                style="vertical-align: inherit;">
-                                                                                                <font
-                                                                                                    style="vertical-align: inherit;">
-                                                                                                    ¡Contáctenos!
-                                                                                                </font>
-                                                                                                <font
-                                                                                                    style="vertical-align: inherit;">
-                                                                                                    &gt;</font>
-                                                                                            </font>
-                                                                                        </span></a>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table
-                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px;background-color:#eae9e9;margin:20px 0px 0px 0px">
-                        <tbody>
-                            <tr>
-                                <td style="vertical-align:top;padding:25px 15px">
-                                    <table
-                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                                        <tbody>
-                                            <tr>
-                                                <td
-                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:24px;font-size:14px;font-weight:300;padding:0 20px">
-                                                    This email is automatically generated, please do not reply. This
-                                                    e-mail (and any attachment(s)) is confidential; if you are not the
-                                                    intended recipient please delete it immediately without keeping a
-                                                    copy.
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table
-                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px;background-color:#000000">
-                        <tbody>
-                            <tr>
-                                <td style="vertical-align:top;padding:5px 15px">
-                                    <table
-                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                                        <tbody>
-                                            <tr>
-                                                <td style="vertical-align:top;padding:5px 20px">
-                                                    <table
-                                                        style="width:100%;min-width:100%;max-width:100%;border-collapse:collapse;border-spacing:0px 0px">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td
-                                                                    style="vertical-align:top;text-align:left;font-family:Arial,sans-serif;line-height:16px;font-size:12px;font-weight:400;color:#ffffff;padding:0px">
-                                                                    Ways of software
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-</td>
+      .terms a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="https://drive.google.com/uc?export=view&id=1ZyIa6S4-qgL1FpdhzYrbC8EEYhe1G7P0"
+        alt="Logo"
+        width="100"
+      />
+      <p class="subtitle">
+        <b>
+          ¡Verifique su correo electrónico y estará listo para usar su cuenta
+          {{APP_NAME}}!</b
+        >
+      </p>
+      <p>¡Casi ahí! Gracias por crear su cuenta {{APP_NAME}}.</p>
+      <p>
+        Seleccione <b>CONTINUAR</b> para completar la verificación de su cuenta
+      </p>
+      <p><a href="{{link}}" class="button">CONTINUAR</a></p>
+      <p class="terms">
+        El enlace de arriba solo se puede usar una vez. Caducará en una hora,
+        después de lo cual deberá comenzar una nueva solicitud para verificar su
+        cuenta.
+      </p>
+      <p class="terms">
+        Si no realizó esta solicitud, puede ignorar este correo electrónico.
+      </p>
+      <hr />
+      <p class="footer">
+        This email was sent to you by Ways of software. If you have any
+        questions or concerns, please contact us at
+        <a href="mailto:wayofsoft@gmail.com">support@wayofsoft.com</a>.
+      </p>
+    </div>
+  </body>
+</html>

@@ -8,6 +8,7 @@ const {
   AWSSECRETACCESSKEY,
   AWSACCESSKEYID,
 } = require("../config");
+const config = require("../config");
 aws.config.update({
   accessKeyId: AWSACCESSKEYID,
   secretAccessKey: AWSSECRETACCESSKEY,
@@ -51,6 +52,7 @@ async function sendEmail(user, subject, text, htmlpath) {
         var replacements = {
           username: user.firstName,
           link: text,
+          APP_NAME:config.APPLICATION_NAME
         };
         if (err) {
           reject(err);

@@ -39,7 +39,7 @@ async function uploadImage(bufferImage) {
 
   try {
     const response = await s3.send(command);
-    console.log("Successfully uploaded data to myBucket/myKey");
+    console.log(`Successfully uploaded data to ${AWSBUCKETIMG}/${myKey}`);
     return response;
   } catch (err) {
     console.log(err);

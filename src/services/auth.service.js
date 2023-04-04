@@ -52,19 +52,19 @@ class AuthService {
           }
           throw error;
         });
-    } else  {
-      if(!userBody.roles.includes("ROLE_PROVIDER_ACCESS")){
-      userExist = await selectServiceByProperty(
-        "uniquecode",
-        uniquecode,
-        true
-      ).catch((err) => {
-        throw err;
-      });
-    }
+    } else {
+      if (!userBody.roles.includes("ROLE_PROVIDER_ACCESS")) {
+        userExist = await selectServiceByProperty(
+          "uniquecode",
+          uniquecode,
+          true
+        ).catch((err) => {
+          throw err;
+        });
+      }
       if (userBody.roles.includes("ROLE_USER_ACCESS")) {
         return await _userService
-          .create({ ...userBody, neighborhood: userExist.user._id })
+          .create({ ...userBody, neighborhood: userExist?.user?._id })
           .then((res) => {
             return res;
           })
@@ -86,14 +86,10 @@ class AuthService {
           .then((user) => {
             return user.save();
           });
-      } else if (
-        userBody.roles.includes("ROLE_PROVIDER_ACCESS") 
-      ) {
-        return await _providerService
-          .create(userBody)
-          .then((user) => {
-            return user.save();
-          });
+      } else if (userBody.roles.includes("ROLE_PROVIDER_ACCESS")) {
+        return await _providerService.create(userBody).then((user) => {
+          return user.save();
+        });
       } else {
         const error = new Error();
         error.status = 400;
@@ -464,26 +460,24 @@ async function selectServiceByProperty(propName, value, signUp = false) {
     propName,
     value
   );
-  if (!userExist && !adminExist && !providerExist) {
-    const error = new Error();
-    error.status = 404;
-    error.message = `${propName} does not exist`;
-    throw error;
-  }
 
   let _service = null;
   let _user = null;
-  if (adminExist) {
-    _service = _adminService;
-    _user = adminExist;
-  } else if (userExist) {
+  if (value === "") {
     _service = _userService;
-    _user = userExist;
   } else {
-    _service = _providerService;
-    _user = providerExist;
+    if (adminExist) {
+      _service = _adminService;
+      _user = adminExist;
+    } else if (userExist) {
+      _service = _userService;
+      _user = userExist;
+    } else {
+      _service = _providerService;
+      _user = providerExist;
+    }
   }
-  if (!_user.isVerified && !signUp) {
+  if (!_user?.isVerified && !signUp) {
     await _user.generatePasswordReset();
     throw await _user.save().then((user) => {
       return sendEmail(
@@ -505,7 +499,7 @@ async function selectServiceByProperty(propName, value, signUp = false) {
         });
     });
   }
-  if (!_user.enabled && !signUp) {
+  if (!_user?.enabled && !signUp) {
     const error = new Error();
     error.status = 400;
     error.message = "User disabled";

@@ -14,23 +14,21 @@ class AuthController {
     const { body } = req;
     const { baseUrl } = req;
     const host = req.headers.host + baseUrl;
-    await _authService.signUp(body).then(async(userService) => {
-      if(!userService.isVerified){
-      return await _authService
-        .verifyEmail(userService, host)
-        .then((sendVerifyUser) => {
-          return res
-            .status(200)
-            .send({ userService, ...{ emailResult: sendVerifyUser } });
-        })
-        .catch((error) => {
-          return res.status(500).send(error);
-        });}
-        else{
-          return res
-          .status(200)
-          .send({ userService });
-        }
+    await _authService.signUp(body).then(async (userService) => {
+      if (!userService.isVerified) {
+        return await _authService
+          .verifyEmail(userService, host)
+          .then((sendVerifyUser) => {
+            return res
+              .status(200)
+              .send({ userService, ...{ emailResult: sendVerifyUser } });
+          })
+          .catch((error) => {
+            return res.status(500).send(error);
+          });
+      } else {
+        return res.status(200).send({ userService });
+      }
     });
   }
 

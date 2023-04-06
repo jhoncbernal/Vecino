@@ -1,45 +1,48 @@
 const BaseService = require('./base.service')
 let _adminRepository = null;
 class AdminService extends BaseService {
-    constructor({ AdminRepository }) {
-        super(AdminRepository);
-        _adminRepository = AdminRepository;
-    }
+  constructor({ AdminRepository }) {
+    super(AdminRepository);
+    _adminRepository = AdminRepository;
+  }
 
-    async getAdminByuniquecode(uniquecode) {
-        return await _adminRepository.getAdminByuniquecode(uniquecode);
-    }
+  async getAdminByuniquecode(uniquecode) {
+    return await _adminRepository.getAdminByuniquecode(uniquecode);
+  }
 
-    async getAdminByUsername(username) {
-        return await _adminRepository.getAdminByUsername(username);
-    }
+  async getAdminByUsername(username) {
+    return await _adminRepository.getAdminByUsername(username);
+  }
 
-    async getAdminByProperty(propName, value) {
-        return await _adminRepository.getAdminByProperty(propName, value);
-    }
+  async getAdminByProperty(propName, value) {
+    return await _adminRepository.getAdminByProperty(propName, value);
+  }
 
-    async getAllAdminNames(pageSize, pageNum) {
-        return await _adminRepository.getAllAdminNames(pageSize, pageNum);
-    }
+  async getAllAdminNames(pageSize, pageNum) {
+    return await _adminRepository.getAllAdminNames(pageSize, pageNum);
+  }
 
-    async recover(propName, value) {
-        return await _adminRepository.recover(propName, value);
-    }
+  async recover(propName, value) {
+    return await _adminRepository.recover(propName, value);
+  }
 
-    async reset(token) {
-        return await _adminRepository.reset(token);
-    }
+  async reset(token) {
+    return await _adminRepository.reset(token);
+  }
 
-    async resetPassword(token) {
-        return await _adminRepository.resetPassword(token);
-    }
+  async resetPassword(token) {
+    return await _adminRepository.resetPassword(token);
+  }
 
-    async verifyEmail(token) {
-        return await _adminRepository.verifyEmail(token);
-    }
+  async verifyEmail(token) {
+    return await _adminRepository.verifyEmail(token);
+  }
 
-    async verify(token) {
-        return await _adminRepository.verify(token);
-    }
+  async verify(token) {
+    return await _adminRepository.verify(token);
+  }
+  async getAllAdminsBasicInfoByCity(city,pageSize, pageNum) {
+    return await _adminRepository.getAllAdminsBasicInfo(city,pageSize, pageNum);
+  }
 }
 module.exports = AdminService;

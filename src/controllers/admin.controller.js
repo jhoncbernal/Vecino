@@ -70,5 +70,28 @@ class AdminController {
     const admins = await _adminService.getAllAdminNames(pageSize, pageNum);
     return res.send(admins);
   }
+  async getAllAdminsBasicInfoByCity(req, res) {
+    const { pageSize, pageNum } = req.query;
+    const { adminCity } = req.params;
+
+    if (adminCity) {
+      return res.status(400).send({
+        message: "Please provide a city",
+      });
+    }
+
+    try {
+      const admins = await _adminService.getAllAdminsBasicInfoByCity(
+        adminCity,
+        pageSize,
+        pageNum
+      );
+      return res.send(admins);
+    } catch (err) {
+      return res.status(500).send({
+        message: err.message,
+      });
+    }
+  }
 }
 module.exports = AdminController;

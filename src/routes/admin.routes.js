@@ -8,6 +8,7 @@ module.exports = function ({ AdminController }) {
     router.patch('/:adminId', AuthMiddlewareAdmin, AdminController.update);
     router.delete('/:adminId', AuthMiddlewareOwner, AdminController.delete);
     router.post('/', AuthMiddlewareOwner, AdminController.create)
-    router.get('/names/1', AdminController.getAllNames);
+    router.get('/names/:id', AdminController.getAllNames);
+    router.get("/:city", AdminController.getAllAdminsBasicInfoByCity);
     return router;
 };

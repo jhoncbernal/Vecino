@@ -49,5 +49,18 @@ class AdminRepository extends BaseRepository {
       resetPasswordExpires: { $gt: Date.now() },
     });
   }
+  async getAllAdminsBasicInfoByCity(city, pageSize, pageNum) {
+    // use the city parameter to filter the query
+    const skips = pageSize * (pageNum - 1);
+    return await _admin
+      .find(
+        { city: city },
+        { firstName: 1, uniquecode: 1, _id: 1, address: 1, email: 1, phone: 1 }
+      )
+      // skips the number of records specified in the page size
+      .skip(skips)
+      // limits the number of records returned
+      .limit(pageSize);
+  }
 }
 module.exports = AdminRepository;

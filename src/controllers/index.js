@@ -8,4 +8,5 @@ module.exports = {
     FileController: require('./file.controller'),
     ProductController: require('./product.controller'),
     BillController: require('./bill.controller'),
+    CityController: require('./city.controller'),
 }

@@ -9,4 +9,5 @@ module.exports = {
     FileRoutes: require('./file.routes'),
     ProductRoutes:require('./product.routes'),
     BillRoutes:require('./bill.routes'),
+    CityRoutes:require('./city.routes'),
 }

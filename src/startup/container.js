@@ -1,22 +1,76 @@
-const { createContainer, asClass, asValue, asFunction } = require('awilix');
+const { createContainer, asClass, asValue, asFunction } = require("awilix");
 //config
-const config = require('../config');
-const app = require('.')
-const database = require('../database/mongoose.database');
+const config = require("../config");
+const app = require(".");
+const database = require("../database/mongoose.database");
 
 //services
-const { UserService, AuthService, AdminService,ProviderService, VehicleService, ParkingSpaceService, FileService,ProductService,BillService } = require('../services');
+const {
+  UserService,
+  AuthService,
+  AdminService,
+  ProviderService,
+  VehicleService,
+  ParkingSpaceService,
+  FileService,
+  ProductService,
+  BillService,
+  CityService,
+} = require("../services");
 //controllers
-const { UserController, AuthController, AdminController,ProviderController, VehicleController, ParkingSpaceController, FileController,ProductController,BillController } = require('../controllers');
+const {
+  UserController,
+  AuthController,
+  AdminController,
+  ProviderController,
+  VehicleController,
+  ParkingSpaceController,
+  FileController,
+  ProductController,
+  BillController,
+  CityController,
+} = require("../controllers");
 //routes
-const { UserRoutes, AuthRoutes, AdminRoutes,ProviderRoutes, VehicleRoutes, ParkingSpaceRoutes, PositionsRoutes, FileRoutes,ProductRoutes,BillRoutes } = require('../routes/index.routes');
-const Routes = require('../routes');
-
+const {
+  UserRoutes,
+  AuthRoutes,
+  AdminRoutes,
+  ProviderRoutes,
+  VehicleRoutes,
+  ParkingSpaceRoutes,
+  PositionsRoutes,
+  FileRoutes,
+  ProductRoutes,
+  BillRoutes,
+  CityRoutes,
+} = require("../routes/index.routes");
+const Routes = require("../routes");
 
 //models
-const { User, Admin,Provider, Vehicle, ParkingSpace, Positions, File,Product,Bill } = require('../models')
+const {
+  User,
+  Admin,
+  Provider,
+  Vehicle,
+  ParkingSpace,
+  Positions,
+  File,
+  Product,
+  Bill,
+  City,
+} = require("../models");
 //repositories
-const { UserRepository, AdminRepository,ProviderRepository, VehicleRepository, ParkingSpaceRepository, FileRepository,ProductRepository,BillRepository } = require('../repositories')
+const {
+  UserRepository,
+  AdminRepository,
+  ProviderRepository,
+  VehicleRepository,
+  ParkingSpaceRepository,
+  FileRepository,
+  ProductRepository,
+  BillRepository,
+  CityRepository,
+} = require("../repositories");
 
 const container = createContainer();
 container
@@ -36,6 +90,7 @@ container
     FileService: asClass(FileService).singleton(),
     ProductService: asClass(ProductService).singleton(),
     BillService: asClass(BillService).singleton(),
+    CityService: asClass(CityService).singleton(),
   })
   .register({
     UserController: asClass(UserController.bind(UserController)).singleton(),
@@ -55,6 +110,7 @@ container
       ProductController.bind(ProductController)
     ).singleton(),
     BillController: asClass(BillController.bind(BillController)).singleton(),
+    CityController: asClass(CityController).singleton(),
   })
   .register({
     UserRoutes: asFunction(UserRoutes).singleton(),
@@ -67,6 +123,7 @@ container
     FileRoutes: asFunction(FileRoutes).singleton(),
     ProductRoutes: asFunction(ProductRoutes).singleton(),
     BillRoutes: asFunction(BillRoutes).singleton(),
+    CityRoutes: asFunction(CityRoutes).singleton(),
   })
   .register({
     User: asValue(User),
@@ -78,6 +135,7 @@ container
     File: asValue(File),
     Product: asValue(Product),
     Bill: asValue(Bill),
+    City: asValue(City),
   })
   .register({
     UserRepository: asClass(UserRepository).singleton(),
@@ -88,6 +146,7 @@ container
     FileRepository: asClass(FileRepository).singleton(),
     ProductRepository: asClass(ProductRepository).singleton(),
     BillRepository: asClass(BillRepository).singleton(),
+    CityRepository: asClass(CityRepository).singleton(),
   });
 
 module.exports = container;

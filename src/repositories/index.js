@@ -7,4 +7,5 @@ module.exports = {
     FileRepository: require('./file.repository'),
     ProductRepository: require('./product.repository'),
     BillRepository: require('./bill.repository'),
+    CityRepository: require('./city.repository'),
 }

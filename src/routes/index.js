@@ -17,7 +17,8 @@ module.exports = function ({
     PositionsRoutes,
     FileRoutes,
     ProductRoutes,
-    BillRoutes
+    BillRoutes,
+    CityRoutes,
 }) {
     const router = express.Router();
     const apiRoutes = express.Router();
@@ -41,6 +42,7 @@ module.exports = function ({
     apiRoutes.use('/file', FileRoutes);
     apiRoutes.use('/product', ProductRoutes);
     apiRoutes.use('/bill', BillRoutes);
+    apiRoutes.use('/city', CityRoutes);
 
 
 

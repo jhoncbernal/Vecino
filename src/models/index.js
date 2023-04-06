@@ -10,4 +10,5 @@ module.exports = {
     File: require('./file.model'),
     Product: require('./product.model'),
     Bill: require('./bill.model'),
+    City: require('./city.model'),
 }

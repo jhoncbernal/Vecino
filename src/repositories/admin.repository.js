@@ -54,9 +54,21 @@ class AdminRepository extends BaseRepository {
     const skips = pageSize * (pageNum - 1);
     return await _admin
       .find(
-        { city: city },
-        { firstName: 1, uniquecode: 1, _id: 1, address: 1, email: 1, phone: 1 }
+        { $or: [{ cityCode: city }, { cityName: city }] },
+        {
+          firstName: 1,
+          uniquecode: 1,
+          _id: -1,
+          address: 1,
+          propertyInfo: {
+            numberOfSections: 1,
+            sectionType: 1,
+            numberOfProperties: 1,
+            propertyType: 1,
+          },
+        }
       )
+      .collation({ locale: "es", strength: 1 })
       // skips the number of records specified in the page size
       .skip(skips)
       // limits the number of records returned

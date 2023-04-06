@@ -42,7 +42,11 @@ class AdminService extends BaseService {
     return await _adminRepository.verify(token);
   }
   async getAllAdminsBasicInfoByCity(city,pageSize, pageNum) {
-    return await _adminRepository.getAllAdminsBasicInfo(city,pageSize, pageNum);
+    return await _adminRepository.getAllAdminsBasicInfoByCity(
+      city,
+      pageSize,
+      pageNum
+    );
   }
 }
 module.exports = AdminService;

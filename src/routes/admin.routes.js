@@ -9,6 +9,6 @@ module.exports = function ({ AdminController }) {
     router.delete('/:adminId', AuthMiddlewareOwner, AdminController.delete);
     router.post('/', AuthMiddlewareOwner, AdminController.create)
     router.get('/names/:id', AdminController.getAllNames);
-    router.get("/:city", AdminController.getAllAdminsBasicInfoByCity);
+    router.get("/city/:city", AdminController.getAllAdminsBasicInfoByCity);
     return router;
 };

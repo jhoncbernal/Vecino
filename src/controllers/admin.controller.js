@@ -72,9 +72,9 @@ class AdminController {
   }
   async getAllAdminsBasicInfoByCity(req, res) {
     const { pageSize, pageNum } = req.query;
-    const { adminCity } = req.params;
+    const { city } = req.params;
 
-    if (adminCity) {
+    if (!city) {
       return res.status(400).send({
         message: "Please provide a city",
       });
@@ -82,7 +82,7 @@ class AdminController {
 
     try {
       const admins = await _adminService.getAllAdminsBasicInfoByCity(
-        adminCity,
+        city,
         pageSize,
         pageNum
       );

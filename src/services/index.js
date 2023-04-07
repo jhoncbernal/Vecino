@@ -10,4 +10,5 @@ module.exports = {
     ProductService: require('./product.service'),
     BillService: require('./bill.service'),
     CityService: require('./city.service'),
+    PackageService: require('./package.service'),
 }

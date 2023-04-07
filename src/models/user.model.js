@@ -49,9 +49,9 @@ const UserSchema = new Schema(
     },
     uniquecode: { type: String, required: [true, "What is your uniquecode?"] },
     code: { type: String },
-    homeNumber: { type: Number },
-    blockNumber: { type: Number },
-    city: { type: String, required: true },
+    cityName: { type: String, required: true },
+    cityCode: { type: String, required: true },
+    postalCode: { type: String, required: true },
     points: { type: Number, required: true, trim: true, default: 5 },
     isOwner: { type: Boolean, default: 0 },
     debt: { type: String, default: null },
@@ -63,6 +63,10 @@ const UserSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "neighborhood",
       autopopulate: { select: ["firstName", "address"] },
+    },
+    propertyInfo: {
+      sectionNumber: { type: Number, required: true },
+      propertyNumber: { type: Number, required: true },
     },
     admin: {
       _id: false,

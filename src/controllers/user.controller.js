@@ -14,11 +14,15 @@ class UserController {
     const { id: userId } = req.user;
     const { pageSize, pageNum } = req.query;
     let admin;
-     await _adminService.get(userId).then((result)=>{admin=result}).catch(async()=>{
-      admin = await _userService.get(userId);
-    });
-   
-  
+    await _adminService
+      .get(userId)
+      .then((result) => {
+        admin = result;
+      })
+      .catch(async () => {
+        admin = await _userService.get(userId);
+      });
+
     const users = await _userService.getAll(
       "uniquecode",
       admin.uniquecode,
@@ -54,6 +58,26 @@ class UserController {
       return res.send(users);
     } catch (err) {
       return res.status(error.status ? error.status : 500).send(err);
+    }
+  }
+
+
+  async getUsersByPropertyInfo(req, res) {
+    try {
+    const { sectionNumber, propertyNumber } = req.query;
+      const users = await _userService.getUsersByPropertyInfo(
+        sectionNumber,
+        propertyNumber
+      );
+      if (!users) {
+        res.status(404);
+        return res.json({ message: "User not found" });
+      }
+      res.json(users);
+    } catch (err) {
+      console.error(err);
+      res.status(500);
+      res.json({ message: "An error has occurred" });
     }
   }
 }

@@ -8,4 +8,5 @@ module.exports = {
     ProductRepository: require('./product.repository'),
     BillRepository: require('./bill.repository'),
     CityRepository: require('./city.repository'),
+    PackageRepository: require('./package.repository'),
 }

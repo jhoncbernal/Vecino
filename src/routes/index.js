@@ -19,6 +19,7 @@ module.exports = function ({
     ProductRoutes,
     BillRoutes,
     CityRoutes,
+    PackageRoutes
 }) {
     const router = express.Router();
     const apiRoutes = express.Router();
@@ -43,6 +44,7 @@ module.exports = function ({
     apiRoutes.use('/product', ProductRoutes);
     apiRoutes.use('/bill', BillRoutes);
     apiRoutes.use('/city', CityRoutes);
+    apiRoutes.use('/package', PackageRoutes);
 
 
 

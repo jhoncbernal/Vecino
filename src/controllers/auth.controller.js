@@ -34,7 +34,7 @@ class AuthController {
 
   async signIn(req, res) {
     const { body } = req;
-    if (!body.email.includes("@")) {
+    if (!body.email?.includes("@")) {
       body.username = body.email;
       delete body.email;
     }

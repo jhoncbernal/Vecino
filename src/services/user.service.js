@@ -39,5 +39,8 @@ class UserService extends BaseService {
     async deleteUserRole(userId,role){
         return await _userRepository.deleteUserRole(userId,role);
     }
+    async getUsersByPropertyInfo(sectionNumber, propertyNumber) {
+        return await _userRepository.getUsersByPropertyInfo(sectionNumber, propertyNumber);
+    }
 }
 module.exports = UserService;

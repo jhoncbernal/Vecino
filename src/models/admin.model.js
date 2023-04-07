@@ -60,6 +60,7 @@ const AdminSchema = new Schema(
     },
     cityName: { type: String, required: true },
     cityCode: { type: String, required: true },
+    postalCode: { type: String, required: true },
     propertyInfo: {
       numberOfSections: { type: Number, required: true },
       sectionType: {

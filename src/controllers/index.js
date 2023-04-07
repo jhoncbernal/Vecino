@@ -9,4 +9,5 @@ module.exports = {
     ProductController: require('./product.controller'),
     BillController: require('./bill.controller'),
     CityController: require('./city.controller'),
+    PackageController: require('./package.controller'),
 }

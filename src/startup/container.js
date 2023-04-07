@@ -16,6 +16,7 @@ const {
   ProductService,
   BillService,
   CityService,
+  PackageService,
 } = require("../services");
 //controllers
 const {
@@ -29,6 +30,7 @@ const {
   ProductController,
   BillController,
   CityController,
+  PackageController
 } = require("../controllers");
 //routes
 const {
@@ -43,6 +45,7 @@ const {
   ProductRoutes,
   BillRoutes,
   CityRoutes,
+  PackageRoutes
 } = require("../routes/index.routes");
 const Routes = require("../routes");
 
@@ -58,6 +61,7 @@ const {
   Product,
   Bill,
   City,
+  Package
 } = require("../models");
 //repositories
 const {
@@ -70,6 +74,7 @@ const {
   ProductRepository,
   BillRepository,
   CityRepository,
+  PackageRepository
 } = require("../repositories");
 
 const container = createContainer();
@@ -91,6 +96,7 @@ container
     ProductService: asClass(ProductService).singleton(),
     BillService: asClass(BillService).singleton(),
     CityService: asClass(CityService).singleton(),
+    PackageService: asClass(PackageService).singleton(),
   })
   .register({
     UserController: asClass(UserController.bind(UserController)).singleton(),
@@ -111,6 +117,7 @@ container
     ).singleton(),
     BillController: asClass(BillController.bind(BillController)).singleton(),
     CityController: asClass(CityController).singleton(),
+    PackageController: asClass(PackageController).singleton(),
   })
   .register({
     UserRoutes: asFunction(UserRoutes).singleton(),
@@ -124,6 +131,7 @@ container
     ProductRoutes: asFunction(ProductRoutes).singleton(),
     BillRoutes: asFunction(BillRoutes).singleton(),
     CityRoutes: asFunction(CityRoutes).singleton(),
+    PackageRoutes: asFunction(PackageRoutes).singleton(),
   })
   .register({
     User: asValue(User),
@@ -136,6 +144,7 @@ container
     Product: asValue(Product),
     Bill: asValue(Bill),
     City: asValue(City),
+    Package: asValue(Package),
   })
   .register({
     UserRepository: asClass(UserRepository).singleton(),
@@ -147,6 +156,7 @@ container
     ProductRepository: asClass(ProductRepository).singleton(),
     BillRepository: asClass(BillRepository).singleton(),
     CityRepository: asClass(CityRepository).singleton(),
+    PackageRepository: asClass(PackageRepository).singleton(),
   });
 
 module.exports = container;

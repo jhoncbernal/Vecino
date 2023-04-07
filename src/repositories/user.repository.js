@@ -1,5 +1,5 @@
 const BaseRepository = require("./base.repository");
-
+const uuid = require("uuid");
 let _user = null;
 class UserRepository extends BaseRepository {
   constructor({ User }) {
@@ -187,15 +187,57 @@ class UserRepository extends BaseRepository {
     });
   }
 
-  async addNewUserRole(userId,role) {
-    return await _user.findOneAndUpdate({
-      _id: userId},{$push: {roles: role}}
+  async addNewUserRole(userId, role) {
+    return await _user.findOneAndUpdate(
+      {
+        _id: userId,
+      },
+      { $push: { roles: role } }
     );
   }
-  async deleteUserRole(userId,role) {
-    return await _user.findOneAndUpdate({
-      _id: userId},{$pull: {roles: role}}
+  async deleteUserRole(userId, role) {
+    return await _user.findOneAndUpdate(
+      {
+        _id: userId,
+      },
+      { $pull: { roles: role } }
     );
+  }
+  async getUsersBasicInfoByUuids(usersUuids) {
+    const fieldName = uuid.validate(usersUuids[0]) ? "uuid" : "_id";
+    return await _user.find(
+      { [fieldName]: { $in: usersUuids } },
+      {
+        _id: 0,
+        uuid: 1,
+        firstName: 1,
+        lastName: 1,
+        propertyInfo: 1,
+        neighborhood: 0,
+        admin: 1,
+      }
+    );
+  }
+
+  async getUsersByPropertyInfo(sectionNumber, propertyNumber) {
+    return await _user.aggregate([
+      {
+        $match: {
+          "propertyInfo.sectionNumber": sectionNumber,
+          "propertyInfo.propertyNumber": propertyNumber,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          uuid: 1,
+          firstName: 1,
+          lastName: 1,
+          propertyInfo: 1,
+          admin: 1,
+        },
+      },
+    ]);
   }
 }
 

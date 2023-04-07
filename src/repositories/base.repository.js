@@ -3,7 +3,7 @@ class BaseRepository {
         this.model = model;
     }
     async get(id) {
-        return await this.model.findById(id);
+        return await this.model.find({$or : [{_id:id},{uuid:id}] });
     }
     async getAll(propName, value,pageSize=5,pageNum=1,orderBy="_id") {
         const skips=pageSize*(pageNum-1);

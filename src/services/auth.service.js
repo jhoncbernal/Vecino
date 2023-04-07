@@ -64,7 +64,11 @@ class AuthService {
       }
       if (userBody.roles.includes("ROLE_USER_ACCESS")) {
         return await _userService
-          .create({ ...userBody, neighborhood: userExist?.user?._id })
+          .create({
+            ...userBody,
+            neighborhood: userExist?.user?._id,
+            admin: { uuid: userExist?.user?.uuid },
+          })
           .then((res) => {
             return res;
           })

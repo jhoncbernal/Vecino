@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { compareSync, hashSync, genSaltSync } = require("bcryptjs");
 const crypto = require("crypto");
+const { v4: uuidv4 } = require("uuid");
 const ParkingLotsSchema = new Schema({
   numberOfParkingLots: { type: Number, required: true },
   parkingLotType: {
@@ -12,6 +13,12 @@ const ParkingLotsSchema = new Schema({
 });
 const AdminSchema = new Schema(
   {
+    uuid: {
+      type: String,
+      default: uuidv4,
+      required: true,
+      unique: true,
+    },
     username: {
       type: String,
       required: [true, "What is your username?"],

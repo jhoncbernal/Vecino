@@ -58,9 +58,8 @@ const packageSchema = new Schema({
   ],
   signature: {
     type: String,
-    required: true,
   },
-  image: {
+  imageUrl: {
     type: String,
     required: true,
   },

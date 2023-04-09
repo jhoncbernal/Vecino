@@ -13,7 +13,7 @@ class PackageRepository extends BaseRepository {
   }
 
   async getPackageByPackageCode(packageCode) {
-    return this.package.find({ packageCode: packageCode });
+    return this.package.findOne({ packageCode: packageCode });
   }
 
   async getPackagesByUserUuid(userUuid) {

@@ -26,7 +26,7 @@ class PackageController {
         deliveryCompany,
         receivedBy,
         signature,
-        image,
+        imageUrl,
         admin,
         trackingNumber,
       } = req.body;
@@ -36,7 +36,7 @@ class PackageController {
         deliveryCompany,
         receivedBy,
         signature,
-        image,
+        imageUrl,
         users: [{ uuid: userUuid }],
         pin,
         admin: { uuid: admin.uuid },

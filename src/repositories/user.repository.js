@@ -220,6 +220,8 @@ class UserRepository extends BaseRepository {
   }
 
   async getUsersByPropertyInfo(sectionNumber, propertyNumber) {
+    sectionNumber = parseInt(sectionNumber);
+    propertyNumber = parseInt(propertyNumber);
     return await _user.aggregate([
       {
         $match: {

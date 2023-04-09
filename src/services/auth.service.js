@@ -131,6 +131,7 @@ class AuthService {
             const userToEncode = {
               username: userExist.user.email,
               id: userExist.user._id,
+              uuid: userExist.user?.uuid,
             };
             token = generateToken(userToEncode);
           }
@@ -148,6 +149,7 @@ class AuthService {
             const userToEncode = {
               username: userExist.user.email,
               id: userExist.user._id,
+              uuid: userExist.user?.uuid,
             };
             token = generateTokenOwner(userToEncode);
           }
@@ -158,6 +160,7 @@ class AuthService {
             const adminToEncode = {
               username: userExist.user.email,
               id: userExist.user._id,
+              uuid: userExist.user?.uuid,
             };
             token = generateTokenAdmin(adminToEncode);
           }
@@ -168,6 +171,7 @@ class AuthService {
             const providerToEncode = {
               username: userExist.user.email,
               id: userExist.user._id,
+              uuid: userExist.user?.uuid,
             };
             token = generateTokenAdmin(providerToEncode);
           }

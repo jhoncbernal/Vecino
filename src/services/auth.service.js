@@ -481,6 +481,10 @@ async function selectServiceByProperty(propName, value, signUp = false) {
       _user = providerExist;
     }
   }
+  if (!signUp && !_user) {
+    throw new Error("User not found");
+  }
+
   if (!_user?.isVerified && !signUp) {
     await _user.generatePasswordReset();
     throw await _user.save().then((user) => {

@@ -34,7 +34,6 @@ const UserSchema = new Schema(
     lastName: { type: String },
     documentId: {
       type: Number,
-      required: [true, "What is your id number?"],
       unique: true,
     },
     phone: { type: String, required: [true, "What is your contact number?"] },
@@ -48,9 +47,10 @@ const UserSchema = new Schema(
       default: false,
     },
     uniquecode: { type: String, required: [true, "What is your uniquecode?"] },
-    code: { type: String },
     cityName: { type: String, required: true },
     cityCode: { type: String, required: true },
+    countryCode: { type: String, required: true },
+    stateCode: { type: String, required: true },
     postalCode: { type: String, required: true },
     points: { type: Number, required: true, trim: true, default: 5 },
     isOwner: { type: Boolean, default: 0 },
@@ -92,10 +92,6 @@ UserSchema.methods.toJSON = function () {
 UserSchema.methods.comparePasswords = function (password) {
   return compareSync(password, this.password);
 };
-UserSchema.pre("save", function (next) {
-  this.code = this.blockNumber.toString() + this.homeNumber.toString();
-  next();
-});
 
 UserSchema.pre("save", async function (next) {
   const user = this;

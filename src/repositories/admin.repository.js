@@ -60,6 +60,7 @@ class AdminRepository extends BaseRepository {
           uniquecode: 1,
           _id: -1,
           address: 1,
+          postalCode:1,
           propertyInfo: {
             numberOfSections: 1,
             sectionType: 1,

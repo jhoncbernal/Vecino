@@ -12,7 +12,7 @@ class CityRepository extends BaseRepository {
 
   async getCityByName(name) {
     return await this.city
-      .findOne({ name: name })
+      .find({ name: { $regex: new RegExp(name, "i") } })
       .collation({ locale: "es", strength: 1 });
   }
 
@@ -35,10 +35,17 @@ class CityRepository extends BaseRepository {
       .limit(pageSize);
   }
 
-  async getAll(findby,pageSize, pageNum) {
+  async getAll(findby, pageSize, pageNum) {
     const { code, name, stateCode, stateName } = findby;
     return await this.city
-      .find({$or:[{code:code},{name:name},{stateCode:stateCode},{stateName:stateName}]})
+      .find({
+        $or: [
+          { code: code },
+          { name: name },
+          { stateCode: stateCode },
+          { stateName: stateName },
+        ],
+      })
       .collation({ locale: "es", strength: 1 })
       .skip(pageSize * (pageNum - 1))
       .limit(pageSize);

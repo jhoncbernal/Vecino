@@ -1,4 +1,6 @@
 const BaseService = require("./base.service");
+const { generatePin } = require("../utils/generate.utils");
+
 let _packageRepository,
   _userRepository = null;
 

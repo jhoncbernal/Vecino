@@ -2,8 +2,10 @@ const {
   S3Client,
   PutObjectCommand,
   DeleteObjectCommand,
+  GetObjectCommand,
 } = require("@aws-sdk/client-s3");
 const sharp = require("sharp");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 var {
   AWSSECRETACCESSKEY,
   AWSREGION,
@@ -40,33 +42,38 @@ async function uploadImage(bufferImage) {
   try {
     const response = await s3.send(command);
     console.log(`Successfully uploaded data to ${AWSBUCKETIMG}/${myKey}`);
-    return response;
+    //const Location = await getImageUrl(myKey);
+    return { ...response, Location:"some" };
   } catch (err) {
     console.log(err);
     throw err;
   }
 }
 
-
-async function getImageUrl(myKey) {
-  AWS.config.update({
+async function getImageUrl(key) {
+  const s3 = new S3Client({
+    region: AWSREGION, // Replace "your-bucket-region" with your bucket's region
     credentials: {
-      secretAccessKey: AWSSECRETACCESSKEY,
       accessKeyId: AWSACCESSKEYID,
+      secretAccessKey: AWSSECRETACCESSKEY,
     },
-    region: AWSREGION,
+  });
+  const command = new GetObjectCommand({
+    Bucket: AWSBUCKETIMG,
+    Key: key,
   });
 
-  const s3 = new AWS.S3();
-  const myBucket = AWSBUCKETIMG;
+  const response = await s3.send(command);
 
-  const params = {
-    Bucket: myBucket,
-    Key: myKey,
-  };
-
-  const url = await s3.getSignedUrlPromise("getObject", params);
-  return url;
+  if (response.$metadata.httpStatusCode === 200) {
+    const signedUrl = await getSignedUrl(s3, {
+      Bucket: AWSBUCKETIMG,
+      Key: key
+    });
+    return signedUrl;
+  } else {
+    throw new Error("Error getting object from S3");
+  }
 }
 
 async function deleteImage(myKey) {
@@ -84,7 +91,6 @@ async function deleteImage(myKey) {
     throw err;
   }
 }
-
 
 async function listImages() {
   AWS.config.update({

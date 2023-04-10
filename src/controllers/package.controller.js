@@ -1,5 +1,3 @@
-const { generatePin } = require("../utils/generate.utils");
-
 class PackageController {
   constructor({ PackageService }) {
     this.packageService = PackageService;
@@ -15,40 +13,32 @@ class PackageController {
 
   async create(req, res) {
     try {
-      const userUuid = req.body.user;
-      const userPackages = await this.packageService.getPackagesByUserUuid(
-        userUuid
+      const { sectionNumber, propertyNumber } = req.body;
+
+      const result = await this.packageService.create(
+        req.body,
+        sectionNumber,
+        propertyNumber
       );
 
-      let pin = userPackages.length > 0 ? userPackages[0].pin : generatePin();
-      const {
-        packageCode,
-        deliveryCompany,
-        receivedBy,
-        signature,
-        imageUrl,
-        admin,
-        trackingNumber,
-      } = req.body;
-
-      await this.packageService.create({
-        packageCode,
-        deliveryCompany,
-        receivedBy,
-        signature,
-        imageUrl,
-        users: [{ uuid: userUuid }],
-        pin,
-        admin: { uuid: admin.uuid },
-        trackingNumber,
-      });
-
       const { usersUuids, packageCodes } =
-        await this.packageService.getUsersAndPackagesByPin(pin);
-      res.status(201).json({ usersUuids, packageCodes, pin });
+        await this.packageService.getUsersAndPackagesByPin(result.pin);
+      res
+        .status(201)
+        .json({
+          usersUuids,
+          packageCodes,
+          pin: result.pin,
+          message: "Package created successfully",
+        });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+      if (error.message.includes("duplicate key")) {
+        error.message = `${Object.keys(error?.keyValue)[0]} already exists`;
+      }
+      res
+        .status(500)
+        .json({ message: error?.message || "An error has occurred" });
     }
   }
 
@@ -69,7 +59,6 @@ class PackageController {
 
   async update(req, res) {
     const { packageId } = req.params;
-    const { name, country } = req.body;
     try {
       const updatedPackage = await this.packageService.update(
         packageId,
@@ -126,7 +115,7 @@ class PackageController {
       const users = await this.packageService.getUsersBasicInfoByUuids(
         usersUuids
       );
-      const result =  this._mapPackageToResponse(users);
+      const result = this._mapPackageToResponse(users);
       if (packageCodes && users && result) {
         res.json({ packageCodes, ...result });
       } else {

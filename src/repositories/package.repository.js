@@ -28,7 +28,7 @@ class PackageRepository extends BaseRepository {
   async getUsersAndPackagesByPin(pin) {
     const packages = await this.package
       .aggregate([
-        { $match: { pin: pin ,status: { $ne: "delivered" }, } },
+        { $match: { pin: pin, status: { $ne: "delivered" } } },
         { $project: { users: 1, packageCode: 1 } },
         { $unwind: "$users" },
         {
@@ -47,7 +47,9 @@ class PackageRepository extends BaseRepository {
         },
       ])
       .exec();
-
+    if (!packages || packages.length === 0) {
+      return { usersUuids: [], packageCodes: []};
+    }
     return {
       usersUuids: packages[0].usersUuids,
       packageCodes: packages[0].packageCodes,

@@ -23,14 +23,12 @@ class PackageController {
 
       const { usersUuids, packageCodes } =
         await this.packageService.getUsersAndPackagesByPin(result.pin);
-      res
-        .status(201)
-        .json({
-          usersUuids,
-          packageCodes,
-          pin: result.pin,
-          message: "Package created successfully",
-        });
+      return res.status(201).json({
+        usersUuids,
+        packageCodes,
+        pin: result.pin,
+        message: "Package created successfully",
+      });
     } catch (error) {
       console.error(error);
       if (error.message.includes("duplicate key")) {
@@ -47,13 +45,13 @@ class PackageController {
     try {
       const onePackage = await this.packageService.get(packageId);
       if (onePackage) {
-        res.json(onePackage);
+        return res.json(onePackage);
       } else {
-        res.status(404).json({ message: "Package not found" });
+        return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+      return res.status(500).json({ message: "An error has occurred" });
     }
   }
 
@@ -65,13 +63,13 @@ class PackageController {
         req.body
       );
       if (updatedPackage) {
-        res.json(updatedPackage);
+        return res.json(updatedPackage);
       } else {
-        res.status(404).json({ message: "Package not found" });
+        return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+      return res.status(500).json({ message: "An error has occurred" });
     }
   }
 
@@ -80,13 +78,13 @@ class PackageController {
     try {
       const deletedPackage = await this.packageService.delete(packageId);
       if (deletedPackage) {
-        res.json({ message: "Package deleted" });
+        return res.json({ message: "Package deleted" });
       } else {
-        res.status(404).json({ message: "Package not found" });
+        return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+      return res.status(500).json({ message: "An error has occurred" });
     }
   }
 
@@ -97,13 +95,13 @@ class PackageController {
         userUuid
       );
       if (packages) {
-        res.json(packages);
+        return res.json(packages);
       } else {
-        res.status(404).json({ message: "Packages not found" });
+        return res.status(404).json({ message: "Packages not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+      return res.status(500).json({ message: "An error has occurred" });
     }
   }
 
@@ -112,18 +110,30 @@ class PackageController {
     try {
       const { usersUuids, packageCodes } =
         await this.packageService.getUsersAndPackagesByPin(pinId);
+      if (
+        !usersUuids ||
+        usersUuids.length === 0 ||
+        !packageCodes ||
+        usersUuids.length === 0
+      ) {
+       return res
+         .status(404)
+         .json({ message: `Package not found using the pin ${pinId}` });
+      }
       const users = await this.packageService.getUsersBasicInfoByUuids(
         usersUuids
       );
       const result = this._mapPackageToResponse(users);
       if (packageCodes && users && result) {
-        res.json({ packageCodes, ...result });
+       return res.json({ packageCodes, ...result });
       } else {
-        res.status(404).json({ message: "Package not found" });
+      return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+     return res
+       .status(500)
+       .json({ message: error.message || "An error has occurred" });
     }
   }
 
@@ -134,13 +144,13 @@ class PackageController {
         packageCode
       );
       if (onePackage) {
-        res.json(onePackage);
+       return res.json(onePackage);
       } else {
-        res.status(404).json({ message: "Package not found" });
+      return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "An error has occurred" });
+     return res.status(500).json({ message: "An error has occurred" });
     }
   }
 

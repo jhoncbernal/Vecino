@@ -42,8 +42,10 @@ async function uploadImage(bufferImage) {
   try {
     const response = await s3.send(command);
     console.log(`Successfully uploaded data to ${AWSBUCKETIMG}/${myKey}`);
-    //const Location = await getImageUrl(myKey);
-    return { ...response, Location:"some" };
+    // Generate the URL to access the uploaded image file
+    const imageUrl = `https://${AWSBUCKETIMG}.s3.${AWSREGION}.amazonaws.com/${myKey}`;
+
+    return { ...response, Location: imageUrl };
   } catch (err) {
     console.log(err);
     throw err;

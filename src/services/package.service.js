@@ -32,7 +32,7 @@ class PackageService extends BaseService {
       sectionNumber,
       propertyNumber
     );
-    if (!users) {
+    if (!users || users.length === 0 ) {
       throw new Error("No users found");
     }
     const userPackages = await _packageRepository.getPackagesByUserUuid(

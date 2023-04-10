@@ -34,7 +34,6 @@ const UserSchema = new Schema(
     lastName: { type: String },
     documentId: {
       type: Number,
-      unique: true,
     },
     phone: { type: String, required: [true, "What is your contact number?"] },
     resetPasswordToken: { type: String, required: false },

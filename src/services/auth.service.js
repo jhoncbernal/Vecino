@@ -383,15 +383,14 @@ class AuthService {
         if (
           user.email.length < 5 ||
           user.firstName.length < 3 ||
-          user.phone.length < 8 ||
-          user.documentId.toString().length < 8
+          user.phone.length < 8 
         ) {
           replacements = {
             email: user.email,
             name: user.firstName,
             address: user.address,
             phone: user.phone,
-            documentId: user.documentId,
+            documentId: user?.documentId,
           };
         } else {
           if (!user.isVerified) {

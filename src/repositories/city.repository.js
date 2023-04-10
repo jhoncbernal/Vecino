@@ -12,7 +12,7 @@ class CityRepository extends BaseRepository {
 
   async getCityByName(name) {
     return await this.city
-      .find({ name: { $regex: new RegExp(name, "i") } })
+      .findOne({ name: { $regex: new RegExp(name, "i") } })
       .collation({ locale: "es", strength: 1 });
   }
 

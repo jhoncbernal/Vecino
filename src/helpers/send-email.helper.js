@@ -79,7 +79,6 @@ async function sendEmail(user, subject, text, htmlpath) {
       },
       Source: FROM_EMAIL,
     };
-    return true;
     return await new Promise((resolve, reject) => {
       ses.sendEmail(mailOptions, function (err, info) {
         if (err) {

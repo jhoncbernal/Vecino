@@ -6,7 +6,7 @@ class BaseRepository {
   async get(id) {
     const fieldName = uuid.validate(id) ? "uuid" : "_id";
 
-    return await this.model.find({ [fieldName]: id });
+    return await this.model.findOne({ [fieldName]: id });
   }
   async getAll(propName, value, pageSize = 5, pageNum = 1, orderBy = "_id") {
     const skips = pageSize * (pageNum - 1);

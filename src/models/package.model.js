@@ -26,10 +26,13 @@ const packageSchema = new Schema({
     required: true,
     default: Date.now,
   },
+  statusUpdatedAt: {
+    type: Date,
+  },
   status: {
     type: String,
     required: true,
-    enum: ["received", "in transit", "delivered"],
+    enum: ["received", "notified", "delivered"],
     default: "received",
   },
   pin: {
@@ -42,7 +45,7 @@ const packageSchema = new Schema({
     {
       _id: false,
       uuid: {
-        ref: "users",
+        ref: "User",
         type: String,
       },
     },
@@ -51,7 +54,7 @@ const packageSchema = new Schema({
     {
       _id: false,
       uuid: {
-        ref: "admin",
+        ref: "neighborhood",
         type: String,
       },
     },
@@ -70,7 +73,19 @@ const packageSchema = new Schema({
     default: "email",
   },
   trackingNumber: {
-    type: String
+    type: String,
+  },
+  sectionNumber: {
+    type: String,
+  },
+  propertyNumber: {
+    type: String,
+  },
+  kind: {
+    type: String,
+    required: true,
+    enum: ["package", "letter", "mail", "parcel", "box", "envelope", "other","utilities"],
+    default: "package",
   },
 });
 

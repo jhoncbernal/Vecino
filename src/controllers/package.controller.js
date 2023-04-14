@@ -9,6 +9,8 @@ class PackageController {
     this.getPackageByPin = this.getPackageByPin.bind(this);
     this.getPackageByPackageCode = this.getPackageByPackageCode.bind(this);
     this._mapPackageToResponse = this._mapPackageToResponse.bind(this);
+    this.updatePackageStatusByPIN = this.updatePackageStatusByPIN.bind(this);
+    this.getAllByAdmin = this.getAllByAdmin.bind(this);
   }
 
   async create(req, res) {
@@ -116,24 +118,24 @@ class PackageController {
         !packageCodes ||
         usersUuids.length === 0
       ) {
-       return res
-         .status(404)
-         .json({ message: `Package not found using the pin ${pinId}` });
+        return res
+          .status(404)
+          .json({ message: `Package not found using the pin ${pinId}` });
       }
       const users = await this.packageService.getUsersBasicInfoByUuids(
         usersUuids
       );
       const result = this._mapPackageToResponse(users);
       if (packageCodes && users && result) {
-       return res.json({ packageCodes, ...result });
+        return res.json({ packageCodes, ...result });
       } else {
-      return res.status(404).json({ message: "Package not found" });
+        return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-     return res
-       .status(500)
-       .json({ message: error.message || "An error has occurred" });
+      return res
+        .status(500)
+        .json({ message: error.message || "An error has occurred" });
     }
   }
 
@@ -144,13 +146,54 @@ class PackageController {
         packageCode
       );
       if (onePackage) {
-       return res.json(onePackage);
+        return res.json(onePackage);
       } else {
-      return res.status(404).json({ message: "Package not found" });
+        return res.status(404).json({ message: "Package not found" });
       }
     } catch (error) {
       console.error(error);
-     return res.status(500).json({ message: "An error has occurred" });
+      return res.status(500).json({ message: "An error has occurred" });
+    }
+  }
+
+  async updatePackageStatusByPIN(req, res) {
+    const { pinId } = req.params;
+    const { signature } = req.body;
+    try {
+      const updatedPackage = await this.packageService.updatePackageStatusByPIN(
+        pinId,
+        signature,
+        "delivered"
+      );
+      if (updatedPackage) {
+        return res.json(updatedPackage);
+      } else {
+        return res.status(404).json({ message: "Package not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error has occurred" });
+    }
+  }
+
+  async getAllByAdmin(req, res) {
+    try {
+      const { adminUuid } = req.params;
+      console.log(adminUuid);
+      const { pageSize, pageNum } = req.query;
+      const packages = await this.packageService.getAllByAdmin(
+        pageSize,
+        pageNum,
+        adminUuid,
+      );
+      if (packages) {
+        return res.json(packages);
+      } else {
+        return res.status(404).json({ message: "Packages not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error has occurred" });
     }
   }
 

@@ -6,7 +6,7 @@ class PackageRepository extends BaseRepository {
     this.getPackageByPin = this.getPackageByPin.bind(this);
     this.getPackageByPackageCode = this.getPackageByPackageCode.bind(this);
     this.getPackagesByUserUuid = this.getPackagesByUserUuid.bind(this);
-    this.getAll = this.getAll.bind(this);
+    this.updatePackageStatusByPIN = this.updatePackageStatusByPIN.bind(this);
   }
   async getPackageByPin(pin) {
     return this.package.find({ pin: pin, status: { $ne: "delivered" } });
@@ -46,14 +46,53 @@ class PackageRepository extends BaseRepository {
           },
         },
       ])
+      .collation({ locale: "es", strength: 1 })
       .exec();
     if (!packages || packages.length === 0) {
-      return { usersUuids: [], packageCodes: []};
+      return { usersUuids: [], packageCodes: [] };
     }
     return {
       usersUuids: packages[0].usersUuids,
       packageCodes: packages[0].packageCodes,
     };
+  }
+
+  async updatePackageStatusByPIN(pin,signature, status) {
+    return await this.package.updateMany(
+      { pin: pin },
+      { status: status, statusUpdatedAt: new Date() , signature: signature}
+    );
+  }
+
+  async getAllByAdmin(pageSize, pageNum, adminUUid){
+        const skips = pageSize * (pageNum - 1);
+
+    return await this.package
+      .find(
+        { admin: { $elemMatch: { uuid: adminUUid } } },
+        {
+          _id:0,
+          packageCode: 1,
+          deliveryCompany: 1,
+          receivedBy: 1,
+          status: 1,
+          pin: 1,
+          imageUrl: 1,
+          notificationWay: 1,
+          sectionNumber: 1,
+          propertyNumber: 1,
+          receivedAt: 1,
+          kind: 1,
+        }
+      )
+      .sort([
+        ["status", "asc"],
+        ["receivedAt", "desc"],
+      ])
+      .skip(skips)
+      .limit(pageSize);
+
+
   }
 }
 module.exports = PackageRepository;

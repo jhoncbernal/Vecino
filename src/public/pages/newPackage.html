@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Package Alert</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Reset styles */
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      table,
+      td {
+        border-collapse: collapse;
+      }
+      img {
+        border: none;
+        display: block;
+        max-width: 100%;
+      }
+
+      /* Main styles */
+      body {
+        background-color: #f2f2f2;
+      }
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px #888888;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #444444;
+      }
+      .subtitle {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #444444;
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0px 0px;
+      }
+      p {
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: left;
+      }
+      .button {
+        display: inline-block;
+        background-color: #3880ff;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease-in-out;
+      }
+      .button:hover {
+        background-color: #3880ff;
+      }
+      .footer {
+        background-color: #f5f5f5;
+        color: #777;
+        font-size: 12px;
+        padding: 10px;
+        text-align: left;
+      }
+      .pin {
+        background-color: #3880ff;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        font-weight: bold;
+        display: inline-block;
+        font-size: 36px;
+        margin-top: 20px;
+        margin-bottom: 40px;
+      }
+
+      /* Media Queries */
+      @media only screen and (max-width: 480px) {
+        .container {
+          padding: 10px;
+        }
+        p {
+          font-size: 14px;
+        }
+        .button {
+          font-size: 16px;
+        }
+        .footer {
+          font-size: 12px;
+        }
+      }
+      .container {
+        background-image: url("https://drive.google.com/uc?export=view&id=1wFsLvKXJOBMkpZoMVBcqGyGy5UwmtuDb");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        animation-name: moveBackground;
+        animation-duration: 60s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes moveBackground {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: 100% 0;
+        }
+      }
+      .terms {
+        font-size: 14px;
+      }
+
+      .terms a {
+        color: #3880ff;
+        text-decoration: none;
+      }
+
+      .terms a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="https://drive.google.com/uc?export=view&id=1ZyIa6S4-qgL1FpdhzYrbC8EEYhe1G7P0"
+        alt="Logo"
+        width="100"
+      />
+      <p class="subtitle">
+        <b>¡Nuevo paquete en recepción!</b>
+      </p>
+      <p>Hola,</p>
+      <p>
+        Nos complace informarle que tiene un nuevo paquete esperándolo en
+        recepción. Su PIN único para recibir el paquete es:
+      </p>
+      <div class="pin" style="background-color: #007bff; color: #fff">
+        {{PIN}}
+      </div>
+      <p>
+        Presente este PIN a la persona en recepción cuando recoja su paquete.
+      </p>
+      <p>¡Gracias por elegir nuestros servicios!.</p>
+      <p class="terms">
+        Si tiene alguna pregunta o inquietud, comuníquese con nosotros al
+        <a href="mailto:wayofsoft@gmail.com">help@wayofsoftware.com</a>.
+      </p>
+      <hr />
+      <p class="footer">
+        Este correo electrónico le fue autogenerado. si no reconoces este
+        paquete o tiene alguna inquietud, comuníquese con nosotros de inmediato.
+      </p>
+    </div>
+  </body>
+</html>

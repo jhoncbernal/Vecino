@@ -5,6 +5,10 @@ const { v4: uuidv4 } = require("uuid");
 const crypto = require("crypto");
 const UserSchema = new Schema(
   {
+    _id: {
+      type: String,
+      required: true,
+    },
     uuid: {
       type: String,
       default: uuidv4,
@@ -123,4 +127,4 @@ UserSchema.methods.generatePasswordReset = function () {
   this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
 };
 UserSchema.plugin(require("mongoose-autopopulate"));
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("User", UserSchema);

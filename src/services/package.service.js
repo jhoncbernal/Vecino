@@ -27,12 +27,24 @@ class PackageService extends BaseService {
     return await _userRepository.getUsersBasicInfoByUuids(userUuid);
   }
 
+  async updatePackageStatusByPIN(pin, signature, status) {
+    return await _packageRepository.updatePackageStatusByPIN(
+      pin,
+      signature,
+      status
+    );
+  }
+
+  async getAllByAdmin(pageSize, pageNum, adminUuid) {
+    return await _packageRepository.getAllByAdmin(pageSize, pageNum, adminUuid);
+  }
+
   async create(pkg, sectionNumber, propertyNumber) {
     const users = await _userRepository.getUsersByPropertyInfo(
       sectionNumber,
       propertyNumber
     );
-    if (!users || users.length === 0 ) {
+    if (!users || users.length === 0) {
       throw new Error("No users found");
     }
     const userPackages = await _packageRepository.getPackagesByUserUuid(
@@ -52,6 +64,8 @@ class PackageService extends BaseService {
       trackingNumber: pkg.trackingNumber,
       users: usersUuid,
       admin: users[0]?.admin,
+      sectionNumber: sectionNumber,
+      propertyNumber: propertyNumber,
     };
     return await _packageRepository.create(newPakage);
   }

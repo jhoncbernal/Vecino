@@ -7,8 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest",
-    "postinstall": "npm run build",
-    "build": "NODE_ENV=PROJECT_MODE node index.js"
+    "heroku-postbuild": "yarn start --production"
   },
   "engines": {
     "node": "18.x"

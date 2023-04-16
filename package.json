@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "npm run build"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "author": "Jhon Casallas",
   "license": "ISC",

@@ -1,14 +1,12 @@
 const mongoose = require("mongoose");
 
-
 mongoose.Promise = global.Promise;
 let MONGO_DB = null;
- class MongooseConnection {
+class MongooseConnection {
   constructor({ config }) {
     MONGO_DB = config.MONGO_DB;
   }
   async connect() {
-    
     if (this.mongooseInstance) return this.mongooseInstance;
 
     this.mongooseConnection = mongoose.connection;
@@ -17,7 +15,11 @@ let MONGO_DB = null;
     this.mongooseConnection.on("error", this._errorConnection);
     this.mongooseConnection.on("disconnected", this._disconnectedConnection);
 
-    const uriDb = `mongodb://${MONGO_DB.username}:${MONGO_DB.password}@${MONGO_DB.hostname}:${MONGO_DB.port}/${MONGO_DB.database}`;
+    const uriDb = `mongodb${MONGO_DB.port ? "" : "+srv"}://${
+      MONGO_DB.username
+    }:${MONGO_DB.password}@${MONGO_DB.hostname}${
+      MONGO_DB.port ? ":" + MONGO_DB.port : ""
+    }/${MONGO_DB.database}`;
 
     const optionsDb = {
       useNewUrlParser: true,

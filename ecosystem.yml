@@ -1,8 +1,8 @@
 apps:
   - script: ./index.js
     name: "Vecinoo"
-    instances: "max"
-    exec_mode: cluster
+    instances: 1
+    exec_mode: fork
     autorestart: true
     watch: true
     restart_delay: 1000

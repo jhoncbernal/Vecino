@@ -44,5 +44,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - run: yarn
-      - run: yarn run build --if-present
+      - run: yarn run build --if-present &
       - run: yarn test

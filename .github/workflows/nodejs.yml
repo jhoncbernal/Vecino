@@ -45,9 +45,6 @@ jobs:
       REDIS_USERNAME: ${{ vars.REDIS_USERNAME }}
       REDIS_PASSWORD: ${{ vars.REDIS_PASSWORD }}
     steps:
-      - name: Poject name
-        run: |
-          echo "${{ vars.PROJECT_NAME }}"
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -55,4 +52,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
       - run: yarn
+      - run: yarn ci --if-present
       - run: yarn run build --if-present
+      - run: yarn test

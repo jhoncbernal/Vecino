@@ -44,4 +44,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - run: yarn
-      - run: yarn run build --if-present &
+      - run: yarn global add pm2
+      - run: pm2 install pm2-logrotate
+      - run: pm2 set pm2-logrotate:max_size 10M
+      - run: pm2 set pm2-logrotate:retain 30
+      - run: yarn install --ignore-engines
+      - run: timeout 20m yarn run build --if-present

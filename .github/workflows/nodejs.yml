@@ -9,8 +9,45 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-
+    env:
+      NODE_ENV: production
+      PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+      PROJECT_MODE: ${{ vars.PROJECT_MODE }}
+      PROJECT_VERSION: ${{ vars.PROJECT_VERSION }}
+      SERVER_HOSTNAME: ${{ vars.SERVER_HOSTNAME }}
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      API: ${{ vars.API }}
+      APPLICATION_NAME: ${{ vars.APPLICATION_NAME }}
+      AWSACCESSKEYID: ${{ vars.AWSACCESSKEYID }}
+      AWSBUCKETIMG: ${{ vars.AWSBUCKETIMG }}
+      AWSREGION: ${{ vars.AWSREGION }}
+      AWSSECRETACCESSKEY: ${{ vars.AWSSECRETACCESSKEY }}
+      BLNMAILTRAP: ${{ vars.BLNMAILTRAP }}
+      HOST: ${{ vars.HOST }}
+      JWT_SECRET: ${{ vars.JWT_SECRET }}
+      JWT_SECRETADMIN: ${{ vars.JWT_SECRETADMIN }}
+      JWT_SECRETOWNER: ${{ vars.JWT_SECRETOWNER }}
+      MONGODB_HOSTNAME: ${{ vars.MONGODB_HOSTNAME }}
+      MONGODB_PORT: ${{ vars.MONGODB_PORT }}
+      MONGODB_USERNAME: ${{ vars.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ vars.MONGODB_PASSWORD }}
+      MONGODB_DATABASE: ${{ vars.MONGODB_DATABASE }}
+      PSWD_EMAIL: ${{ vars.PSWD_EMAIL }}
+      SECRET_OWNER: ${{ vars.SECRET_OWNER }}
+      PORT: ${{ vars.PORT }}
+      DD_API_KEY: ${{ vars.DD_API_KEY }}
+      DD_HOSTNAME: ${{ vars.DD_HOSTNAME }}
+      DD_SITE: ${{ vars.DD_SITE }}
+      DD_PORT: ${{ vars.DD_PORT }}
+      REDIS_IS_SECURE: ${{ vars.REDIS_IS_SECURE }}
+      REDIS_HOSTNAME: ${{ vars.REDIS_HOSTNAME }}
+      REDIS_PORT: ${{ vars.REDIS_PORT }}
+      REDIS_USERNAME: ${{ vars.REDIS_USERNAME }}
+      REDIS_PASSWORD: ${{ vars.REDIS_PASSWORD }}
     steps:
+      - name: Poject name
+        run: |
+          echo "${{ vars.PROJECT_NAME }}"
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -18,5 +55,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
       - run: yarn
-      - run: yarn run build --if-present
       - run: yarn test
+      - run: yarn run build --if-present

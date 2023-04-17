@@ -5,9 +5,6 @@ on: [push]
 jobs:
   build:
     runs-on: self-hosted
-    strategy:
-      matrix:
-        node-version: [16.x]
     env:
       NODE_ENV: production
       PROJECT_NAME: ${{ vars.PROJECT_NAME }}
@@ -46,7 +43,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - run: nvm use ${{ matrix.node-version }}
       - run: yarn cache clean
       - run: yarn
       - run: yarn install --ignore-engines

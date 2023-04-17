@@ -48,4 +48,4 @@ jobs:
       - run: pm2 set pm2-logrotate:max_size 10M
       - run: pm2 set pm2-logrotate:retain 30
       - run: yarn install --ignore-engines
-      - run: timeout 20m yarn run build --if-present
+      - run: timeout 2000m yarn run build

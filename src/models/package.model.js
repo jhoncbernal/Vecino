@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
+const { generatePin } = require("../utils/generate.utils");
+
 const packageSchema = new Schema({
   uuid: {
     type: String,
@@ -10,12 +12,19 @@ const packageSchema = new Schema({
   },
   packageCode: {
     type: String,
-    required: true,
+    required: function () {
+      return this.kind === "package";
+    },
+    default: function () {
+      return uuidv4().substring(0, 8);
+    },
     unique: true,
   },
   deliveryCompany: {
     type: String,
-    required: true,
+    required: function () {
+      return this.kind === "package";
+    },
   },
   receivedBy: {
     type: String,
@@ -40,6 +49,9 @@ const packageSchema = new Schema({
     required: true,
     match: /^[a-zA-Z]\d{4}$/,
     index: true,
+    default: function () {
+      return generatePin();
+    },
   },
   users: [
     {
@@ -64,7 +76,9 @@ const packageSchema = new Schema({
   },
   imageUrl: {
     type: String,
-    required: true,
+    required: function () {
+      return this.kind === "package";
+    },
   },
   notificationWay: {
     type: String,
@@ -81,10 +95,25 @@ const packageSchema = new Schema({
   propertyNumber: {
     type: String,
   },
+  utility: {
+    type: String,
+    required: function () {
+      return this.kind === "utilities";
+    },
+  },
   kind: {
     type: String,
     required: true,
-    enum: ["package", "letter", "mail", "parcel", "box", "envelope", "other","utilities"],
+    enum: [
+      "package",
+      "letter",
+      "mail",
+      "parcel",
+      "box",
+      "envelope",
+      "other",
+      "utilities",
+    ],
     default: "package",
   },
 });

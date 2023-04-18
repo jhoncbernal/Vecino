@@ -9,6 +9,7 @@ class UserRepository extends BaseRepository {
   async getUserByUsername(username) {
     return await _user.findOne({ username });
   }
+
   async updateUserPoints(propName, value) {
     await _user
       .aggregate([
@@ -145,6 +146,7 @@ class UserRepository extends BaseRepository {
         throw err;
       });
   }
+
   async getUsersByPoints(propName, value, pageSize, pageNum) {
     const skips = pageSize * (pageNum - 1);
     return await _user
@@ -156,12 +158,15 @@ class UserRepository extends BaseRepository {
         throw err;
       });
   }
+
   async getUserByProperty(propName, value) {
     return await _user.findOne({ [propName]: value });
   }
+
   async recover(propName, value) {
     return await _user.findOne({ [propName]: value });
   }
+
   async reset(token) {
     return await _user.findOne({
       resetPasswordToken: token,
@@ -195,6 +200,7 @@ class UserRepository extends BaseRepository {
       { $push: { roles: role } }
     );
   }
+
   async deleteUserRole(userId, role) {
     return await _user.findOneAndUpdate(
       {
@@ -203,6 +209,7 @@ class UserRepository extends BaseRepository {
       { $pull: { roles: role } }
     );
   }
+
   async getUsersBasicInfoByUuids(usersUuids) {
     const fieldName = uuid.validate(usersUuids[0]) ? "uuid" : "_id";
     return await _user.find(
@@ -237,6 +244,63 @@ class UserRepository extends BaseRepository {
           lastName: 1,
           propertyInfo: 1,
           admin: 1,
+        },
+      },
+    ]);
+  }
+
+  async getAllUsersByAdminGroupByPropertyInfo(adminId) {
+    return await _user.aggregate([
+      {
+        $match: {
+          admin: {
+            uuid: adminId,
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          uuid: 1,
+          firstName: 1,
+          lastName: 1,
+          email: 1,
+          preferNotificationWay: 1,
+          admin: 1,
+          "propertyInfo.sectionNumber": 1,
+          "propertyInfo.propertyNumber": 1,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            sectionNumber: "$propertyInfo.sectionNumber",
+            propertyNumber: "$propertyInfo.propertyNumber",
+            admin: "$admin",
+          },
+          usersUUIDs: {
+            $push: {
+              uuid: "$uuid",
+            },
+          },
+          users: {
+            $push: {
+              firstName: "$firstName",
+              lastName: "$lastName",
+              email: "$email",
+              preferNotificationWay: "$preferNotificationWay",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          "propertyInfo.sectionNumber": "$_id.sectionNumber",
+          "propertyInfo.propertyNumber": "$_id.propertyNumber",
+          "propertyInfo.admin": "$_id.admin",
+          usersUUIDs: 1,
+          users: 1,
         },
       },
     ]);

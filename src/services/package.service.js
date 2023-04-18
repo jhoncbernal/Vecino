@@ -40,34 +40,67 @@ class PackageService extends BaseService {
   }
 
   async create(pkg, sectionNumber, propertyNumber) {
-    const users = await _userRepository.getUsersByPropertyInfo(
-      sectionNumber,
-      propertyNumber
-    );
-    if (!users || users.length === 0) {
-      throw new Error("No users found");
+    let result;
+    if (!(propertyNumber && sectionNumber) && pkg.kind === "utilities") {
+      result = await _userRepository.getAllUsersByAdminGroupByPropertyInfo(
+        pkg.adminUuid
+      );
+      if (!result || result.length === 0) {
+        throw new Error("No users found");
+      }
+      await result.map(async (user) => {
+        const userPackages = await _packageRepository.getPackagesByUserUuid(
+          user.usersUUIDs[0].uuid
+        );
+        let pin = userPackages.length > 0 ? userPackages[0].pin : generatePin();
+
+        const newPakage = {
+          receivedBy: pkg.receivedBy,
+          pin: pin,
+          users: user.usersUUIDs,
+          admin: user.propertyInfo.admin,
+          sectionNumber: user.propertyInfo.sectionNumber,
+          propertyNumber: user.propertyInfo.propertyNumber,
+          kind: pkg.kind,
+          utility: pkg.utility,
+        };
+        return await _packageRepository.create(newPakage);
+      });
+    } else {
+      result = await _userRepository.getUsersByPropertyInfo(
+        sectionNumber,
+        propertyNumber
+      );
+      if (!result || result.length === 0) {
+        throw new Error("No users found");
+      }
+      const userPackages = await _packageRepository.getPackagesByUserUuid(
+        result[0].uuid
+      );
+      let pin = userPackages.length > 0 ? userPackages[0].pin : generatePin();
+      const usersUuid = result.map((user) => {
+        return { uuid: user.uuid };
+      });
+      const newPakage = {
+        packageCode: pkg.packageCode,
+        deliveryCompany: pkg.deliveryCompany,
+        receivedBy: pkg.receivedBy,
+        signature: pkg.signature,
+        imageUrl: pkg?.imageUrl,
+        pin: pin,
+        trackingNumber: pkg.trackingNumber,
+        users: usersUuid,
+        admin: result[0]?.admin,
+        sectionNumber: sectionNumber,
+        propertyNumber: propertyNumber,
+        kind: pkg.kind,
+      };
+      return await _packageRepository.create(newPakage);
     }
-    const userPackages = await _packageRepository.getPackagesByUserUuid(
-      users[0].uuid
-    );
-    let pin = userPackages.length > 0 ? userPackages[0].pin : generatePin();
-    const usersUuid = users.map((user) => {
-      return { uuid: user.uuid };
-    });
-    const newPakage = {
-      packageCode: pkg.packageCode,
-      deliveryCompany: pkg.deliveryCompany,
-      receivedBy: pkg.receivedBy,
-      signature: pkg.signature,
-      imageUrl: pkg.imageUrl,
-      pin: pin,
-      trackingNumber: pkg.trackingNumber,
-      users: usersUuid,
-      admin: users[0]?.admin,
-      sectionNumber: sectionNumber,
-      propertyNumber: propertyNumber,
-    };
-    return await _packageRepository.create(newPakage);
+  }
+
+  async getAllDeliveryCompanies() {
+    return await _packageRepository.getAllDeliveryCompanies();
   }
 }
 module.exports = PackageService;

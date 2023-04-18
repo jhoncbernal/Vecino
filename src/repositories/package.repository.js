@@ -57,6 +57,27 @@ class PackageRepository extends BaseRepository {
     };
   }
 
+  async getAllDeliveryCompanies() {
+    return this.package
+      .aggregate([
+        {
+          $group: {
+            _id: null,
+            deliveryCompanies: { $addToSet: { $toUpper: "$deliveryCompany" } },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            deliveryCompanies: 1,
+          },
+        },
+      ])
+      .collation({ locale: "es", strength: 1 })
+      .exec()
+      .then(result => result[0].deliveryCompanies);
+  }
+
   async updatePackageStatusByPIN(pin,signature, status) {
     return await this.package.updateMany(
       { pin: pin },
@@ -69,7 +90,7 @@ class PackageRepository extends BaseRepository {
 
     return await this.package
       .find(
-        { admin: { $elemMatch: { uuid: adminUUid } } },
+        { admin: { $elemMatch: { uuid: adminUUid } }, kind: { $ne: "utilities" }},
         {
           _id:0,
           packageCode: 1,

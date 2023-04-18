@@ -12,6 +12,10 @@ module.exports = function ({ PackageController }) {
     "/packageCode/:packageCode",
     PackageController.getPackageByPackageCode
   );
+  router.get(
+    "/packages/deliveryCompanies",
+    PackageController.getAllDeliveryCompanies
+  );
   router.get("/pin/:pinId", PackageController.getPackageByPin);
   router.patch("/pin/:pinId", PackageController.updatePackageStatusByPIN);
   return router;

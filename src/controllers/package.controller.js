@@ -11,6 +11,7 @@ class PackageController {
     this._mapPackageToResponse = this._mapPackageToResponse.bind(this);
     this.updatePackageStatusByPIN = this.updatePackageStatusByPIN.bind(this);
     this.getAllByAdmin = this.getAllByAdmin.bind(this);
+    this.getAllDeliveryCompanies = this.getAllDeliveryCompanies.bind(this);
   }
 
   async create(req, res) {
@@ -22,7 +23,11 @@ class PackageController {
         sectionNumber,
         propertyNumber
       );
-
+      if (req.body.kind === "utilities") {
+        return res.status(201).json({
+          message: "Notification created successfully",
+        });
+      }
       const { usersUuids, packageCodes } =
         await this.packageService.getUsersAndPackagesByPin(result.pin);
       return res.status(201).json({
@@ -176,6 +181,23 @@ class PackageController {
     }
   }
 
+  async getAllDeliveryCompanies(req, res) {
+    try {
+      const deliveryCompanies =
+        await this.packageService.getAllDeliveryCompanies();
+      if (deliveryCompanies) {
+        return res.json(deliveryCompanies);
+      } else {
+        return res
+          .status(404)
+          .json({ message: "Delivery companies not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error has occurred" });
+    }
+  }
+
   async getAllByAdmin(req, res) {
     try {
       const { adminUuid } = req.params;
@@ -184,7 +206,7 @@ class PackageController {
       const packages = await this.packageService.getAllByAdmin(
         pageSize,
         pageNum,
-        adminUuid,
+        adminUuid
       );
       if (packages) {
         return res.json(packages);

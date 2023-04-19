@@ -132,6 +132,7 @@ class AuthService {
               username: userExist.user.email,
               id: userExist.user._id,
               uuid: userExist.user?.uuid,
+              roles: userExist.user?.roles,
             };
             token = generateToken(userToEncode);
           }
@@ -150,6 +151,7 @@ class AuthService {
               username: userExist.user.email,
               id: userExist.user._id,
               uuid: userExist.user?.uuid,
+              role: userExist.user?.roles,
             };
             token = generateTokenOwner(userToEncode);
           }
@@ -161,6 +163,7 @@ class AuthService {
               username: userExist.user.email,
               id: userExist.user._id,
               uuid: userExist.user?.uuid,
+              roles: userExist.user?.roles
             };
             token = generateTokenAdmin(adminToEncode);
           }
@@ -172,6 +175,7 @@ class AuthService {
               username: userExist.user.email,
               id: userExist.user._id,
               uuid: userExist.user?.uuid,
+              roles: userExist.user?.roles
             };
             token = generateTokenAdmin(providerToEncode);
           }

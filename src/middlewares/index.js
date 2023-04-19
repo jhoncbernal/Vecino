@@ -5,5 +5,7 @@ module.exports={
     AuthMiddlewareAdmin :require('./authadmin.middleware'),
     AuthMiddlewareOwner :require('./authowner.middleware'),
     ParseIntMiddleware:require('./parse-int.middleware'),
-    CacheMiddleware:require('./cache.middleware')
+    CacheMiddleware:require('./cache.middleware'),
+    HasPermissionMiddleware:require('./hasPermission.middleware')
+
 }

@@ -1,12 +1,20 @@
 const { Router } = require("express");
-const { AuthMiddleware, ParseIntMiddleware}  = require('../middlewares');
+const { AuthMiddleware, HasPermissionMiddleware,ParseIntMiddleware}  = require('../middlewares');
 module.exports = function ({ BillController }) {
     const router = Router();
     router.get('/:billId',BillController.get);
-    router.get('', [AuthMiddleware,ParseIntMiddleware], BillController.getBillsByUser);
-    router.get('/provider/1', [AuthMiddleware,ParseIntMiddleware], BillController.getBillsByProvider);
-    router.patch('/:billId', AuthMiddleware, BillController.update);
-    router.delete('/:billId', AuthMiddleware, BillController.delete);
-    router.post('/', AuthMiddleware, BillController.create)
+    router.get(
+      "",
+      [AuthMiddleware, HasPermissionMiddleware,ParseIntMiddleware],
+      BillController.getBillsByUser
+    );
+    router.get(
+      "/provider/1",
+      [AuthMiddleware, HasPermissionMiddleware,ParseIntMiddleware],
+      BillController.getBillsByProvider
+    );
+    router.patch('/:billId',[AuthMiddleware, HasPermissionMiddleware], BillController.update);
+    router.delete('/:billId',[AuthMiddleware, HasPermissionMiddleware], BillController.delete);
+    router.post('/',[AuthMiddleware, HasPermissionMiddleware], BillController.create)
     return router;
 };

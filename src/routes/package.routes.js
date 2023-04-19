@@ -8,20 +8,50 @@ module.exports = function ({ PackageController }) {
     [AuthMiddleware, HasPermissionMiddleware],
     PackageController.get
   );
-  router.get("/admin/:adminUuid", PackageController.getAllByAdmin);
-  router.post("", PackageController.create);
-  router.patch("/:packageId", PackageController.update);
-  router.delete("/:packageId", PackageController.delete);
-  router.get("/user/:userUuid", PackageController.getPackagesByUserUuid);
+  router.get(
+    "/admin/:adminUuid",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.getAllByAdmin
+  );
+  router.post(
+    "",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.create
+  );
+  router.patch(
+    "/:packageId",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.update
+  );
+  router.delete(
+    "/:packageId",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.delete
+  );
+  router.get(
+    "/user/:userUuid",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.getPackagesByUserUuid
+  );
   router.get(
     "/packageCode/:packageCode",
+    [AuthMiddleware, HasPermissionMiddleware],
     PackageController.getPackageByPackageCode
   );
   router.get(
     "/packages/deliveryCompanies",
+    [AuthMiddleware, HasPermissionMiddleware],
     PackageController.getAllDeliveryCompanies
   );
-  router.get("/pin/:pinId", PackageController.getPackageByPin);
-  router.patch("/pin/:pinId", PackageController.updatePackageStatusByPIN);
+  router.get(
+    "/pin/:pinId",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.getPackageByPin
+  );
+  router.patch(
+    "/pin/:pinId",
+    [AuthMiddleware, HasPermissionMiddleware],
+    PackageController.updatePackageStatusByPIN
+  );
   return router;
 };

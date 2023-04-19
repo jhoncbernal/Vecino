@@ -1,13 +1,12 @@
 const {Router}=require("express");
-const {AuthMiddlewareAdmin,ParseIntMiddleware,CacheMiddleware}=require('../middlewares');
-const {CACHE_TIME} = require('../helpers')
+const {AuthMiddleware,ParseIntMiddleware,}=require('../middlewares');
 module.exports=function({ParkingSpaceController}){
     const router=Router();
-    router.get('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.get);
-    router.get('',[AuthMiddlewareAdmin,ParseIntMiddleware],ParkingSpaceController.getAll);
-    router.patch('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.update);
-    router.delete('/:parkingname',AuthMiddlewareAdmin,ParkingSpaceController.delete);
-    router.post('',AuthMiddlewareAdmin,ParkingSpaceController.create)
+    router.get('/:parkingname',AuthMiddleware,ParkingSpaceController.get);
+    router.get('',[AuthMiddleware,ParseIntMiddleware],ParkingSpaceController.getAll);
+    router.patch('/:parkingname',AuthMiddleware,ParkingSpaceController.update);
+    router.delete('/:parkingname',AuthMiddleware,ParkingSpaceController.delete);
+    router.post('',AuthMiddleware,ParkingSpaceController.create)
    
     return router;
 };

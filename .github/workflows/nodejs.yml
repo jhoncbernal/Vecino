@@ -21,8 +21,6 @@ jobs:
       BLNMAILTRAP: ${{ vars.BLNMAILTRAP }}
       HOST: ${{ vars.HOST }}
       JWT_SECRET: ${{ vars.JWT_SECRET }}
-      JWT_SECRETADMIN: ${{ vars.JWT_SECRETADMIN }}
-      JWT_SECRETOWNER: ${{ vars.JWT_SECRETOWNER }}
       MONGODB_HOSTNAME: ${{ vars.MONGODB_HOSTNAME }}
       MONGODB_PORT: ${{ vars.MONGODB_PORT }}
       MONGODB_USERNAME: ${{ vars.MONGODB_USERNAME }}

@@ -1,14 +1,11 @@
 const { Router } = require("express");
-const {
-  AuthMiddleware,
-  HasPermissionMiddleware
-} = require("../middlewares");
+const { AuthMiddleware, HasPermissionMiddleware } = require("../middlewares");
 
 module.exports = function ({ PackageController }) {
   const router = Router();
   router.get(
     "/:packageId",
-    [AuthMiddleware,HasPermissionMiddleware],
+    [AuthMiddleware, HasPermissionMiddleware],
     PackageController.get
   );
   router.get("/admin/:adminUuid", PackageController.getAllByAdmin);

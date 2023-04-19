@@ -22,8 +22,6 @@ module.exports = {
   },
   APPLICATION_NAME: process.env.APPLICATION_NAME,
   JWT_SECRET: process.env.JWT_SECRET,
-  JWT_SECRETADMIN: process.env.JWT_SECRETADMIN,
-  JWT_SECRETOWNER: process.env.JWT_SECRETOWNER,
   CACHE_KEY: process.env.CACHE_KEY,
   PSWD_EMAIL: process.env.PSWD_EMAIL,
   FROM_EMAIL: process.env.FROM_EMAIL,

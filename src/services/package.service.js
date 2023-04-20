@@ -100,6 +100,7 @@ class PackageService extends BaseService {
         sectionNumber,
         propertyNumber
       );
+
       if (!usersByPropertyInfo || usersByPropertyInfo.length === 0) {
         throw new Error("No users found");
       }
@@ -134,8 +135,8 @@ class PackageService extends BaseService {
     const commonData = {
       receivedBy: pkg.receivedBy,
       pin,
-      users: user.usersUUIDs,
-      admin: user.propertyInfo.admin,
+      users: user.usersUUIDs || [{ uuid: user.uuid }],
+      admin: user.propertyInfo.admin || [user.admin],
       sectionNumber: user.propertyInfo.sectionNumber,
       propertyNumber: user.propertyInfo.propertyNumber,
       kind: pkg.kind,

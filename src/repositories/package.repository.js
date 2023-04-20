@@ -75,24 +75,27 @@ class PackageRepository extends BaseRepository {
       ])
       .collation({ locale: "es", strength: 1 })
       .exec()
-      .then(result => result[0].deliveryCompanies);
+      .then((result) => result[0].deliveryCompanies);
   }
 
-  async updatePackageStatusByPIN(pin,signature, status) {
+  async updatePackageStatusByPIN(pin, signature, status) {
     return await this.package.updateMany(
       { pin: pin },
-      { status: status, statusUpdatedAt: new Date() , signature: signature}
+      { status: status, statusUpdatedAt: new Date(), signature: signature }
     );
   }
 
-  async getAllByAdmin(pageSize, pageNum, adminUUid){
-        const skips = pageSize * (pageNum - 1);
+  async getAllByAdmin(pageSize, pageNum, adminUUid) {
+    const skips = pageSize * (pageNum - 1);
 
     return await this.package
       .find(
-        { admin: { $elemMatch: { uuid: adminUUid } }, kind: { $ne: "utilities" }},
         {
-          _id:0,
+          admin: { $elemMatch: { uuid: adminUUid } },
+          kind: { $ne: "utilities" },
+        },
+        {
+          _id: 0,
           packageCode: 1,
           deliveryCompany: 1,
           receivedBy: 1,
@@ -112,8 +115,6 @@ class PackageRepository extends BaseRepository {
       ])
       .skip(skips)
       .limit(pageSize);
-
-
   }
 }
 module.exports = PackageRepository;

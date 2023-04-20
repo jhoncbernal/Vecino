@@ -153,7 +153,7 @@ class PackageController {
         "delivered"
       );
       if (updatedPackage) {
-        return res.json(updatedPackage);
+        return res.json({ ...updatedPackage, message: "Package delivered" });
       } else {
         return res.status(404).json({ message: "Package not found" });
       }

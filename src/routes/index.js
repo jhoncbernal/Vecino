@@ -24,11 +24,11 @@ module.exports = function ({
   const router = express.Router();
   const apiRoutes = express.Router();
   // CORS configuration
-  const corsOptions = {
-    origin: ["*"], // Replace with your Heroku app URL and any other origins you want to allow
-    methods: "GET,PUT,PATCH,POST,DELETE", // Allowed methods
-    allowedHeaders: "Content-Type,Authorization", // Allowed headers
-  };
+const corsOptions = {
+  origin: "https://vecinoo.herokuapp.com", // Make sure this matches your frontend URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type,Authorization",
+};
   apiRoutes
     .use(express.json())
     .use(express.urlencoded({ extended: true }))

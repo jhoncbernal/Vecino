@@ -63,7 +63,7 @@ async function sendEmail(user, subject, text, htmlpath,objectReplacement={}) {
     });
     const recipientsArr = user.email.includes(",")
       ? user.email.split(",")
-      : user.email;
+      : [user.email];
     const mailOptions = {
       Destination: {
         ToAddresses: recipientsArr,

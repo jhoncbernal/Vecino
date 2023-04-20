@@ -171,7 +171,7 @@ class PackageService extends BaseService {
 
     const userInfo = {
       firstName: "",
-      email: emails.join(";"),
+      email: emails.join(","),
     };
     const subject = `${
       templateType === "new" ? "Nuevo pedido recibido " : "Pedido entregado "

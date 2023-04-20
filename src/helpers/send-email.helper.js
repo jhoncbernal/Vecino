@@ -61,9 +61,12 @@ async function sendEmail(user, subject, text, htmlpath,objectReplacement={}) {
         }
       });
     });
+    const recipientsArr = user.email.includes(",")
+      ? user.email.split(",")
+      : user.email;
     const mailOptions = {
       Destination: {
-        ToAddresses: [user.email],
+        ToAddresses: recipientsArr,
       },
       Message: {
         Body: {

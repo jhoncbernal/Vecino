@@ -6,7 +6,7 @@ const permissions = {
   },
   ROLE_SECURITY_GUARDS_ACCESS: {
     "security-guard": ["read"],
-    package: ["readAll", "create","read"],
+    package: ["readAll", "create","read","update"],
     user: ["readAll", "read"],
   },
   ROLE_SALES_ACCESS: {
@@ -37,7 +37,7 @@ const permissions = {
 
 const actionsToMethods = {
   create: "post",
-  update: "put",
+  update: "patch",
   delete: "delete",
   read: "get",
   readAll: "getAll",

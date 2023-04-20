@@ -44,7 +44,7 @@ async function HTMLReplace(htmlpath, replacements) {
   }
 }
 
-async function sendEmail(user, subject, text, htmlpath) {
+async function sendEmail(user, subject, text, htmlpath,objectReplacement={}) {
   try {
     htmlToSend = await new Promise((resolve, reject) => {
       readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
@@ -57,7 +57,7 @@ async function sendEmail(user, subject, text, htmlpath) {
         if (err) {
           reject(err);
         } else {
-          resolve(template(replacements));
+          resolve(template({...replacements,...objectReplacement}));
         }
       });
     });

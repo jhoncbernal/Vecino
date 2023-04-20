@@ -220,6 +220,7 @@ class UserRepository extends BaseRepository {
         firstName: 1,
         lastName: 1,
         propertyInfo: 1,
+        email:1,
         neighborhood: 0,
         admin: 1,
       }
@@ -242,6 +243,7 @@ class UserRepository extends BaseRepository {
           uuid: 1,
           firstName: 1,
           lastName: 1,
+          email: 1,
           propertyInfo: 1,
           admin: 1,
         },

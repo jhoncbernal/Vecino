@@ -8,7 +8,6 @@ class PackageController {
     this.getPackagesByUserUuid = this.getPackagesByUserUuid.bind(this);
     this.getPackageByPin = this.getPackageByPin.bind(this);
     this.getPackageByPackageCode = this.getPackageByPackageCode.bind(this);
-    this._mapPackageToResponse = this._mapPackageToResponse.bind(this);
     this.updatePackageStatusByPIN = this.updatePackageStatusByPIN.bind(this);
     this.getAllByAdmin = this.getAllByAdmin.bind(this);
     this.getAllDeliveryCompanies = this.getAllDeliveryCompanies.bind(this);
@@ -23,17 +22,19 @@ class PackageController {
         sectionNumber,
         propertyNumber
       );
+      let resultPin;
+      if (Array.isArray(result) && result.length > 0) resultPin = result[0].pin;
       if (req.body.kind === "utilities") {
         return res.status(201).json({
           message: "Notification created successfully",
         });
       }
       const { usersUuids, packageCodes } =
-        await this.packageService.getUsersAndPackagesByPin(result.pin);
+        await this.packageService.getUsersAndPackagesByPin(resultPin);
       return res.status(201).json({
         usersUuids,
         packageCodes,
-        pin: result.pin,
+        pin: resultPin,
         message: "Package created successfully",
       });
     } catch (error) {
@@ -115,27 +116,8 @@ class PackageController {
   async getPackageByPin(req, res) {
     const { pinId } = req.params;
     try {
-      const { usersUuids, packageCodes } =
-        await this.packageService.getUsersAndPackagesByPin(pinId);
-      if (
-        !usersUuids ||
-        usersUuids.length === 0 ||
-        !packageCodes ||
-        usersUuids.length === 0
-      ) {
-        return res
-          .status(404)
-          .json({ message: `Package not found using the pin ${pinId}` });
-      }
-      const users = await this.packageService.getUsersBasicInfoByUuids(
-        usersUuids
-      );
-      const result = this._mapPackageToResponse(users);
-      if (packageCodes && users && result) {
-        return res.json({ packageCodes, ...result });
-      } else {
-        return res.status(404).json({ message: "Package not found" });
-      }
+      const result = await this.packageService.getPackageByPin(pinId);
+      return res.json(result);
     } catch (error) {
       console.error(error);
       return res
@@ -217,25 +199,6 @@ class PackageController {
       console.error(error);
       return res.status(500).json({ message: "An error has occurred" });
     }
-  }
-
-  _mapPackageToResponse(users) {
-    return users.reduce((acc, user) => {
-      const userObj = {
-        name: `${user.firstName} ${user.lastName}`,
-        uuid: user.uuid,
-      };
-
-      if (!acc.propertyInfo) {
-        acc.propertyInfo = user.propertyInfo;
-        acc.admin_uuid = user.admin.uuid;
-        acc.users = [userObj];
-      } else {
-        acc.users.push(userObj);
-      }
-
-      return acc;
-    }, {});
   }
 }
 

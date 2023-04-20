@@ -25,7 +25,7 @@ module.exports = function ({
   const apiRoutes = express.Router();
   // CORS configuration
   const corsOptions = {
-    origin: ["corsOptions", "http://localhost:3000"], // Replace with your Heroku app URL and any other origins you want to allow
+    origin: ["*"], // Replace with your Heroku app URL and any other origins you want to allow
     methods: "GET,PUT,PATCH,POST,DELETE", // Allowed methods
     allowedHeaders: "Content-Type,Authorization", // Allowed headers
   };

@@ -11,7 +11,7 @@ module.exports = {
   },
   SERVER: {
     hostname: process.env.SERVER_HOSTNAME,
-    port: process.env.SERVER_PORT,
+    port: process.env.PORT || process.env.SERVER_PORT,
   },
   MONGO_DB: {
     hostname: process.env.MONGODB_HOSTNAME,

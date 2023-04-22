@@ -25,7 +25,7 @@ module.exports = function ({
   const apiRoutes = express.Router();
   // CORS configuration
 const corsOptions = {
-  origin: ["https://vecinoo.herokuapp.com", "http://localhost:5173"], // Make sure this matches your frontend URL
+  origin: ["https://vecinoo.herokuapp.com", "http://localhost:5173"], // allowed origins
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders:
     "Content-Type,Authorization,encType,Access-Control-Allow-Origin,Access-Control-Allow-Headers,Origin,Accept,X-Requested-With,Access-Control-Request-Method,Access-Control-Request-Headers",

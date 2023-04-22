@@ -6,7 +6,7 @@ const permissions = {
   },
   ROLE_SECURITY_GUARDS_ACCESS: {
     "security-guard": ["read"],
-    package: ["readAll", "create","read","update"],
+    package: ["readAll", "create", "read", "update"],
     user: ["readAll", "read"],
   },
   ROLE_SALES_ACCESS: {
@@ -24,14 +24,14 @@ const permissions = {
   },
   ROLE_USER_ACCESS: {
     user: ["update", "read"],
-    package: ["readAll","read"],
+    package: ["readAll", "read"],
     delivery: ["update", "read", "create"],
     bill: ["readAll", "read"],
   },
   ROLE_ADMINISTRATION_ACCESS: {
-    user: ["create", "update", "delete", "readAll","read"],
+    user: ["create", "update", "delete", "readAll", "read"],
     "security-guard": ["create", "update", "delete", "readAll"],
-    admin: ["read","update"],
+    admin: ["read", "update"],
   },
 };
 
@@ -44,7 +44,7 @@ const actionsToMethods = {
 };
 
 // Define the middleware function
-module.exports=function(req, res, next)  {
+module.exports = function (req, res, next) {
   try {
     const { user } = req;
     const { roles } = user;
@@ -52,6 +52,7 @@ module.exports=function(req, res, next)  {
     // Get the requested path and method
     const path = req.baseUrl.split("/")[3];
     let method = req.method.toLowerCase();
+    if (roles.includes("ROLE_OWNER_ACCESS")) return next();
 
     // Determine the action for GET requests based on the last part of the URL
     if (method === "get") {

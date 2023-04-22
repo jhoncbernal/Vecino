@@ -38,6 +38,7 @@ jobs:
       REDIS_PORT: ${{ vars.REDIS_PORT }}
       REDIS_USERNAME: ${{ vars.REDIS_USERNAME }}
       REDIS_PASSWORD: ${{ vars.REDIS_PASSWORD }}
+      FRONT_END_URL: ${{ vars.FRONT_END_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

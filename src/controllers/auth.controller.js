@@ -1,3 +1,5 @@
+const { FRONT_END_URL } = require("../config");
+
 let _authService,
   _userService = null;
 class AuthController {
@@ -5,39 +7,26 @@ class AuthController {
     _authService = AuthService;
     _userService = UserService;
   }
-  /**
-   * SignUp for user and AdminNeigboorhood
-   * @param {*} req
-   * @param {*} res
-   */
+
   async signUp(req, res) {
-    const { body } = req;
-    const { baseUrl } = req;
-    const host = req.headers.host + baseUrl;
-    await _authService.signUp(body).then(async (userService) => {
-      if (!userService.isVerified) {
-        return await _authService
-          .verifyEmail(userService, host)
-          .then((sendVerifyUser) => {
-            return res
-              .status(200)
-              .send({ userService, ...{ emailResult: sendVerifyUser } });
-          })
-          .catch((error) => {
-            return res.status(500).send(error);
-          });
-      } else {
-        return res.status(200).send({ userService });
+    try {
+      const { body } = req;
+      const result = await _authService.signUp(body);
+
+      return res.status(200).send(result);
+    } catch (error) {
+      if (error.message.includes("duplicate key")) {
+        const error = new Error();
+        error.status = 500;
+        error.message = "username or email already exists";
+        throw error;
       }
-    });
+      throw error;
+    }
   }
 
   async signIn(req, res) {
     const { body } = req;
-    if (!body.email?.includes("@")) {
-      body.username = body.email;
-      delete body.email;
-    }
     const creds = await _authService.signIn(body);
     return res.status(200).send(creds);
   }
@@ -47,68 +36,43 @@ class AuthController {
     const createdProvider = await _authService.signUpProvider(body);
     return res.status(200).send(createdProvider);
   }
+
   async signInAndUpdate(req, res) {
     const { body } = req;
-    if (!body.email.includes("@")) {
-      body.username = body.email;
-      delete body.email;
-    }
     const result = await _authService.signIn(body, true);
-
-    delete body.password;
     await _authService.signInAndUpdate(result.user, body);
-    return res.redirect("https://vecinoo.herokuapp.com/login"); //send("Actualizacion de datos exitosa");
-  }
-  async signInAdmin(req, res) {
-    const { body } = req;
-    const creds = await _authService.signInAdmin(body);
-    return res.status(200).send(creds);
+    return res.redirect(FRONT_END_URL); //send("Actualizacion de datos exitosa");
   }
 
   async recover(req, res) {
-    const { body, baseUrl } = req;
-    if (!body.email.includes("@")) {
-      body.username = body.email;
-      delete body.email;
-    }
-    const host = req.headers.host + baseUrl;
-    await _authService
-      .recover(body, host)
-      .then((successMessage) => {
-        return res.status(200).send(successMessage);
-      })
-      .catch((error) => {
-        throw error;
-      });
+    const { body } = req;
+    const result = await _authService.recover(body);
+    return res.status(200).send(result);
   }
+
   async reset(req, res) {
     const { token } = req.params;
     const resetUser = await _authService.reset(token);
     return res.status(200).send(resetUser);
   }
+
   async resetPassword(req, res) {
     const { token } = req.params;
     const { body } = req;
     const resetPasswordUser = await _authService.resetPassword(token, body);
     return res.status(200).send(resetPasswordUser);
   }
+
   async verifyEmail(req, res) {
     const { body } = req;
-    const { baseUrl } = req;
-    let host = req.headers.host + baseUrl;
-    await _authService
-      .verifyEmail(body, host)
-      .then((successMessage) => {
-        return res.status(200).send(successMessage);
-      })
-      .catch((error) => {
-        throw error;
-      });
+    const { email } = body;
+    const result = await _authService.verifyEmail(email);
+    return res.status(200).send(result);
   }
+
   async verify(req, res) {
     const { token } = req.params;
     const resetUser = await _authService.verify(token);
-
     return res.status(200).send(resetUser);
   }
 }

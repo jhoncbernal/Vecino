@@ -1,10 +1,6 @@
-const {
-  generateToken,
-  generateTokenAdmin,
-  generateTokenOwner,
-} = require("../helpers/jwt.helper");
-const { SECRET_OWNER, HOST, API } = require("../config");
-const { sendEmail, HTMLReplace } = require("../helpers");
+const { generateToken } = require("../helpers/jwt.helper");
+const { SECRET_OWNER, FRONT_END_URL } = require("../config");
+const { sendEmail } = require("../helpers");
 
 let _userService,
   _providerService,
@@ -18,508 +14,306 @@ class AuthService {
   }
 
   async signUp(userBody) {
-    const { uniquecode } = userBody;
+    const { uniquecode, roles, secretKey } = userBody;
     userBody.enabled = false;
-    if (userBody.roles.includes(userBody.uniquecode)) {
-      userBody.enabled = true;
-      userBody.isVerified = true;
+    if (roles.includes(uniquecode)) {
+      enabled = true;
+      isVerified = true;
     }
     let userExist;
-    if (userBody.roles.includes("ROLE_OWNER_ACCESS")) {
-      if (!userBody.secretKey) {
-        const error = new Error();
-        error.status = 400;
-        error.message = "For owner role secretKey must be sent";
-        throw error;
-      }
-      if (userBody.secretKey != SECRET_OWNER) {
-        const error = new Error();
-        error.status = 400;
-        error.message = "Invalid secretKey";
-        throw error;
-      }
-      return await _userService
-        .create({ ...userBody })
-        .then((res) => {
-          return res;
-        })
-        .catch((error) => {
-          if (error.message.includes("duplicate key")) {
-            const error = new Error();
-            error.status = 500;
-            error.message = "username or email already exists";
-            throw error;
-          }
-          throw error;
-        });
-    } else {
-      if (!userBody.roles.includes("ROLE_PROVIDER_ACCESS")) {
-        userExist = await selectServiceByProperty(
-          "uniquecode",
-          uniquecode,
-          true
-        ).catch((err) => {
-          throw err;
-        });
-      }
-      if (userBody.roles.includes("ROLE_USER_ACCESS")) {
-        return await _userService
-          .create({
-            ...userBody,
-            neighborhood: userExist?.user?._id,
-            admin: { uuid: userExist?.user?.uuid },
-          })
-          .then((res) => {
-            return res;
-          })
-          .catch((error) => {
-            if (error.message.includes("duplicate key")) {
-              const error = new Error();
-              error.status = 500;
-              error.message = "username or email already exists";
-              throw error;
-            }
-            throw error;
-          });
-      } else if (
-        userBody.roles.includes("ROLE_ADMINISTRATION_ACCESS") &&
-        !userExist.user.isVerified
-      ) {
-        return await _adminService
-          .update(userExist.user._id, userBody)
-          .then((user) => {
-            return user.save();
-          });
-      } else if (userBody.roles.includes("ROLE_PROVIDER_ACCESS")) {
-        return await _providerService.create(userBody).then((user) => {
-          return user.save();
-        });
-      } else {
-        const error = new Error();
-        error.status = 400;
-        error.message = "User already exist";
-        throw error;
-      }
+    if (roles.includes("ROLE_OWNER_ACCESS")) {
+      validateOwnerAccess(secretKey);
+      return await _userService.create({ ...userBody });
     }
-  }
-
-  async signIn(user, singUp = false) {
-    const { username, email, password, secretKey } = user;
-    let propName,
-      value = null;
-    if (username) {
-      (propName = "username"), (value = username);
-    } else {
-      (propName = "email"), (value = email);
-    }
-    return await selectServiceByProperty(propName, value, singUp).then(
-      (userExist) => {
-        let validPassword;
-        let token;
-        if (userExist.user) {
-          validPassword = userExist.user.comparePasswords(password);
-          if (!validPassword) {
-            const error = new Error();
-            error.status = 401;
-            error.message = "Invalid Password";
-            throw error;
-          }
-          if (
-            userExist.user.roles.includes("ROLE_USER_ACCESS") &&
-            validPassword
-          ) {
-            const userToEncode = {
-              username: userExist.user.email,
-              id: userExist.user._id,
-              uuid: userExist.user?.uuid,
-              roles: userExist.user?.roles,
-            };
-            token = generateToken(userToEncode);
-          }
-          if (
-            userExist.user.roles.includes("ROLE_OWNER_ACCESS") &&
-            secretKey &&
-            validPassword
-          ) {
-            if (secretKey != SECRET_OWNER) {
-              const error = new Error();
-              error.status = 400;
-              error.message = "Invalid secretKey";
-              throw error;
-            }
-            const userToEncode = {
-              username: userExist.user.email,
-              id: userExist.user._id,
-              uuid: userExist.user?.uuid,
-              role: userExist.user?.roles,
-            };
-            token = generateTokenOwner(userToEncode);
-          }
-          if (
-            userExist.user.roles.includes("ROLE_ADMINISTRATION_ACCESS") &&
-            validPassword
-          ) {
-            const adminToEncode = {
-              username: userExist.user.email,
-              id: userExist.user._id,
-              uuid: userExist.user?.uuid,
-              roles: userExist.user?.roles
-            };
-            token = generateTokenAdmin(adminToEncode);
-          }
-          if (
-            userExist.user.roles.includes("ROLE_PROVIDER_ACCESS") &&
-            validPassword
-          ) {
-            const providerToEncode = {
-              username: userExist.user.email,
-              id: userExist.user._id,
-              uuid: userExist.user?.uuid,
-              roles: userExist.user?.roles
-            };
-            token = generateTokenAdmin(providerToEncode);
-          }
-        }
-        if (!token) {
-          const error = new Error();
-          error.status = 400;
-          error.message = "Validate user role access";
-          throw error;
-        }
-        return { token, user: userExist.user };
-      }
-    );
-  }
-
-  async recover(body, host) {
-    const { username, email } = body;
-    let propName,
-      value = null;
-    if (username) {
-      (propName = "username"), (value = username);
-    } else {
-      (propName = "email"), (value = email);
-    }
-    const userExist = await selectServiceByProperty(propName, value);
-
-    return await userExist.service
-      .recover(propName, value)
-      .then((user) => {
-        if (!user) {
-          const err = new Error();
-          err.status = 404;
-          err.message =
-            "The email address is not associated with any account. Double-check your email address and try again.";
-          throw err;
-        }
-        //Generate and set password reset token
-        user.generatePasswordReset();
-        // Save the updated user object
-        return user.save();
-      })
-      .then((user) => {
-        return sendEmail(
-          user,
-          "Password change request",
-          `http://${host}/reset/${user.resetPasswordToken}`,
-          "../public/pages/recoverypassword.html"
-        )
-          .then((result) => {
-            return {
-              ...{ message: "Password change request" },
-              ...{ emailResult: { result } },
-            };
-          })
-          .catch((error) => {
-            throw error;
-          });
-      })
-      .catch((error) => {
-        throw error;
+    const admin = (userExist = await selectServiceByProperty(
+      "uniquecode",
+      uniquecode,
+      true
+    ));
+    const { _id, uuid, isVerified } = admin.user;
+    if (roles.includes("ROLE_USER_ACCESS")) {
+      await _userService.create({
+        ...userBody,
+        neighborhood: _id,
+        admin: { uuid: uuid },
       });
+    } else if (roles.includes("ROLE_ADMINISTRATION_ACCESS") && !isVerified) {
+      await _adminService.update(userExist.user._id, userBody);
+    } else if (roles.includes("ROLE_PROVIDER_ACCESS")) {
+      await _providerService.create(userBody);
+    } else createError(400, "User already exist");
+    return await selectServiceByProperty("email", userBody.email, true);
+  }
+
+  async signIn(userInfo, singUp = false) {
+    const { email, password, secretKey } = userInfo;
+    const { propName, value } = getUsernameOrEmail(email);
+    const { user } = await selectServiceByProperty(propName, value, singUp);
+
+    let token;
+    if (user) {
+      const validPassword = user.comparePasswords(password);
+      if (!validPassword) createError(401, "Invalid Password");
+
+      if (user.roles.includes("ROLE_USER_ACCESS") && validPassword) {
+        const userToEncode = {
+          username: user.email,
+          uuid: user?.uuid,
+          roles: user?.roles,
+          phone: user?.phone,
+        };
+        token = generateToken(userToEncode);
+      }
+      if (user.roles.includes("ROLE_OWNER_ACCESS") && validPassword) {
+        if (secretKey != SECRET_OWNER) createError(400, "Invalid secretKey");
+      }
+    }
+    if (!token) createError(400, "Invalid username or password");
+
+    return {
+      token,
+      user: {
+        username: user.email,
+        firstName: user.firstName,
+        lastName: user?.lastName,
+        propertyInfo: user?.propertyInfo,
+        cityName: user?.cityName,
+        admin: user?.admin,
+      },
+    };
+  }
+
+  async recover(body) {
+    const { propName, value } = getUsernameOrEmail(body.email);
+
+    const { user } = await selectServiceByProperty(propName, value);
+
+    if (!user) {
+      throw createError(
+        404,
+        "The email address is not associated with any account. Double-check your email address and try again."
+      );
+    }
+
+    user.generatePasswordReset();
+    const newUser = await user.save();
+
+    if (!newUser) {
+      throw createError(
+        500,
+        "No fue posible generar el token intente nuevamente"
+      );
+    }
+
+    const emailResult = await sendPasswordEmail(user, "reset");
+
+    return {
+      message: "Password change request",
+      emailResult,
+    };
   }
 
   async reset(token) {
-    const userExist = await selectServiceByProperty(
-      "resetPasswordToken",
-      token
-    );
-    return await userExist.service
-      .reset(token)
-      .then((user) => {
-        if (!user) {
-          const err = new Error();
-          err.status = 401;
-          err.message =
-            "El restablecimiento de contraseña no es válido o ha expirado.";
-          throw err;
-        }
-        const replacements = {
-          email: user.email,
-          name: user.firstName,
-          token: token,
-        };
-        if (replacements != null) {
-          return HTMLReplace(
-            "../public/pages/changePassword.html",
-            replacements
-          ).then((result) => {
-            return result;
-          });
-        }
-      })
-      .catch((err) => {
-        throw err;
-      });
+    const { user } = await selectServiceByProperty("resetPasswordToken", token);
+    if (!user) {
+      throw createError(
+        500,
+        "El restablecimiento de contraseña no es válido o ha expirado."
+      );
+    }
+    return {
+      username: user.username,
+      email: user.email,
+    };
   }
 
   async resetPassword(token, body) {
-    const userExist = await selectServiceByProperty(
-      "resetPasswordToken",
-      token
-    );
-    return await userExist.service
-      .resetPassword(token)
-      .then((user) => {
-        if (!user) {
-          const err = new Error();
-          err.status = 401;
-          err.message = "Password reset token is invalid or has expired.";
-          throw err;
-        }
-        //Set the new password
-        user.password = body.password;
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpires = undefined;
+    const { user } = await selectServiceByProperty("resetPasswordToken", token);
 
-        // Save
-        return user.save();
-      })
-      .then((user) => {
-        return sendEmail(
-          user,
-          "Your password has been changed",
-          `
-                El dia de hoy, se realizó exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email} `,
-          "../public/pages/changeconfirmation.html"
-        )
-          .then((result) => {
-            const replacements = {
-              username: user.firstName,
-              link: `El dia de hoy, se realizó exitosamente el cambio de contraseña a cuenta registrada con el email ${user.email}`,
-            };
-            if (replacements != null) {
-              return HTMLReplace(
-                "../public/pages/changeconfirmation.html",
-                replacements
-              ).then((result) => {
-                return result;
-              });
-            }
-          })
-          .catch((error) => {
-            throw error;
-          });
-      })
-      .catch((error) => {
-        throw error;
-      });
+    if (!user) {
+      throw createError(500, "Password reset token is invalid or has expired.");
+    }
+    //Set the new password
+    user.password = body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    // Save
+    const newUser = await user.save();
+    if (!newUser) {
+      throw createError(500, "No se pudo actualizar la contraseña");
+    }
+    const emailResult = await sendPasswordEmail(user, "changed");
+    return {
+      ...{ message: "Your password has been changed" },
+      ...{ emailResult },
+    };
   }
 
-  async verifyEmail(body, host) {
-    return await selectServiceByProperty("email", body.email, true).then(
-      (userExist) => {
-        return userExist.service
-          .verifyEmail(body)
-          .then((user) => {
-            if (!user) {
-              const err = new Error();
-              err.status = 404;
-              err.message =
-                "The email address is not associated with any account. Double-check your email address and try again.";
-              throw err;
-            }
-            //Generate and set password reset token
-            user.generatePasswordReset();
-            // Save the updated user object
-            return user.save().then((user) => {
-              return sendEmail(
-                user,
-                "Please Verify your Vecino Account",
-                `http://${host}/verify/${user.resetPasswordToken}`,
-                "../public/pages/verifyemail.html"
-              )
-                .then((result) => {
-                  return {
-                    ...{ message: "Verify Account" },
-                    ...{ email: { result } },
-                  };
-                })
-                .catch((error) => {
-                  throw error;
-                });
-            });
-          })
+  async verifyEmail(email) {
+    const { user } = await selectServiceByProperty("email", email, true);
+    if (!user) {
+      throw createError(
+        500,
+        "The email address is not associated with any account. Double-check your email address and try again."
+      );
+    }
+    //Generate and set password reset token
+    user.generatePasswordReset();
+    // Save the updated user object
+    const newUser = await user.save();
+    if (!newUser)
+      throw createError(
+        500,
+        "No fue posible verificar su cuenta intente nuevamente"
+      );
 
-          .catch((error) => {
-            throw error;
-          });
-      }
-    );
+    const emailResult = await sendPasswordEmail(user, "verify");
+
+    return {
+      ...{ message: "Verify Account" },
+      ...{ email: { emailResult } },
+    };
   }
 
   async verify(token) {
-    let replacements = null;
-    const userExist = await selectServiceByProperty(
+    const { user } = await selectServiceByProperty(
       "resetPasswordToken",
-      token,
-      true
+      token
     );
-    return await userExist.service
-      .verify(token)
-      .then((user) => {
-        if (!user) {
-          const err = new Error();
-          err.status = 401;
-          err.message = "Verify token is invalid or has expired.";
-          throw err;
-        }
-        if (
-          user.email.length < 5 ||
-          user.firstName.length < 3 ||
-          user.phone.length < 8 
-        ) {
-          replacements = {
-            email: user.email,
-            name: user.firstName,
-            address: user.address,
-            phone: user.phone,
-            documentId: user?.documentId,
-          };
-        } else {
-          if (!user.isVerified) {
-            user.enabled = true;
-          }
-          //Set the new values
-          user.isVerified = true;
-          user.resetPasswordToken = undefined;
-          user.resetPasswordExpires = undefined;
-        }
+    if (!user) createError(500, "Verify token is invalid or has expired.");
+    if (!user.isVerified) {
+      user.enabled = true;
+    }
+    //Set the new values
+    user.isVerified = true;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
 
-        // Save
-        return user.save().then((user) => {
-          return sendEmail(
-            user,
-            "Your email has been verified",
-            `
-                    Se realizó exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
-            "../public/pages/changeconfirmation.html"
-          )
-            .then(() => {
-              if (replacements != null) {
-                return HTMLReplace(
-                  "../public/pages/verifyform.html",
-                  replacements
-                ).then((result) => {
-                  return result;
-                });
-              } else {
-                replacements = {
-                  username: user.firstName,
-                  link: `Se realizó exitosamente la verificación de la cuenta registrada con el email ${user.email} `,
-                };
-                return HTMLReplace(
-                  "../public/pages/changeconfirmation.html",
-                  replacements
-                ).then((result) => {
-                  return result;
-                });
-              }
-            })
-            .catch((error) => {
-              throw error;
-            });
-        });
-      })
-      .catch((error) => {
-        throw error;
-      });
+    // Save
+    const userNew = user.save();
+
+    if (!userNew) throw createError(500, "No se pudo verificar su cuenta");
+
+    const emailResult = await sendPasswordEmail(user, "verified");
+    return { message: "Verificacion completa", ...emailResult };
   }
-  async signInAndUpdate(loginUser, body) {
-    let _service = await selectServiceByProperty(
+
+  async signInAndUpdate(loginUser) {
+    let { user } = await selectServiceByProperty(
       "email",
       loginUser.email,
       true
     );
-    const updateUser = await _service.service
-      .update(loginUser._id, body)
-      .then((user) => {
-        //Set the new values
-        user.enabled = true;
-        user.isVerified = true;
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpires = undefined;
-        // Save
-        return user.save();
-      });
+    //Set the new values
+    user.enabled = true;
+    user.isVerified = true;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    // Save
+    userUpdated = await user.save();
+    delete userUpdated.password;
+    if (!userUpdated) throw createError(500, "No se pudo verificar su cuenta");
+    return userUpdated;
   }
 }
+
+// private functions
 async function selectServiceByProperty(propName, value, signUp = false) {
-  const userExist = await _userService.getUserByProperty(propName, value);
-  const adminExist = await _adminService.getAdminByProperty(propName, value);
-  const providerExist = await _providerService.getProviderByProperty(
+  const user = await _userService.getUserByProperty(propName, value);
+  const admin = await _adminService.getAdminByProperty(propName, value);
+  const provider = await _providerService.getProviderByProperty(
     propName,
     value
   );
 
-  let _service = null;
-  let _user = null;
-  if (value === "") {
-    _service = _userService;
-  } else {
-    if (adminExist) {
-      _service = _adminService;
-      _user = adminExist;
-    } else if (userExist) {
-      _service = _userService;
-      _user = userExist;
-    } else {
-      _service = _providerService;
-      _user = providerExist;
-    }
-  }
+  let _user = user || admin || provider;
+  let _service = _userService || _adminService || _providerService;
+  const result = { service: _service, user: _user };
   if (!signUp && !_user) {
-    throw new Error("User not found");
+    createError(404, "User not found");
   }
 
-  if (!_user?.isVerified && !signUp) {
+  if (!_user?.isVerified && signUp) {
     await _user.generatePasswordReset();
-    throw await _user.save().then((user) => {
-      return sendEmail(
-        user,
-        "Please Verify your Vecino Account",
-        `${HOST}/${API}/auth/verify/${user.resetPasswordToken}`,
-        "../public/pages/verifyemail.html"
-      )
-        .then((result) => {
-          return {
-            ...{ message: "Verify account email" },
-            ...{ email: { result } },
-          };
-        })
-        .catch((error) => {
-          error.status = 400;
-          error.message = "User has not been verified";
-          throw error;
-        });
-    });
+    _user.enabled = true;
+    await _user.save();
+    const emailResult = await sendPasswordEmail(_user, "verify");
+    return {
+      message: "Verify account email",
+      emailResult: { emailResult },
+      ...result,
+    };
   }
-  if (!_user?.enabled && !signUp) {
-    const error = new Error();
-    error.status = 400;
-    error.message = "User disabled";
-    throw error;
-  }
-  return { service: _service, user: _user };
+  if (!_user?.enabled && !signUp) createError(400, "User disabled");
+
+  return result;
 }
+
+function getUsernameOrEmail(input) {
+  if (input && input?.includes("@")) {
+    return { propName: "email", value: input };
+  }
+  return { propName: "username", value: input };
+}
+
+function createError(status, message) {
+  const error = new Error();
+  error.status = status;
+  error.message = message;
+  throw error;
+}
+
+async function sendPasswordEmail(user, emailType) {
+  let subject, template, templateData;
+
+  if (emailType === "reset") {
+    subject = "Solitud de cambio de contraseña";
+    template = "../public/pages/changePasswordNotification.html";
+    templateData = {
+      NAME: user.firstName,
+      RESET_URL: `${FRONT_END_URL}/reset/${user.resetPasswordToken}`,
+      USERNAME: user.username,
+    };
+  } else if (emailType === "changed") {
+    subject = "Your password has been changed";
+    template = "../public/pages/changePasswordConfirmation.html";
+    templateData = {
+      EMAIL: user.email,
+      FRONT_END_URL: FRONT_END_URL,
+      NAME: user.firstName,
+    };
+  } else if (emailType === "verify") {
+    subject = "Por favor verifique su cuenta Vecino";
+    template = "../public/pages/verifyemail.html";
+    templateData = {
+      VERIFY_LINK: `${FRONT_END_URL}/verify/${user.resetPasswordToken}`,
+    };
+  } else if (emailType === "verified") {
+    subject = "Tu cuenta ha sido verificada";
+    template = "../public/pages/changeconfirmation.html";
+    templateData = {
+      NAME: user.firstName,
+      user: {
+        email: user.email,
+      },
+      FRONT_END_URL: FRONT_END_URL,
+    };
+  } else {
+    throw new Error("Invalid emailType provided.");
+  }
+
+  return await sendEmail(user, subject, "", template, templateData);
+}
+
+async function validateOwnerAccess(secretKey) {
+  if (!secretKey) {
+    throw createError(400, "For owner role, secretKey must be sent");
+  }
+
+  if (secretKey !== SECRET_OWNER) {
+    throw createError(400, "Invalid secretKey");
+  }
+}
+
 module.exports = AuthService;

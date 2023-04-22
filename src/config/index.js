@@ -20,6 +20,7 @@ module.exports = {
     username: process.env.MONGODB_USERNAME,
     password: process.env.MONGODB_PASSWORD,
   },
+  FRONT_END_URL: process.env.FRONT_END_URL,
   APPLICATION_NAME: process.env.APPLICATION_NAME,
   JWT_SECRET: process.env.JWT_SECRET,
   CACHE_KEY: process.env.CACHE_KEY,

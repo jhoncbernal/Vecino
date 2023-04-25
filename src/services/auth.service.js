@@ -79,6 +79,7 @@ class AuthService {
         propertyInfo: user?.propertyInfo,
         cityName: user?.cityName,
         admin: user?.admin,
+        roles: user?.roles,
       },
     };
   }

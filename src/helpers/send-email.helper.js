@@ -44,7 +44,13 @@ async function HTMLReplace(htmlpath, replacements) {
   }
 }
 
-async function sendEmail(user, subject, text, htmlpath,objectReplacement={}) {
+async function sendEmail(
+  user,
+  subject,
+  text,
+  htmlpath,
+  objectReplacement = {}
+) {
   try {
     htmlToSend = await new Promise((resolve, reject) => {
       readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
@@ -52,12 +58,12 @@ async function sendEmail(user, subject, text, htmlpath,objectReplacement={}) {
         var replacements = {
           username: user.firstName,
           link: text,
-          APP_NAME:config.APPLICATION_NAME
+          APP_NAME: config.APPLICATION_NAME,
         };
         if (err) {
           reject(err);
         } else {
-          resolve(template({...replacements,...objectReplacement}));
+          resolve(template({ ...replacements, ...objectReplacement }));
         }
       });
     });
@@ -82,6 +88,7 @@ async function sendEmail(user, subject, text, htmlpath,objectReplacement={}) {
       },
       Source: FROM_EMAIL,
     };
+    if (config.PROJECT.mode === "development") return { email: "OK" }; 
     return await new Promise((resolve, reject) => {
       ses.sendEmail(mailOptions, function (err, info) {
         if (err) {

@@ -1,6 +1,8 @@
 const BaseService = require("./base.service");
 const { FRONT } = require("../config");
 const { sendEmail } = require("../helpers");
+const createError = require("../utils/createError");
+
 let _filerepository,
   _userRepository = null;
 
@@ -11,8 +13,14 @@ class FileService extends BaseService {
     _userRepository = UserRepository;
   }
 
-  async uploadFilePortfolioUsers(portfoliodata) {
-    return await _filerepository.uploadFilePortfolioUsers(portfoliodata);
+  async uploadFilePortfolioUsers(portfoliodata, uniquecode) {
+    const result = await _filerepository.uploadFilePortfolioUsers(
+      portfoliodata
+    );
+    if (!result) {
+      createError(400, "Error al subir el archivo");
+    }
+    return result;
   }
 
   async uploadFileUsers(usersData) {
@@ -55,7 +63,7 @@ class FileService extends BaseService {
                   userEmail.title = `Tu cuenta fue asociada a su conjunto ${
                     userExist.uniquecode === user.Uniquecode
                       ? userExist.neighborhood.firstName
-                      : ''
+                      : ""
                   }`;
                   userEmail.message = `
                     Se realizó exitosamente la verificación de la cuenta registrada con el email ${
@@ -63,12 +71,12 @@ class FileService extends BaseService {
                     } a su conjunto ${
                     userExist.uniquecode === user.Uniquecode
                       ? userExist.neighborhood.firstName
-                      : ''
+                      : ""
                   }`;
                   userEmail.pathPage =
                     "../public/pages/changeconfirmation.html";
-                }else{
-                  return
+                } else {
+                  return;
                 }
               } else {
                 userEmail.firstName = user.Nombres;
@@ -94,16 +102,22 @@ class FileService extends BaseService {
         throw error;
       });
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    const sendEmails = async(email) => {
-        if (email) {
-          return await sendEmail(email, email.title, email.message, email.pathPage)
-           
-        }
+    const sendEmails = async (email) => {
+      if (email) {
+        return await sendEmail(
+          email,
+          email.title,
+          email.message,
+          email.pathPage
+        );
       }
+    };
     return emails.reduce(function (promise, item) {
-      return promise.then(function (result) {
-        return Promise.all([delay(10), sendEmails(item)]);
-      }).catch(console.error);
+      return promise
+        .then(function (result) {
+          return Promise.all([delay(10), sendEmails(item)]);
+        })
+        .catch(console.error);
     }, Promise.resolve());
   }
 

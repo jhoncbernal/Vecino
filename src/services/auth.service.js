@@ -1,7 +1,7 @@
 const { generateToken } = require("../helpers/jwt.helper");
 const { SECRET_OWNER, FRONT_END_URL } = require("../config");
 const { sendEmail } = require("../helpers");
-
+const createError = require("../utils/createError");
 let _userService,
   _providerService,
   _adminService = null;
@@ -25,11 +25,10 @@ class AuthService {
       validateOwnerAccess(secretKey);
       return await _userService.create({ ...userBody });
     }
-    const admin = (userExist = await selectServiceByProperty(
+    const admin =  await selectServiceByProperty(
       "uniquecode",
-      uniquecode,
-      true
-    ));
+      uniquecode
+    );
     const { _id, uuid, isVerified } = admin.user;
     if (roles.includes("ROLE_USER_ACCESS")) {
       await _userService.create({
@@ -42,13 +41,13 @@ class AuthService {
     } else if (roles.includes("ROLE_PROVIDER_ACCESS")) {
       await _providerService.create(userBody);
     } else createError(400, "User already exist");
-    return await selectServiceByProperty("email", userBody.email, true);
+    return await selectServiceByProperty("email", userBody.email);
   }
 
-  async signIn(userInfo, singUp = false) {
+  async signIn(userInfo) {
     const { email, password, secretKey } = userInfo;
     const { propName, value } = getUsernameOrEmail(email);
-    const { user } = await selectServiceByProperty(propName, value, singUp);
+    const { user } = await selectServiceByProperty(propName, value);
 
     let token;
     if (user) {
@@ -61,6 +60,7 @@ class AuthService {
           uuid: user?.uuid,
           roles: user?.roles,
           phone: user?.phone,
+          uniquecode: user?.uniquecode,
         };
         token = generateToken(userToEncode);
       }
@@ -80,13 +80,17 @@ class AuthService {
         cityName: user?.cityName,
         admin: user?.admin,
         roles: user?.roles,
+        uniquecode: user?.uniquecode,
+        postalCode: user?.postalCode,
+        stateCode: user?.stateCode,
+        countryCode: user?.countryCode,
+        cityCode: user?.cityCode,
       },
     };
   }
 
   async recover(body) {
     const { propName, value } = getUsernameOrEmail(body.email);
-
     const { user } = await selectServiceByProperty(propName, value);
 
     if (!user) {
@@ -152,7 +156,7 @@ class AuthService {
   }
 
   async verifyEmail(email) {
-    const { user } = await selectServiceByProperty("email", email, true);
+    const { user } = await selectServiceByProperty("email", email);
     if (!user) {
       throw createError(
         500,
@@ -178,10 +182,7 @@ class AuthService {
   }
 
   async verify(token) {
-    const { user } = await selectServiceByProperty(
-      "resetPasswordToken",
-      token
-    );
+    const { user } = await selectServiceByProperty("resetPasswordToken", token);
     if (!user) createError(500, "Verify token is invalid or has expired.");
     if (!user.isVerified) {
       user.enabled = true;
@@ -203,8 +204,7 @@ class AuthService {
   async signInAndUpdate(loginUser) {
     let { user } = await selectServiceByProperty(
       "email",
-      loginUser.email,
-      true
+      loginUser.email
     );
     //Set the new values
     user.enabled = true;
@@ -220,7 +220,7 @@ class AuthService {
 }
 
 // private functions
-async function selectServiceByProperty(propName, value, signUp = false) {
+async function selectServiceByProperty(propName, value) {
   const user = await _userService.getUserByProperty(propName, value);
   const admin = await _adminService.getAdminByProperty(propName, value);
   const provider = await _providerService.getProviderByProperty(
@@ -231,11 +231,11 @@ async function selectServiceByProperty(propName, value, signUp = false) {
   let _user = user || admin || provider;
   let _service = _userService || _adminService || _providerService;
   const result = { service: _service, user: _user };
-  if (!signUp && !_user) {
+  if (!_user) {
     createError(404, "User not found");
   }
 
-  if (!_user?.isVerified && signUp) {
+  if (!_user?.isVerified) {
     await _user.generatePasswordReset();
     _user.enabled = true;
     await _user.save();
@@ -246,7 +246,7 @@ async function selectServiceByProperty(propName, value, signUp = false) {
       ...result,
     };
   }
-  if (!_user?.enabled && !signUp) createError(400, "User disabled");
+  if (!_user?.enabled) createError(400, "User disabled");
 
   return result;
 }
@@ -258,12 +258,7 @@ function getUsernameOrEmail(input) {
   return { propName: "username", value: input };
 }
 
-function createError(status, message) {
-  const error = new Error();
-  error.status = status;
-  error.message = message;
-  throw error;
-}
+
 
 async function sendPasswordEmail(user, emailType) {
   let subject, template, templateData;

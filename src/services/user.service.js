@@ -42,5 +42,8 @@ class UserService extends BaseService {
     async getUsersByPropertyInfo(sectionNumber, propertyNumber) {
         return await _userRepository.getUsersByPropertyInfo(sectionNumber, propertyNumber);
     }
+    async getAllUsersByUniqueCode(uniquecode, pageSize, pageNum) {
+        return await _userRepository.getAllUsersByUniqueCode(uniquecode, pageSize, pageNum);
+    }
 }
 module.exports = UserService;

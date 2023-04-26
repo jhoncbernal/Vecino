@@ -19,7 +19,12 @@ const UserSchema = new Schema(
       trim: true,
       index: true,
     },
-    password: { type: String, required: [true, "What is your password?"] },
+    password: {
+      type: String,
+      required: function () {
+        return this.acceptPolicity;
+      },
+    },
     email: {
       type: String,
       required: [true, "What is your email?"],
@@ -78,7 +83,7 @@ const UserSchema = new Schema(
       type: String,
       enum: ["email", "sms", "both"],
       default: "email",
-    }
+    },
   },
   { timestamps: true }
 );

@@ -11,23 +11,13 @@ class UserController {
     return res.send(user);
   }
   async getAll(req, res) {
-    const { id: userId } = req.user;
     const { pageSize, pageNum } = req.query;
-    let admin;
-    await _adminService
-      .get(userId)
-      .then((result) => {
-        admin = result;
-      })
-      .catch(async () => {
-        admin = await _userService.get(userId);
-      });
+    const uniquecode = req.user.uniquecode;
 
-    const users = await _userService.getAll(
-      "uniquecode",
-      admin.uniquecode,
-      pageSize,
-      pageNum
+    const users = await _userService.getAllUsersByUniqueCode(
+      uniquecode,
+      pageSize || 10,
+      pageNum || 1
     );
     return res.send(users);
   }
@@ -61,10 +51,9 @@ class UserController {
     }
   }
 
-
   async getUsersByPropertyInfo(req, res) {
     try {
-    const { sectionNumber, propertyNumber } = req.query;
+      const { sectionNumber, propertyNumber } = req.query;
       const users = await _userService.getUsersByPropertyInfo(
         sectionNumber,
         propertyNumber

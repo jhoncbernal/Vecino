@@ -1,4 +1,5 @@
 const { uploadImage, deleteImage } = require("../helpers");
+const createError = require("../utils/createError");
 
 let _fileService,
   _userService,
@@ -11,36 +12,35 @@ class FileController {
   }
 
   async uploadFilePortfolioUsers(req, res) {
-    const { id: userId } = req.user;
-    const admin = await _adminService.get(userId);
-    if (!req.files) {
-      return res.status(400).send("No files were uploaded.");
-    }
-    const result = await _fileService
-      .uploadFilePortfolioUsers(req.files.file.data)
-      .catch((err) => {
-        throw err;
-      });
-    if (result) {
-      await _userService
-        .updateUserPoints("uniquecode", admin.uniquecode)
-        .catch((err) => {
-          throw err;
-        });
-      return res.status(200).send("Updated");
+    try {
+      const { uniquecode } = req.user;
+      if (!req.files) createError(400, "No files were uploaded.");
+       await _fileService.uploadFilePortfolioUsers(
+        req.files.file.data,
+        uniquecode
+      );
+      const users = await _userService.updateUserPoints(
+        "uniquecode",
+        uniquecode
+      );
+      if (!users) createError(400, "Error al actualizar los puntos");
+      return res.status(200).send({ message: "Updated" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error has occurred" });
     }
   }
   async uploadFileUsers(req, res) {
-    if (!req.files) {
-      return res.status(400).send("No files were uploaded.");
+    try {
+      if (!req.files) {
+        return res.status(400).send("No files were uploaded.");
+      }
+      await _fileService.uploadFileUsers(req.files.file.data);
+      return res.status(200).send({ message: "Updated" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error has occurred" });
     }
-    await _fileService
-      .uploadFileUsers(req.files.file.data)
-      .catch((err) => {
-        throw err;
-      });
-      return res.status(200).send("Updated");
-
   }
   async uploadFileImage(req, res) {
     if (!req.files) {

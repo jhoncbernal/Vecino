@@ -1,5 +1,5 @@
 const BaseService = require("./base.service");
-const { FRONT } = require("../config");
+const { FRONT_END_URL } = require("../config");
 const { sendEmail } = require("../helpers");
 const createError = require("../utils/createError");
 
@@ -13,7 +13,7 @@ class FileService extends BaseService {
     _userRepository = UserRepository;
   }
 
-  async uploadFilePortfolioUsers(portfoliodata, uniquecode) {
+  async uploadFilePortfolioUsers(portfoliodata) {
     const result = await _filerepository.uploadFilePortfolioUsers(
       portfoliodata
     );
@@ -23,101 +23,89 @@ class FileService extends BaseService {
     return result;
   }
 
-  async uploadFileUsers(usersData) {
-    const emails = await _filerepository
-      .uploadFileUsers(usersData)
-      .then(async (users) => {
-        return await Promise.all(
-          users.map(async (user) => {
-            try {
-              const userExist = await _userRepository
-                .getUserByProperty("documentId", user.Identificacion)
-                .then((res) => {
-                  return res;
-                })
-                .catch((e) => {
-                  console.error(e);
-                });
-              let userEmail = {
-                firstName: "",
-                email: "",
-                title: "",
-                message: "",
-                pathPage: "",
-                fileId: user._id,
-              };
+  async uploadFileUsers(usersData, uniquecode) {
+    const fileUsers = await _filerepository.uploadFileUsers(usersData);
+    if (!fileUsers) createError(400, "Error al subir el archivo");
+    const userExtraInfo = await _userRepository.getUserByProperty(
+      "uniquecode",
+      uniquecode
+    );
+    if (!userExtraInfo) {
+      createError(400, "Error al obtener la información del usuario admin");
+    }
 
-              if (userExist) {
-                if (!userExist.roles.includes(user.Uniquecode)) {
-                  await _userRepository
-                    .addNewUserRole(userExist._id, user.Uniquecode)
-                    .then((res) => {
-                      return res;
-                    })
-                    .catch((e) => {
-                      console.error(e);
-                    });
+    const userEmailsPromises = fileUsers.map(async (fileUser) => {
+      try {
+        const userByDocId = await _userRepository.getUserByProperty(
+          "documentId",
+          fileUser.Identificacion
+        );
+        const userByEmail = await _userRepository.getUserByProperty(
+          "email",
+          fileUser.Correo
+        );
+        fileUser.Direccion = userExtraInfo.address;
+        fileUser.CodigoPostal = userExtraInfo.postalCode;
+        fileUser.CodigoUnico = userExtraInfo.uniquecode;
+        fileUser.NombreCiudad = userExtraInfo.cityName;
+        fileUser.CodigoCiudad = userExtraInfo.cityCode;
+        fileUser.CodigoEstado = userExtraInfo.stateCode;
+        fileUser.CodigoPais = userExtraInfo.countryCode;
+        await fileUser.save();
 
-                  userEmail.firstName = userExist.firstName;
-                  userEmail.email = userExist.email;
-                  userEmail.title = `Tu cuenta fue asociada a su conjunto ${
-                    userExist.uniquecode === user.Uniquecode
-                      ? userExist.neighborhood.firstName
-                      : ""
-                  }`;
-                  userEmail.message = `
-                    Se realizó exitosamente la verificación de la cuenta registrada con el email ${
-                      userExist.email
-                    } a su conjunto ${
-                    userExist.uniquecode === user.Uniquecode
-                      ? userExist.neighborhood.firstName
-                      : ""
-                  }`;
-                  userEmail.pathPage =
-                    "../public/pages/changeconfirmation.html";
-                } else {
-                  return;
-                }
-              } else {
-                userEmail.firstName = user.Nombres;
-                userEmail.email = user.Correo;
-                userEmail.title = "Estas a un paso para usar tu cuenta Vecino";
-                userEmail.message = `${FRONT}/signup/${user.Identificacion}`;
-                userEmail.pathPage = "../public/pages/verifyemail.html";
-              }
-              return userEmail;
-            } catch (e) {
-              console.error(e);
-            }
-          })
-        )
-          .then(async (results) => {
-            return results;
-          })
-          .catch((err) => {
-            throw err;
-          });
-      })
-      .catch((error) => {
-        throw error;
-      });
+        const userExist = userByDocId || userByEmail;
+        if (userExist && userExist.isVerified && userExist.enabled) {
+          return null;
+        }
+        const userEmail = {
+          firstName: userExist ? userExist.firstName : fileUser.Nombres,
+          email: userExist ? userExist.email : fileUser.Correo,
+          title: "",
+          message: "",
+          pathPage: "",
+        };
+
+        if (userExist) {
+          userEmail.title = `Tu Administracion te inscribio en Vecino`;
+          userEmail.message = ` la verificación e inscripcion de la cuenta`;
+          userEmail.pathPage = "../public/pages/changeconfirmation.html";
+        } else {
+          userEmail.title = "Tu administracion te inscribio en Vecino";
+          userEmail.link = `${FRONT_END_URL}/signup/${fileUser.uuid}`;
+          userEmail.pathPage = "../public/pages/verifyemail.html";
+        }
+        return userEmail;
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    const userEmails = await Promise.all(userEmailsPromises);
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
     const sendEmails = async (email) => {
       if (email) {
         return await sendEmail(
           email,
           email.title,
           email.message,
-          email.pathPage
+          email.pathPage,
+          {
+            VERIFY_LINK: email.link,
+            FRONT_END_URL: FRONT_END_URL,
+            MENSAJE: email.message,
+            EMAIL: email.email,
+            NAME: email.firstName,
+          }
         );
       }
     };
-    return emails.reduce(function (promise, item) {
-      return promise
-        .then(function (result) {
-          return Promise.all([delay(10), sendEmails(item)]);
-        })
-        .catch(console.error);
+
+    return userEmails.reduce(async (previousPromise, email) => {
+      await previousPromise;
+      await delay(10);
+      return sendEmails(email);
     }, Promise.resolve());
   }
 
@@ -154,13 +142,10 @@ class FileService extends BaseService {
       }
     });
   }
+
   async getUserByDocumentId(documentId) {
     return await _filerepository.getUserByDocumentId(documentId);
   }
 }
-function delay(t, data) {
-  return new Promise((resolve) => {
-    setTimeout(resolve.bind(null, data), t);
-  });
-}
+
 module.exports = FileService;

@@ -26,20 +26,21 @@ class FileRepository extends BaseRepository {
   }
 
   async uploadFileUsers(usersData) {
-    var wb = XLSX.read(usersData, { type: "buffer" });
-    //var csvdata = XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]], { header: 0 });
-    return await new Promise((resolve, reject) => {
-      let jsonxlsx = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
+    try {
+      const wb = XLSX.read(usersData, { type: "buffer" });
+      const jsonxlsx = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
         header: 0,
       });
-      _file.deleteMany({ Apartamento: { $exists: true } }, function (err) {
-        if (err) reject(err);
-        _file.insertMany(jsonxlsx).then((result) => {
-          resolve(result);
-        });
-      });
-    });
+
+      await _file.deleteMany({ Apartamento: { $exists: true } });
+      const result = await _file.insertMany(jsonxlsx);
+
+      return result;
+    } catch (err) {
+      throw err;
+    }
   }
+
   async getUserByDocumentId(documentId) {
     return await _file.findOne({ Identification: documentId });
   }

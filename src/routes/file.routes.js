@@ -5,7 +5,7 @@ module.exports = function ({ FileController }) {
   router.get("/:documentId", FileController.getUserByDocumentId);
   router.delete("/:Id", FileController.delete);
   router.post("",[AuthMiddleware, HasPermissionMiddleware], FileController.uploadFilePortfolioUsers);
-  router.post("/FileUsers/", FileController.uploadFileUsers);
+  router.post("/FileUsers/",[AuthMiddleware, HasPermissionMiddleware], FileController.uploadFileUsers);
   router.post(
     "/images/upload",
     FileController.uploadFileImage

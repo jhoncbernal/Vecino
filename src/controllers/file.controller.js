@@ -15,9 +15,8 @@ class FileController {
     try {
       const { uniquecode } = req.user;
       if (!req.files) createError(400, "No files were uploaded.");
-       await _fileService.uploadFilePortfolioUsers(
-        req.files.file.data,
-        uniquecode
+      await _fileService.uploadFilePortfolioUsers(
+        req.files.file.data
       );
       const users = await _userService.updateUserPoints(
         "uniquecode",
@@ -30,12 +29,12 @@ class FileController {
       return res.status(500).json({ message: "An error has occurred" });
     }
   }
+
   async uploadFileUsers(req, res) {
     try {
-      if (!req.files) {
-        return res.status(400).send("No files were uploaded.");
-      }
-      await _fileService.uploadFileUsers(req.files.file.data);
+      const { uniquecode } = req.user;
+      if (!req.files) createError(400, "No files were uploaded.");
+      await _fileService.uploadFileUsers(req.files.file.data, uniquecode);
       return res.status(200).send({ message: "Updated" });
     } catch (error) {
       console.error(error);

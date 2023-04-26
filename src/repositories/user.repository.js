@@ -114,7 +114,7 @@ class UserRepository extends BaseRepository {
   }
 
   async getUserByProperty(propName, value) {
-    return await _user.findOne({ [propName]: value });
+    return await _user.findOne({ [propName]: value }).sort({ createdAt: -1 });
   }
 
   async recover(propName, value) {

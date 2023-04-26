@@ -88,7 +88,7 @@ async function sendEmail(
       },
       Source: FROM_EMAIL,
     };
-    if (config.PROJECT.mode === "development") return { email: "OK" }; 
+   if (config.PROJECT.mode === "development") return { email: "OK" }; 
     return await new Promise((resolve, reject) => {
       ses.sendEmail(mailOptions, function (err, info) {
         if (err) {

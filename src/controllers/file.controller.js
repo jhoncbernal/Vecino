@@ -24,7 +24,9 @@ class FileController {
       return res.status(200).send({ message: "Updated" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "An error has occurred" });
+      return res
+        .status(500)
+        .json({ message: error?.message || "An error has occurred" });
     }
   }
 
@@ -36,7 +38,9 @@ class FileController {
       return res.status(200).send({ message: "Updated" });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "An error has occurred" });
+      return res
+        .status(500)
+        .json({ message: error?.message || "An error has occurred" });
     }
   }
 
@@ -47,16 +51,13 @@ class FileController {
     const result = await uploadImage(req.files.image);
     res.status(200).send(result);
   }
+
   async deleteFileImage(req, res) {
     const { KeyId } = req.params;
-    await deleteImage(KeyId)
-      .then((response) => {
-        res.status(200).send(response);
-      })
-      .catch((err) => {
-        throw err;
-      });
+    const response = await deleteImage(KeyId);
+    res.status(200).send(response);
   }
+
   async getUserByDocumentId(req, res) {
     const { documentId } = req.params;
     const user = await _fileService.getUserByDocumentId(documentId);

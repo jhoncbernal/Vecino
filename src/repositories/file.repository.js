@@ -1,4 +1,5 @@
 //const csv = require("fast-csv");
+const createError = require("../utils/createError");
 const BaseRepository = require("./base.repository");
 const XLSX = require("xlsx");
 let _file;
@@ -10,7 +11,24 @@ class FileRepository extends BaseRepository {
 
   async uploadFilePortfolioUsers(portfoliodata) {
     const wb = XLSX.read(portfoliodata, { type: "buffer" });
-    const jsonxlsx = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+
+    const expectedColumns = [
+      "codigo",
+      "nombre",
+      "_1_30",
+      "_31_60",
+      "_61_90",
+      "_mas_90",
+      "total",
+      "juridico",
+    ];
+
+    if (!this.validateXlsxSchema(sheet, expectedColumns)) {
+      createError(400, "El archivo no tiene el formato correcto");
+    }
+
+    const jsonxlsx = XLSX.utils.sheet_to_json(sheet, {
       header: 0,
     });
 
@@ -28,7 +46,24 @@ class FileRepository extends BaseRepository {
   async uploadFileUsers(usersData) {
     try {
       const wb = XLSX.read(usersData, { type: "buffer" });
-      const jsonxlsx = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+
+      const expectedColumns = [
+        "Torre",
+        "Apartamento",
+        "Correo",
+        "Telefono",
+        "Nombres",
+        "Apellidos",
+        "Propietario",
+        "Identificacion",
+      ];
+
+      if (!this.validateXlsxSchema(sheet, expectedColumns)) {
+        createError(400, "El archivo no tiene el formato correcto");
+      }
+
+      const jsonxlsx = XLSX.utils.sheet_to_json(sheet, {
         header: 0,
       });
 
@@ -47,6 +82,22 @@ class FileRepository extends BaseRepository {
 
   async deleteByDocumentId(documentId) {
     return await _file.deleteOne({ Identificacion: documentId });
+  }
+
+  validateXlsxSchema(sheet, expectedColumns) {
+    const firstRow = XLSX.utils.sheet_to_json(sheet, {
+      header: 1,
+      raw: false,
+    })[0];
+    if (firstRow.length !== expectedColumns.length) {
+      return false;
+    }
+    for (let i = 0; i < expectedColumns.length; i++) {
+      if (firstRow[i] !== expectedColumns[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

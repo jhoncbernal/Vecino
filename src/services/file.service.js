@@ -44,6 +44,10 @@ class FileService extends BaseService {
           "email",
           fileUser.Correo
         );
+        const userExist = userByDocId || userByEmail;
+        if (userExist && userExist.isVerified && userExist.enabled) {
+          return null;
+        }
         fileUser.Direccion = userExtraInfo.address;
         fileUser.CodigoPostal = userExtraInfo.postalCode;
         fileUser.CodigoUnico = userExtraInfo.uniquecode;
@@ -53,10 +57,7 @@ class FileService extends BaseService {
         fileUser.CodigoPais = userExtraInfo.countryCode;
         await fileUser.save();
 
-        const userExist = userByDocId || userByEmail;
-        if (userExist && userExist.isVerified && userExist.enabled) {
-          return null;
-        }
+        
         const userEmail = {
           firstName: userExist ? userExist.firstName : fileUser.Nombres,
           email: userExist ? userExist.email : fileUser.Correo,

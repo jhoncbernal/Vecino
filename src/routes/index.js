@@ -6,6 +6,7 @@ require("express-async-errors");
 const { ErrorMiddleware, NotFoundMiddleware } = require("../middlewares");
 //fileupload
 var fileUpload = require("express-fileupload");
+const apiRoutesV2 = require("./v2");
 
 module.exports = function ({
   UserRoutes,
@@ -54,6 +55,7 @@ const corsOptions = {
   router.use("/v1/api", apiRoutes);
   router.use(NotFoundMiddleware);
   router.use(ErrorMiddleware);
+  router.use(apiRoutesV2);
 
   return router;
 };

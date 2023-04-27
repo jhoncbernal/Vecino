@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
+const { vehicleSchema } = require("./vehicle.model");
+const { billSchema } = require("./bill.model");
+const { notificationSchema } = require("./notification.model");
+const { guestSchema } = require("./guest.model");
 
 const userSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -30,4 +34,4 @@ const userSchema = new Schema({
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = { User };
+module.exports = { User, userSchema};

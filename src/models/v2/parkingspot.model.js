@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
 
 const parkingSpotSchema = new Schema({
@@ -8,4 +10,4 @@ const parkingSpotSchema = new Schema({
 });
 
 const ParkingSpot = mongoose.model("ParkingSpot", parkingSpotSchema);
-module.exports = { ParkingSpot };
+module.exports = { ParkingSpot, parkingSpotSchema };

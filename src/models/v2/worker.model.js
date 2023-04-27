@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
 
 const workerSchema = new Schema({
@@ -23,4 +25,4 @@ const workerSchema = new Schema({
 });
 
 const Worker = mongoose.model("Worker", workerSchema);
-module.exports = { Worker };
+module.exports = { Worker, workerSchema };

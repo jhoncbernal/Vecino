@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
 const billSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -8,4 +10,4 @@ const billSchema = new Schema({
 });
 
 const Bill = mongoose.model("Bill", billSchema);
-module.exports = { Bill };
+module.exports = { Bill , billSchema};

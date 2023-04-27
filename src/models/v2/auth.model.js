@@ -1,3 +1,6 @@
+
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
 const authSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -38,4 +41,4 @@ authSchema.pre("save", async function (next) {
 });
 
 const Auth = mongoose.model("Auth", authSchema);
-module.exports = { Auth };
+module.exports = { Auth, authSchema };

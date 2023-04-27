@@ -11,9 +11,20 @@ const FileSchema = new Schema(
     },
     Nombres: { type: String, lowercase: true },
     Apellidos: { type: String, lowercase: true },
-    Correo: { type: String, unique: true, lowercase: true },
+    Correo: {
+      type: String,
+      unique: function () {
+        return this.Nombres;
+      },
+      lowercase: true,
+    },
     Telefono: { type: Number },
-    Identificacion: { type: Number, unique: true },
+    Identificacion: {
+      type: Number,
+      unique: function () {
+        return this.Nombres;
+      },
+    },
     Apartamento: { type: Number },
     Torre: { type: Number },
     Propietario: { type: String, default: "no", lowercase: true },

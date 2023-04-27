@@ -3,7 +3,7 @@ const { AuthMiddleware, HasPermissionMiddleware } = require("../middlewares");
 module.exports = function ({ FileController }) {
   const router = Router();
   router.get("/:documentId", FileController.getUserByDocumentId);
-  router.delete("/:Id", FileController.delete);
+  router.delete("/:documentId", FileController.deleteByDocumentId);
   router.post("",[AuthMiddleware, HasPermissionMiddleware], FileController.uploadFilePortfolioUsers);
   router.post("/FileUsers/",[AuthMiddleware, HasPermissionMiddleware], FileController.uploadFileUsers);
   router.post(

@@ -146,6 +146,10 @@ class FileService extends BaseService {
   async getUserByDocumentId(documentId) {
     return await _filerepository.getUserByDocumentId(documentId);
   }
+
+  async deleteByDocumentId(documentId) {
+    return await _filerepository.deleteByDocumentId(documentId);
+  }
 }
 
 module.exports = FileService;

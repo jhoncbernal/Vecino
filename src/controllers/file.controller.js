@@ -15,9 +15,7 @@ class FileController {
     try {
       const { uniquecode } = req.user;
       if (!req.files) createError(400, "No files were uploaded.");
-      await _fileService.uploadFilePortfolioUsers(
-        req.files.file.data
-      );
+      await _fileService.uploadFilePortfolioUsers(req.files.file.data);
       const users = await _userService.updateUserPoints(
         "uniquecode",
         uniquecode
@@ -41,17 +39,13 @@ class FileController {
       return res.status(500).json({ message: "An error has occurred" });
     }
   }
+
   async uploadFileImage(req, res) {
     if (!req.files) {
       return res.status(400).send("No images were uploaded.");
     }
-    await uploadImage(req.files.image)
-      .then((response) => {
-        res.status(200).send(response);
-      })
-      .catch((err) => {
-        throw err;
-      });
+    const result = await uploadImage(req.files.image);
+    res.status(200).send(result);
   }
   async deleteFileImage(req, res) {
     const { KeyId } = req.params;
@@ -66,11 +60,12 @@ class FileController {
   async getUserByDocumentId(req, res) {
     const { documentId } = req.params;
     const user = await _fileService.getUserByDocumentId(documentId);
+    if (!user) createError(400, "Error al obtener el usuario");
     return res.status(200).send(user);
   }
-  async delete(req, res) {
-    const { Id } = req.params;
-    const deleteUser = await _fileService.delete(Id);
+  async deleteByDocumentId(req, res) {
+    const { documentId } = req.params;
+    const deleteUser = await _fileService.deleteByDocumentId(documentId);
     return res.send(deleteUser);
   }
 }

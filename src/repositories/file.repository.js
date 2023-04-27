@@ -42,7 +42,11 @@ class FileRepository extends BaseRepository {
   }
 
   async getUserByDocumentId(documentId) {
-    return await _file.findOne({ Identification: documentId });
+    return await _file.findOne({ Identificacion: documentId });
+  }
+
+  async deleteByDocumentId(documentId) {
+    return await _file.deleteOne({ Identificacion: documentId });
   }
 }
 

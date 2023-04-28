@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
+const { compareSync, hashSync, genSaltSync } = require("bcryptjs");
 const authSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   email: { type: String, unique: true, required: true },
@@ -17,6 +18,9 @@ const authSchema = new Schema({
     required: true,
   },
   providerId: String,
+  enabled: { type: Boolean, default: false },
+  isVerified: { type: Boolean, default: false },
+  isOnline: { type: Boolean, default: false },
 });
 
 authSchema.methods.toJSON = function () {

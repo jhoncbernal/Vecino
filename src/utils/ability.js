@@ -1,32 +1,68 @@
-const { AbilityBuilder, Ability } = require("@casl/ability");
-
 function defineAbilitiesFor(user) {
-  const { can, build } = new AbilityBuilder(Ability);
+  const { can, build } = new AbilityBuilder();
 
   if (user && user.role) {
-    if (user.role === "owner") {
-      can("manage", "all");
-    } else if (user.role === "tenant") {
+    if (user.role === "user") {
+      const ownerUnitTypes = user.addresses
+        .filter((address) => address.userType === "owner")
+        .map((address) => address.unitType);
+
+      can(["create", "update", "delete"], "User", {
+        $or: user.addresses.map((address) => ({
+          addresses: {
+            $elemMatch: {
+              userType: "tenant",
+              unitType: { $in: ownerUnitTypes },
+              _id: address._id,
+              unitResidents: { $in: ["$._id"] },
+            },
+          },
+        })),
+      });
       can("read", "Building");
-      can("update", "User", { _id: user._id });
+      can(["update", "delete"], "User", { _id: user._id });
     } else if (user.role === "worker") {
-      can("read", "Building");
-      can("read", "User");
-      if (user.workerType === "propertyManager") {
-        can("manage", "Building");
-        can("manage", "User");
-      } else if (user.workerType === "concierge") {
-        can("create", "Guest");
-        can("read", "Notification");
-      } else if (user.workerType === "security") {
-        can("read", "ParkingSpot");
-        can("read", "Guest");
-      } else if (
-        user.workerType === "janitor" ||
-        user.workerType === "maintenance"
-      ) {
-        can("read", "MaintenanceRequest");
-        can("update", "MaintenanceRequest");
+      switch (user.workerType) {
+        case "propertyManager":
+          // Define abilities for propertyManager role
+          can("manage", "User", {
+            addresses: { $elemMatch: { building: worker.building } },
+          });
+          can("manage", "Building", {
+            addresses: { $elemMatch: { building: worker.building } },
+          });
+          break;
+
+        case "concierge":
+          // Define abilities for concierge role
+          can("read", "User", {
+            addresses: { $elemMatch: { building: worker.building } },
+          });
+          can("create", "Guest", {
+            visitHistory: { $elemMatch: { building: worker.building } },
+          });
+          can(["read", "create"], "Notification", {
+            building: worker.building,
+          });
+          break;
+
+        case "security":
+          // Define abilities for security role
+          can("read", "ParkingSpot", {
+            building: worker.building,
+          });
+          can("read", "Guest", {
+            visitHistory: { $elemMatch: { building: worker.building } },
+          });
+          break;
+
+        // ... add other workerType cases as needed
+        case "janitor" || "maintenance":
+          can(["read", "update"], "MaintenanceRequest", {
+            building: worker.building,
+          });
+        default:
+          break;
       }
       // Add more permissions depending on the worker type
     }
@@ -34,5 +70,3 @@ function defineAbilitiesFor(user) {
 
   return build();
 }
-
-module.exports = { defineAbilitiesFor };

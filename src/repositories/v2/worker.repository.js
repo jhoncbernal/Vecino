@@ -1,10 +1,10 @@
 const BaseRepository = require("./base.repository");
 
-class UserRepository extends BaseRepository {
-  constructor({ User }) {
-    super(User);
-    this.repository = User;
+class WorkerRepository extends BaseRepository {
+  constructor({ Worker }) {
+    super(Worker);
+    this.repository = Worker;
   }
 }
 
-module.exports = UserRepository;
+module.exports = WorkerRepository;

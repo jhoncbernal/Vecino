@@ -9,6 +9,7 @@ const workerSchema = new Schema({
   email: String,
   auth: { type: String, ref: "Auth", required: true },
   role: { type: String, required: true },
+  building: { type: String, ref: "Building" },
   workerType: {
     type: String,
     enum: [

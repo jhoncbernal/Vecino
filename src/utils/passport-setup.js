@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const { User, Worker, Auth } = require("./models"); // Assuming your models are exported from a single file
+const { User, Worker, Auth } = require("../models/v2/index"); // Assuming your models are exported from a single file
 
 // Local authentication
 passport.use(
@@ -14,13 +14,11 @@ passport.use(
         if (!auth) {
           return done(null, false, { message: "Incorrect email or password." });
         }
-
-        // Verify password here (using a library like bcrypt)
-        // ...
-
+        auth.comparePasswords(password);
         const user =
           (await User.findOne({ auth: auth._id })) ||
           (await Worker.findOne({ auth: auth._id }));
+
         return done(null, user);
       } catch (err) {
         return done(err);

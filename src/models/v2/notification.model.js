@@ -6,6 +6,7 @@ const notificationSchema = new Schema({
   message: String,
   dateSent: Date,
   isRead: Boolean,
+  building: { type: String, ref: "Building" },
 });
 
 const Notification = mongoose.model("Notification", notificationSchema);

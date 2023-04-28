@@ -53,8 +53,7 @@ class BaseRepository {
   // Create a single model
   async create(modelData) {
     try {
-      const result = new (modelData);
-      const saved = await result.save();
+      const saved = await this.model.create(modelData);
       return saved;
     } catch (error) {
       console.error(error);

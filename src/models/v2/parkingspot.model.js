@@ -7,6 +7,7 @@ const parkingSpotSchema = new Schema({
   number: Number,
   isAvailable: { type: Boolean, default: true },
   vehicle: { type: String, ref: "Vehicle", default: null },
+  building: { type: String, ref: "Building" },
 });
 
 const ParkingSpot = mongoose.model("ParkingSpot", parkingSpotSchema);

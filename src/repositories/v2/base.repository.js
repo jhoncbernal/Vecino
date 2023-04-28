@@ -1,4 +1,4 @@
-const handleMongoError = require("../../utils/mongoErrorHandler.util");
+const {handleMongoError} = require("../../utils/mongoErrorHandler.util");
 class BaseRepository {
   constructor(model) {
     this.model = model;

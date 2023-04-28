@@ -1,10 +1,8 @@
 const BaseService = require("./base.service");
-let _notification = null;
-
 class NotificationRepository extends BaseService {
-  constructor({ Notification }) {
-    super(Notification);
-    _notification = Notification;
+  constructor({ NotificationRepository }) {
+    super(NotificationRepository);
+    this.repository = NotificationRepository;
   }
 }
 

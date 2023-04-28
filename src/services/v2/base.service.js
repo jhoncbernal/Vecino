@@ -71,7 +71,7 @@ class BaseService {
   // Update a single result by ID
   async updateById(id, updatedData) {
     try {
-      const result = await this.repository.updateOne({ _id: id }, updatedData);
+      const result = await this.repository.updateById({ _id: id }, updatedData);
       return result;
     } catch (error) {
       console.error(error);

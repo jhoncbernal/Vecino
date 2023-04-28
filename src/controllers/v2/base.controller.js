@@ -1,12 +1,14 @@
+const bindMethods = require("../../utils/bindMethods");
 class BaseController {
   constructor(service) {
     this.service = service;
+    bindMethods(this);
   }
 
   async get(req, res) {
     try {
-      const userId = req.params.id;
-      const user = await this.service.getById(userId);
+      const id = req.params.id;
+      const user = await this.service.getById(id);
       return res.json(user);
     } catch (error) {
       console.error(error);
@@ -28,8 +30,8 @@ class BaseController {
 
   async delete(req, res) {
     try {
-      const userId = req.params.id;
-      await this.service.deleteById(userId);
+      const id = req.params.id;
+      await this.service.deleteById(id);
       return res.json({ message: " deleted successfully" });
     } catch (error) {
       console.error(error);
@@ -50,9 +52,9 @@ class BaseController {
 
   async update(req, res) {
     try {
-      const userId = req.params.id;
+      const id = req.params.id;
       const updatedData = req.body;
-      await this.service.updateById(userId, updatedData);
+      await this.service.updateById(id, updatedData);
       return res.json({ message: " updated successfully" });
     } catch (error) {
       console.error(error);

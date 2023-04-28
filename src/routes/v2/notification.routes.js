@@ -3,12 +3,12 @@ const { Router } = require("express");
 module.exports = function ({ NotificationController }) {
   const router = Router();
 
-  router.get("/:notificationId", NotificationController.get);
+  router.get("/:id", NotificationController.get);
   router.get("", NotificationController.getAll);
   //router.get("/user/:userId", NotificationController.getUserNotifications);
   router.post("", NotificationController.create);
-  router.patch("/:notificationId", NotificationController.update);
-  router.delete("/:notificationId", NotificationController.delete);
+  router.patch("/:id", NotificationController.update);
+  router.delete("/:id", NotificationController.delete);
 
   return router;
 }

@@ -1,10 +1,8 @@
 const BaseService = require("./base.service");
-let _vehicle = null;
-
 class VehicleRepository extends BaseService {
-  constructor({ Vehicle }) {
-    super(Vehicle);
-    _vehicle = Vehicle;
+  constructor({ VehicleRepository }) {
+    super(VehicleRepository);
+    this.repository = VehicleRepository;
   }
 }
 

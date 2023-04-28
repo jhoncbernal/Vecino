@@ -1,10 +1,11 @@
+const bindMethods = require("../../utils/bindMethods");
 const BaseController = require("./base.controller");
-let _notificationService = null;
 
 class NotificationController extends BaseController {
   constructor({ NotificationService }) {
     super(NotificationService);
-    _notificationService = NotificationService;
+    this.service = NotificationService;
+    bindMethods(this);
   }
 }
 

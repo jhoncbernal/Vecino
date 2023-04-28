@@ -1,14 +1,12 @@
-
+const bindMethods = require("../../utils/bindMethods");
 const BaseController = require("./base.controller");
-let _userService = null;
 
 class UserController extends BaseController {
   constructor({ UserService }) {
     super(UserService);
-    _userService = UserService;
+    this.service = UserService;
+    bindMethods(this);
   }
 }
 
 module.exports = UserController;
-
-

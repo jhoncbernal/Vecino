@@ -44,13 +44,12 @@ module.exports = function ({
   apiRoutesV2.use("/parkingspot", ParkingSpotRoutes);
   apiRoutesV2.use("/vehicle", VehicleRoutes);
   apiRoutesV2.use("/worker", WorkerRoutes);
+
   router.use("/v2/api", apiRoutesV2);
-  router.use("/", (req, res) => {
-    res.send("Welcome to Vecino API");
-  });
+
   router.use(NotFoundMiddleware);
   router.use(ErrorMiddleware);
   router.use(apiRoutesV2);
 
-  return apiRoutesV2;
+  return router;
 };

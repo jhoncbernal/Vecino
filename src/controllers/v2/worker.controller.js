@@ -1,10 +1,11 @@
+const bindMethods = require("../../utils/bindMethods");
 const BaseController = require("./base.controller");
-let _workerService = null;
 
 class WorkerController extends BaseController {
   constructor({ WorkerService }) {
     super(WorkerService);
-    _workerService = WorkerService;
+    this.service = WorkerService;
+    bindMethods(this);
   }
 }
 

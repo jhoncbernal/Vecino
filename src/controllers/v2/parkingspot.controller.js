@@ -1,10 +1,11 @@
+const bindMethods = require("../../utils/bindMethods");
 const BaseController = require("./base.controller");
-let _parkingSpotService = null;
 
 class ParkingSpotController extends BaseController {
   constructor({ ParkingSpotService }) {
     super(ParkingSpotService);
-    _parkingSpotService = ParkingSpotService;
+    this.service = ParkingSpotService;
+    bindMethods(this);
   }
 }
 

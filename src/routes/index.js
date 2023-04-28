@@ -55,7 +55,7 @@ const corsOptions = {
   router.use("/v1/api", apiRoutes);
   router.use(NotFoundMiddleware);
   router.use(ErrorMiddleware);
-  router.use(apiRoutesV2);
+  //router.use(apiRoutesV2);
 
   return router;
 };

@@ -3,12 +3,12 @@ const { Router } = require("express");
 module.exports = function ({ BuildingController }) {
   const router = Router();
 
-  router.get("/:buildingId", BuildingController.get);
+  router.get("/:id", BuildingController.get);
   router.get("", BuildingController.getAll);
   //router.get("/user/:userId", BuildingController.getUserBuildings);
   router.post("", BuildingController.create);
-  router.patch("/:buildingId", BuildingController.update);
-  router.delete("/:buildingId", BuildingController.delete);
+  router.patch("/:id", BuildingController.update);
+  router.delete("/:id", BuildingController.delete);
 
   return router;
 }

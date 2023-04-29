@@ -15,7 +15,7 @@ const {
   UserService,
   VehicleService,
   WorkerService,
-} = require("../../services/v2");
+} = require("../../v2/services");
 //controllers
 const {
   AuthController,
@@ -27,7 +27,7 @@ const {
   UserController,
   VehicleController,
   WorkerController,
-} = require("../../controllers/v2");
+} = require("../../v2/controllers");
 //routes
 const {
   AuthRoutes,
@@ -39,8 +39,8 @@ const {
   UserRoutes,
   VehicleRoutes,
   WorkerRoutes,
-} = require("../../routes/v2/index.routes");
-const Routes = require("../../routes/v2");
+} = require("../../v2/routes/index.routes");
+const Routes = require("../../v2/routes");
 
 //models
 const {
@@ -53,7 +53,7 @@ const {
   User,
   Vehicle,
   Worker,
-} = require("../../models/v2");
+} = require("../../v2/models");
 //repositories
 const {
   AuthRepository,
@@ -65,7 +65,7 @@ const {
   UserRepository,
   VehicleRepository,
   WorkerRepository,
-} = require("../../repositories/v2");
+} = require("../../v2/repositories");
 //const container = require("../container");
 
 const container = createContainer();

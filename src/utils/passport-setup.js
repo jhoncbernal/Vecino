@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const { User, Worker, Auth } = require("../models/v2/index"); // Assuming your models are exported from a single file
+const { User, Worker, Auth } = require("../v2/models/index"); // Assuming your models are exported from a single file
 
 // Local authentication
 passport.use(

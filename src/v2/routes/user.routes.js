@@ -8,7 +8,7 @@ module.exports = function ({ UserController }) {
 
   router.get("/:id",EnsureAuthenticated, UserController.get);
   router.get("",EnsureAuthenticated, UserController.getAll);
-  router.post("", UserController.create);
+  router.post("/register", UserController.create);
   router.patch("/:id", UserController.update);
   router.delete("/:id", UserController.delete);
 

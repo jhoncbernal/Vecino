@@ -2,10 +2,19 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
+const validator = require("validator");
 const { compareSync, hashSync, genSaltSync } = require("bcryptjs");
 const authSchema = new Schema({
   _id: { type: String, default: uuidv4 },
-  email: { type: String, unique: true, required: true },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    validate: {
+      validator: (email) => validator.isEmail(email),
+      message: "Invalid email format",
+    },
+  },
   password: {
     type: String,
     required: function () {

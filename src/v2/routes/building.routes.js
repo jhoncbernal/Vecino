@@ -6,7 +6,7 @@ module.exports = function ({ BuildingController }) {
   router.get("/:id", BuildingController.get);
   router.get("", BuildingController.getAll);
   //router.get("/user/:userId", BuildingController.getUserBuildings);
-  router.post("", BuildingController.create);
+  router.post("/register", BuildingController.create);
   router.patch("/:id", BuildingController.update);
   router.delete("/:id", BuildingController.delete);
 

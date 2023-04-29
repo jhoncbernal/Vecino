@@ -6,7 +6,7 @@ module.exports = function ({ AddressController }) {
   router.get("/:id", AddressController.get);
   router.get("", AddressController.getAll);
   //router.get("/user/:userId", AddressController.getUserAddresss);
-  router.post("", AddressController.create);
+  router.post("/register", AddressController.create);
   router.patch("/:id", AddressController.update);
   router.delete("/:id", AddressController.delete);
 

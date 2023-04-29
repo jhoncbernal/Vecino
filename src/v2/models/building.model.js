@@ -9,6 +9,7 @@ const buildingSchema = new Schema({
   address: {
     type: String,
     ref: "Address",
+    required: true,
   },
   subscriptionPlan: { type: String, ref: "Plan", required: true },
   workers: [{ type: String, ref: "Worker" }],

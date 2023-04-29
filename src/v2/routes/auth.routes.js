@@ -7,7 +7,7 @@ module.exports = function ({ AuthController }) {
     res.redirect("/");
   });
   //router.post("/signin", AuthController.create);
-  router.post("/signup", AuthController.create);
+  router.post("/register", AuthController.create);
   //router.post("/signin", AuthController.signIn);
   //router.post("/recover", AuthController.recover);
   //router.get("/reset/:token", AuthController.reset);

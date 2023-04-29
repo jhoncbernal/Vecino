@@ -14,7 +14,9 @@ passport.use(
         if (!auth) {
           return done(null, false, { message: "Incorrect email or password." });
         }
-        auth.comparePasswords(password);
+        if (!auth.comparePasswords(password)) {
+          return done(null, false, { message: "Incorrect email or password." });
+        }
         const user =
           (await User.findOne({ auth: auth._id })) ||
           (await Worker.findOne({ auth: auth._id }));

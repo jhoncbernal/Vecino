@@ -7,6 +7,7 @@ const notificationSchema = new Schema({
   dateSent: Date,
   isRead: Boolean,
   building: { type: String, ref: "Building" },
+  imgNotification: { type: String, ref: "File" },
 });
 
 const Notification = mongoose.model("Notification", notificationSchema);

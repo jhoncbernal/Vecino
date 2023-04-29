@@ -6,10 +6,8 @@ const buildingSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   name: String,
   address: {
-    street: String,
-    city: String,
-    state: String,
-    zipCode: String,
+    type: String,
+    ref: "Address",
   },
   subscriptionPlan: { type: String, ref: "SubscriptionPlan", required: true },
   workers: [{ type: String, ref: "Worker" }],
@@ -79,13 +77,7 @@ const maintenanceRequestSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-const fileSchema = new Schema({
-  _id: { type: String, default: uuidv4 },
-  fileName: { type: String, required: true },
-  fileType: { type: String, required: true },
-  fileUrl: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
+
 const subscriptionPlanSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   name: { type: String, required: true },
@@ -113,7 +105,6 @@ const MaintenanceRequest = mongoose.model(
   "MaintenanceRequest",
   maintenanceRequestSchema
 );
-const File = mongoose.model("File", fileSchema);
 const Building = mongoose.model("Building", buildingSchema);
 module.exports = {
   Building,
@@ -123,7 +114,5 @@ module.exports = {
   ApprovalRequest,
   approvalRequestSchema,
   MaintenanceRequest,
-  maintenanceRequestSchema,
-  File,
-  fileSchema,
+  maintenanceRequestSchema
 };

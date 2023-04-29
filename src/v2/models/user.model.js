@@ -19,23 +19,7 @@ const userSchema = new Schema({
   friendsAndFamily: [{ type: String, ref: "User" }],
 });
 
-const addressSchema = new Schema({
-  _id: { type: String, default: uuidv4 },
-  building: { type: String, ref: "Building" },
-  street: String,
-  city: String,
-  state: String,
-  zipCode: String,
-  unitResidents: [{ type: String, ref: "User" }],
-  latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true },
-  unitNumber: { type: String, required: true },
-  unitType: { type: String, enum: ["apartment", "house"], required: true },
-  propertyInfo: {
-    sectionNumber: { type: String },
-    propertyNumber: { type: String },
-  },
-});
+
 
 const unitResidentSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -45,7 +29,6 @@ const unitResidentSchema = new Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-const Address = mongoose.model("Address", addressSchema);
 const UnitResident = mongoose.model("UnitResident", unitResidentSchema);
 
 module.exports = { User, userSchema };

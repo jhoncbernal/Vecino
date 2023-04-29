@@ -10,7 +10,7 @@ const buildingSchema = new Schema({
     type: String,
     ref: "Address",
   },
-  subscriptionPlan: { type: String, ref: "SubscriptionPlan", required: true },
+  subscriptionPlan: { type: String, ref: "Plan", required: true },
   workers: [{ type: String, ref: "Worker" }],
   guestParkingLot: { type: String, ref: "ParkingLot" },
   residentParkingLot: { type: String, ref: "ParkingLot" },
@@ -78,24 +78,7 @@ const maintenanceRequestSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-const subscriptionPlanSchema = new Schema({
-  _id: { type: String, default: uuidv4 },
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  price: { type: Number, required: true },
-  features: {
-    type: Map,
-    of: Boolean,
-    required: true,
-  },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
 
-const SubscriptionPlan = mongoose.model(
-  "SubscriptionPlan",
-  subscriptionPlanSchema
-);
 
 const ApprovalRequest = mongoose.model(
   "ApprovalRequest",
@@ -109,8 +92,6 @@ const Building = mongoose.model("Building", buildingSchema);
 module.exports = {
   Building,
   buildingSchema,
-  SubscriptionPlan,
-  subscriptionPlanSchema,
   ApprovalRequest,
   approvalRequestSchema,
   MaintenanceRequest,

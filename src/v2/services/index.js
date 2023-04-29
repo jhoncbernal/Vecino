@@ -10,4 +10,5 @@ module.exports = {
   WorkerService: require("./worker.service"),
   AddressService: require("./address.service"),
   FileService: require("./file.service"),
+  PlanService: require("./plan.service"),
 };

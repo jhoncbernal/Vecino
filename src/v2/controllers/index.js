@@ -10,4 +10,5 @@ module.exports = {
   WorkerController: require("./worker.controller"),
   AddressController: require("./address.controller"),
   FileController: require("./file.controller"),
+  PlanController: require("./plan.controller"),
 };

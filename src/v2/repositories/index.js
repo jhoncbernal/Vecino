@@ -10,4 +10,5 @@ module.exports = {
     WorkerRepository: require("./worker.repository"),
     AddressRepository: require("./address.repository"),
     FileRepository: require("./file.repository"),
+    PlanRepository: require("./plan.repository"),
 };

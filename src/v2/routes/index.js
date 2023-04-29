@@ -26,7 +26,8 @@ module.exports = function ({
   VehicleRoutes,
   WorkerRoutes,
   AddressRoutes,
-  FileRoutes
+  FileRoutes,
+  PlanRoutes
 }) {
   const router = express.Router();
   const apiRoutesV2 = express.Router();
@@ -79,6 +80,7 @@ module.exports = function ({
   apiRoutesV2.use("/worker", WorkerRoutes);
   apiRoutesV2.use("/address", AddressRoutes);
   apiRoutesV2.use("/file", FileRoutes);
+  apiRoutesV2.use("/plan", PlanRoutes);
   // Use routes and middleware in router
   router.use("/v2/api", apiRoutesV2);
   router.use('/', (req, res) => {

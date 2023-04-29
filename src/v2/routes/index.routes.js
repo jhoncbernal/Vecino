@@ -10,4 +10,5 @@ module.exports = {
   WorkerRoutes: require("./worker.routes"),
   AddressRoutes: require("./address.routes"),
   FileRoutes: require("./file.routes"),
+  PlanRoutes: require("./plan.routes"),
 };

@@ -10,4 +10,5 @@ module.exports = {
   Worker: require("./worker.model").Worker,
   Address: require("./address.model").Address,
   File: require("./file.model").File,
+  Plan: require("./plan.model").Plan,
 };

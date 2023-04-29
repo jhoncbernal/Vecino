@@ -16,7 +16,8 @@ const {
   VehicleService,
   WorkerService,
   AddressService,
-  FileService
+  FileService,
+  PlanService,
 } = require("../../v2/services");
 //controllers
 const {
@@ -30,7 +31,8 @@ const {
   VehicleController,
   WorkerController,
   AddressController,
-  FileController
+  FileController,
+  PlanController,
 } = require("../../v2/controllers");
 //routes
 const {
@@ -44,7 +46,8 @@ const {
   VehicleRoutes,
   WorkerRoutes,
   AddressRoutes,
-  FileRoutes
+  FileRoutes,
+  PlanRoutes,
 } = require("../../v2/routes/index.routes");
 const Routes = require("../../v2/routes");
 
@@ -60,7 +63,8 @@ const {
   Vehicle,
   Worker,
   Address,
-  File
+  File,
+  Plan,
 } = require("../../v2/models");
 //repositories
 const {
@@ -74,7 +78,8 @@ const {
   VehicleRepository,
   WorkerRepository,
   AddressRepository,
-  FileRepository
+  FileRepository,
+  PlanRepository,
 } = require("../../v2/repositories");
 //const container = require("../container");
 
@@ -98,6 +103,7 @@ container
     WorkerService: asClass(WorkerService).singleton(),
     AddressService: asClass(AddressService).singleton(),
     FileService: asClass(FileService).singleton(),
+    PlanService: asClass(PlanService).singleton(),
   })
   .register({
     AuthController: asClass(AuthController.bind(AuthController)).singleton(),
@@ -123,6 +129,7 @@ container
       AddressController.bind(AddressController)
     ).singleton(),
     FileController: asClass(FileController.bind(FileController)).singleton(),
+    PlanController: asClass(PlanController.bind(PlanController)).singleton(),
   })
   .register({
     AuthRoutes: asFunction(AuthRoutes).singleton(),
@@ -136,6 +143,7 @@ container
     WorkerRoutes: asFunction(WorkerRoutes).singleton(),
     AddressRoutes: asFunction(AddressRoutes).singleton(),
     FileRoutes: asFunction(FileRoutes).singleton(),
+    PlanRoutes: asFunction(PlanRoutes).singleton(),
   })
   .register({
     Auth: asValue(Auth),
@@ -149,6 +157,7 @@ container
     Worker: asValue(Worker),
     Address: asValue(Address),
     File: asValue(File),
+    Plan: asValue(Plan),
   })
   .register({
     AuthRepository: asClass(AuthRepository).singleton(),
@@ -162,6 +171,7 @@ container
     WorkerRepository: asClass(WorkerRepository).singleton(),
     AddressRepository: asClass(AddressRepository).singleton(),
     FileRepository: asClass(FileRepository).singleton(),
+    PlanRepository: asClass(PlanRepository).singleton(),
   });
 
 module.exports = container;

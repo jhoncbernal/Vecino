@@ -15,6 +15,8 @@ const {
   UserService,
   VehicleService,
   WorkerService,
+  AddressService,
+  FileService
 } = require("../../v2/services");
 //controllers
 const {
@@ -27,6 +29,8 @@ const {
   UserController,
   VehicleController,
   WorkerController,
+  AddressController,
+  FileController
 } = require("../../v2/controllers");
 //routes
 const {
@@ -39,6 +43,8 @@ const {
   UserRoutes,
   VehicleRoutes,
   WorkerRoutes,
+  AddressRoutes,
+  FileRoutes
 } = require("../../v2/routes/index.routes");
 const Routes = require("../../v2/routes");
 
@@ -53,6 +59,8 @@ const {
   User,
   Vehicle,
   Worker,
+  Address,
+  File
 } = require("../../v2/models");
 //repositories
 const {
@@ -65,6 +73,8 @@ const {
   UserRepository,
   VehicleRepository,
   WorkerRepository,
+  AddressRepository,
+  FileRepository
 } = require("../../v2/repositories");
 //const container = require("../container");
 
@@ -86,6 +96,8 @@ container
     UserService: asClass(UserService).singleton(),
     VehicleService: asClass(VehicleService).singleton(),
     WorkerService: asClass(WorkerService).singleton(),
+    AddressService: asClass(AddressService).singleton(),
+    FileService: asClass(FileService).singleton(),
   })
   .register({
     AuthController: asClass(AuthController.bind(AuthController)).singleton(),
@@ -107,6 +119,10 @@ container
     WorkerController: asClass(
       WorkerController.bind(WorkerController)
     ).singleton(),
+    AddressController: asClass(
+      AddressController.bind(AddressController)
+    ).singleton(),
+    FileController: asClass(FileController.bind(FileController)).singleton(),
   })
   .register({
     AuthRoutes: asFunction(AuthRoutes).singleton(),
@@ -118,6 +134,8 @@ container
     UserRoutes: asFunction(UserRoutes).singleton(),
     VehicleRoutes: asFunction(VehicleRoutes).singleton(),
     WorkerRoutes: asFunction(WorkerRoutes).singleton(),
+    AddressRoutes: asFunction(AddressRoutes).singleton(),
+    FileRoutes: asFunction(FileRoutes).singleton(),
   })
   .register({
     Auth: asValue(Auth),
@@ -129,6 +147,8 @@ container
     User: asValue(User),
     Vehicle: asValue(Vehicle),
     Worker: asValue(Worker),
+    Address: asValue(Address),
+    File: asValue(File),
   })
   .register({
     AuthRepository: asClass(AuthRepository).singleton(),
@@ -140,6 +160,8 @@ container
     UserRepository: asClass(UserRepository).singleton(),
     VehicleRepository: asClass(VehicleRepository).singleton(),
     WorkerRepository: asClass(WorkerRepository).singleton(),
+    AddressRepository: asClass(AddressRepository).singleton(),
+    FileRepository: asClass(FileRepository).singleton(),
   });
 
 module.exports = container;

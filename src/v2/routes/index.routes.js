@@ -8,4 +8,6 @@ module.exports = {
   UserRoutes: require("./user.routes"),
   VehicleRoutes: require("./vehicle.routes"),
   WorkerRoutes: require("./worker.routes"),
+  AddressRoutes: require("./address.routes"),
+  FileRoutes: require("./file.routes"),
 };

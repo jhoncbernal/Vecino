@@ -8,4 +8,6 @@ module.exports = {
     UserRepository: require("./user.repository"),
     VehicleRepository: require("./vehicle.repository"),
     WorkerRepository: require("./worker.repository"),
+    AddressRepository: require("./address.repository"),
+    FileRepository: require("./file.repository"),
 };

@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const userSchema = new Schema({
   _id: { type: String, default: uuidv4 },
+  photo: { type: String, ref: "File" },
   firstName: String,
   lastName: String,
   auth: { type: String, ref: "Auth", required: true },

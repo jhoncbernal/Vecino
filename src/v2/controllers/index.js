@@ -8,4 +8,6 @@ module.exports = {
   UserController: require("./user.controller"),
   VehicleController: require("./vehicle.controller"),
   WorkerController: require("./worker.controller"),
+  AddressController: require("./address.controller"),
+  FileController: require("./file.controller"),
 };

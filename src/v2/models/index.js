@@ -8,4 +8,6 @@ module.exports = {
   User: require("./user.model").User,
   Vehicle: require("./vehicle.model").Vehicle,
   Worker: require("./worker.model").Worker,
+  Address: require("./address.model").Address,
+  File: require("./file.model").File,
 };

@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const workerSchema = new Schema({
   _id: { type: String, default: uuidv4 },
+  photo: { type: String, ref: "File" },
   name: String,
   contactNumber: String,
   email: String,

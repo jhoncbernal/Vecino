@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const buildingSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   name: String,
+  photo: { type: String, ref: "File" },
   address: {
     type: String,
     ref: "Address",
@@ -77,7 +78,6 @@ const maintenanceRequestSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-
 const subscriptionPlanSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   name: { type: String, required: true },
@@ -114,5 +114,5 @@ module.exports = {
   ApprovalRequest,
   approvalRequestSchema,
   MaintenanceRequest,
-  maintenanceRequestSchema
+  maintenanceRequestSchema,
 };

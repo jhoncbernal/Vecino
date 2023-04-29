@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
 const vehicleSchema = new Schema({
   _id: { type: String, default: uuidv4 },
+  photo: { type: String, ref: "File" },
   make: String,
   model: String,
   year: Number,

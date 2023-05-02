@@ -6,7 +6,7 @@ export default function ({ ParkingSpotController }) {
   router.get("/:id", ParkingSpotController.get);
   router.get("", ParkingSpotController.getAll);
   //router.get("/user/:userId", ParkingSpotController.getUserParkingSpots);
-  router.post("", ParkingSpotController.create);
+  router.post("/register", ParkingSpotController.create);
   router.patch("/:id", ParkingSpotController.update);
   router.delete("/:id", ParkingSpotController.delete);
 

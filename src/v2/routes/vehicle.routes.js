@@ -6,7 +6,7 @@ export default function ({VehicleController}) {
   router.get("/:id", VehicleController.get);
   router.get("", VehicleController.getAll);
   //router.get("/user/:userId", VehicleController.getUserVehicles);
-  router.post("", VehicleController.create);
+  router.post("/register", VehicleController.create);
   router.patch("/:id", VehicleController.update);
   router.delete("/:id", VehicleController.delete);
 

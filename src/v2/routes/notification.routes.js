@@ -6,7 +6,7 @@ export default function ({ NotificationController }) {
   router.get("/:id", NotificationController.get);
   router.get("", NotificationController.getAll);
   //router.get("/user/:userId", NotificationController.getUserNotifications);
-  router.post("", NotificationController.create);
+  router.post("/register", NotificationController.create);
   router.patch("/:id", NotificationController.update);
   router.delete("/:id", NotificationController.delete);
 

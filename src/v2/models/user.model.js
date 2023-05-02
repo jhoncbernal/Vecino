@@ -10,7 +10,6 @@ const userSchema = new Schema(
     firstName: String,
     lastName: String,
     auth: { type: String, ref: "Auth", required: true },
-    addresses: [{ type: String, ref: "Address", required: true }],
     vehicles: [{ type: String, ref: "Vehicle" }],
     bills: [{ type: String, ref: "Bill" }],
     notifications: [{ type: String, ref: "Notification" }],

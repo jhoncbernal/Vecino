@@ -34,11 +34,10 @@ const buildingSchema = new Schema({
 });
 const parkingLotSchema = new Schema({
   _id: { type: String, default: uuidv4 },
-  building: { type: String, ref: "Building", required: true },
   spots: [{ type: String, ref: "ParkingSpot" }],
 });
 
-const ParkingLot = model("ParkingLot", parkingLotSchema);
+ model("ParkingLot", parkingLotSchema);
 
 const approvalRequestSchema = new Schema({
   _id: { type: String, default: uuidv4 },

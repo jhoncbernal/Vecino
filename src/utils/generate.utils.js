@@ -8,4 +8,4 @@ function generatePin() {
   }
   return pin;
 }
-export default {generatePin};
+export { generatePin };

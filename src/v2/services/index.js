@@ -13,6 +13,7 @@ import FileService from "./file.service.js";
 import PlanService from "./plan.service.js";
 import PetService from "./pet.service.js";
 import RecidentialUnitService from "./recidentialUnit.service.js";
+import PackageService from "./package.service.js";
 
 // Export your services
 export {
@@ -30,4 +31,5 @@ export {
   PlanService,
   PetService,
   RecidentialUnitService,
+  PackageService
 };

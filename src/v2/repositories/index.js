@@ -13,6 +13,7 @@ import FileRepository from "./file.repository.js";
 import PlanRepository from "./plan.repository.js";
 import PetRepository from "./pet.repository.js";
 import RecidentialUnitRepository from "./recidentialUnit.repository.js";
+import PackageRepository from "./package.repository.js";
 
 // Export your repositories
 export {
@@ -30,4 +31,5 @@ export {
   PlanRepository,
   PetRepository,
   RecidentialUnitRepository,
+  PackageRepository
 };

@@ -30,7 +30,14 @@ const residentialUnitSchema = new Schema({
   tenants: [{ type: String, ref: "User" }],
   paymentRaiting: { type: String },
   guests: [{ type: String, ref: "Guest" }],
-});
+  notificationWay: {
+    type: String,
+    required: true,
+    enum: ["email", "sms", "both"],
+    default: "email",
+  },
+
+  });
 
 const RecidentialUnit = model("RecidentialUnit", residentialUnitSchema);
 export { RecidentialUnit, residentialUnitSchema };

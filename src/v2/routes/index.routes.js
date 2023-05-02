@@ -13,6 +13,7 @@ import FileRoutes from "./file.routes.js";
 import PlanRoutes from "./plan.routes.js";
 import PetRoutes from "./pet.routes.js";
 import RecidentialUnitRoutes from "./recidentialUnit.routes.js";
+import PackageRoutes from "./package.routes.js";
 
 // Export your routes
 export {
@@ -30,4 +31,5 @@ export {
   PlanRoutes,
   PetRoutes,
   RecidentialUnitRoutes,
+  PackageRoutes
 };

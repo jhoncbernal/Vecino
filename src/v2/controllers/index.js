@@ -13,6 +13,7 @@ import FileController from "./file.controller.js";
 import PlanController from "./plan.controller.js";
 import PetController from "./pet.controller.js";
 import RecidentialUnitController from "./recidentialUnit.controller.js";
+import PackageController from "./package.controller.js";
 
 // Export your controllers
 export {
@@ -30,4 +31,5 @@ export {
   PlanController,
   PetController,
   RecidentialUnitController,
+  PackageController
 };

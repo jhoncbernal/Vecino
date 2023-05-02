@@ -5,10 +5,16 @@ const notificationSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   message: String,
   dateSent: Date,
-  isRead: Boolean,
-  building: { type: String, ref: "Building" },
-  file: { type: String, ref: "File" },
+  isRead: { type: Boolean, default: false },
+  recipientType: { type: String, enum: ["recidency","user", "worker", "building"] },
+  notifiedBy: {
+    type: String,
+    required: true,
+    enum: ["email", "sms", "both"],
+    default: "email",
+  },
 });
 
 const Notification = model("Notification", notificationSchema);
-export  { Notification, notificationSchema };
+
+export { Notification, notificationSchema };

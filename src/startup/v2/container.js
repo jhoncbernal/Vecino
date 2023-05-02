@@ -5,179 +5,60 @@ import app from "../index.js";
 import database from "../../database/mongoose.database.js";
 
 //services
-import {
-  AuthService,
-  BillService,
-  BuildingService,
-  GuestService,
-  NotificationService,
-  ParkingSpotService,
-  UserService,
-  VehicleService,
-  WorkerService,
-  AddressService,
-  FileService,
-  PlanService,
-  PetService,
-  RecidentialUnitService,
-} from "../../v2/services/index.js";
+import * as Services from "../../v2/services/index.js";
 //controllers
-import {
-  AuthController,
-  BillController,
-  BuildingController,
-  GuestController,
-  NotificationController,
-  ParkingSpotController,
-  UserController,
-  VehicleController,
-  WorkerController,
-  AddressController,
-  FileController,
-  PlanController,
-  PetController,
-  RecidentialUnitController,
-} from "../../v2/controllers/index.js";
+import * as Controllers from "../../v2/controllers/index.js";
 //routes
-import { AuthRoutes, BillRoutes, BuildingRoutes, GuestRoutes, NotificationRoutes, ParkingSpotRoutes, UserRoutes, VehicleRoutes, WorkerRoutes, AddressRoutes, FileRoutes, PlanRoutes, PetRoutes, RecidentialUnitRoutes } from "../../v2/routes/index.routes.js";
-import Routes from "../../v2/routes/index.js";
+import * as Routes from "../../v2/routes/index.routes.js";
+//router
+import Router from "../../v2/routes/index.js";
 //models
-import {
-  Auth,
-  Bill,
-  Building,
-  Guest,
-  Notification,
-  ParkingSpot,
-  User,
-  Vehicle,
-  Worker,
-  Address,
-  File,
-  Plan,
-  Pet,
-  RecidentialUnit,
-} from "../../v2/models/index.js";
+import * as Models from "../../v2/models/index.js";
 //repositories
-import {
-  AuthRepository,
-  BillRepository,
-  BuildingRepository,
-  GuestRepository,
-  NotificationRepository,
-  ParkingSpotRepository,
-  UserRepository,
-  VehicleRepository,
-  WorkerRepository,
-  AddressRepository,
-  FileRepository,
-  PlanRepository,
-  PetRepository,
-  RecidentialUnitRepository,
-} from "../../v2/repositories/index.js";
-//const container = require("../container");
+import * as Repositories from "../../v2/repositories/index.js";
 
 const container = createContainer();
-container
-  .register({
-    app: asClass(app).singleton(),
-    router: asClass(Routes).singleton(),
-    config: asValue(config),
-    database: asClass(database).singleton(),
-  })
-  .register({
-    AuthService: asClass(AuthService).singleton(),
-    BillService: asClass(BillService).singleton(),
-    BuildingService: asClass(BuildingService).singleton(),
-    GuestService: asClass(GuestService).singleton(),
-    NotificationService: asClass(NotificationService).singleton(),
-    ParkingSpotService: asClass(ParkingSpotService).singleton(),
-    UserService: asClass(UserService).singleton(),
-    VehicleService: asClass(VehicleService).singleton(),
-    WorkerService: asClass(WorkerService).singleton(),
-    AddressService: asClass(AddressService).singleton(),
-    FileService: asClass(FileService).singleton(),
-    PlanService: asClass(PlanService).singleton(),
-    PetService: asClass(PetService).singleton(),
-    RecidentialUnitService: asClass(RecidentialUnitService).singleton(),
-  })
-  .register({
-    AuthController: asClass(AuthController.bind(AuthController)).singleton(),
-    BillController: asClass(BillController.bind(BillController)).singleton(),
-    BuildingController: asClass(
-      BuildingController.bind(BuildingController)
-    ).singleton(),
-    GuestController: asClass(GuestController.bind(GuestController)).singleton(),
-    NotificationController: asClass(
-      NotificationController.bind(NotificationController)
-    ).singleton(),
-    ParkingSpotController: asClass(
-      ParkingSpotController.bind(ParkingSpotController)
-    ).singleton(),
-    UserController: asClass(UserController.bind(UserController)).singleton(),
-    VehicleController: asClass(
-      VehicleController.bind(VehicleController)
-    ).singleton(),
-    WorkerController: asClass(
-      WorkerController.bind(WorkerController)
-    ).singleton(),
-    AddressController: asClass(
-      AddressController.bind(AddressController)
-    ).singleton(),
-    FileController: asClass(FileController.bind(FileController)).singleton(),
-    PlanController: asClass(PlanController.bind(PlanController)).singleton(),
-    PetController: asClass(PetController.bind(PetController)).singleton(),
-    RecidentialUnitController: asClass(
-      RecidentialUnitController.bind(RecidentialUnitController)
-    ).singleton(),
-  })
-  .register({
-    AuthRoutes: asFunction(AuthRoutes).singleton(),
-    BillRoutes: asFunction(BillRoutes).singleton(),
-    BuildingRoutes: asFunction(BuildingRoutes).singleton(),
-    GuestRoutes: asFunction(GuestRoutes).singleton(),
-    NotificationRoutes: asFunction(NotificationRoutes).singleton(),
-    ParkingSpotRoutes: asFunction(ParkingSpotRoutes).singleton(),
-    UserRoutes: asFunction(UserRoutes).singleton(),
-    VehicleRoutes: asFunction(VehicleRoutes).singleton(),
-    WorkerRoutes: asFunction(WorkerRoutes).singleton(),
-    AddressRoutes: asFunction(AddressRoutes).singleton(),
-    FileRoutes: asFunction(FileRoutes).singleton(),
-    PlanRoutes: asFunction(PlanRoutes).singleton(),
-    PetRoutes: asFunction(PetRoutes).singleton(),
-    RecidentialUnitRoutes: asFunction(RecidentialUnitRoutes).singleton(),
-  })
-  .register({
-    Auth: asValue(Auth),
-    Bill: asValue(Bill),
-    Building: asValue(Building),
-    Guest: asValue(Guest),
-    Notification: asValue(Notification),
-    ParkingSpot: asValue(ParkingSpot),
-    User: asValue(User),
-    Vehicle: asValue(Vehicle),
-    Worker: asValue(Worker),
-    Address: asValue(Address),
-    File: asValue(File),
-    Plan: asValue(Plan),
-    Pet: asValue(Pet),
-    RecidentialUnit: asValue(RecidentialUnit),
-  })
-  .register({
-    AuthRepository: asClass(AuthRepository).singleton(),
-    BillRepository: asClass(BillRepository).singleton(),
-    BuildingRepository: asClass(BuildingRepository).singleton(),
-    GuestRepository: asClass(GuestRepository).singleton(),
-    NotificationRepository: asClass(NotificationRepository).singleton(),
-    ParkingSpotRepository: asClass(ParkingSpotRepository).singleton(),
-    UserRepository: asClass(UserRepository).singleton(),
-    VehicleRepository: asClass(VehicleRepository).singleton(),
-    WorkerRepository: asClass(WorkerRepository).singleton(),
-    AddressRepository: asClass(AddressRepository).singleton(),
-    FileRepository: asClass(FileRepository).singleton(),
-    PlanRepository: asClass(PlanRepository).singleton(),
-    PetRepository: asClass(PetRepository).singleton(),
-    RecidentialUnitRepository: asClass(RecidentialUnitRepository).singleton(),
+container.register({
+  app: asClass(app).singleton(),
+  router: asClass(Router).singleton(),
+  config: asValue(config),
+  database: asClass(database).singleton(),
+});
+
+// Register all services as classes
+Object.entries(Services).forEach(([name, Service]) => {
+  container.register({
+    [name]: asClass(Service).singleton(),
   });
+});
+
+// Register all controllers as classes with bound methods
+Object.entries(Controllers).forEach(([name, Controller]) => {
+  container.register({
+    [name]: asClass(Controller.bind(Controller)).singleton(),
+  });
+});
+
+// Register all routes as functions
+Object.entries(Routes).forEach(([name, Route]) => {
+  container.register({
+    [name]: asFunction(Route).singleton(),
+  });
+});
+
+// Register all repositories as classes
+Object.entries(Repositories).forEach(([name, Repository]) => {
+  container.register({
+    [name]: asClass(Repository).singleton(),
+  });
+});
+
+// Register all models as values
+Object.entries(Models).forEach(([name, Model]) => {
+  container.register({
+    [name]: asValue(Model),
+  });
+});
+
 
 export default container;

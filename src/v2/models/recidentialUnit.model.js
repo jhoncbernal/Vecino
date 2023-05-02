@@ -26,11 +26,11 @@ const residentialUnitSchema = new Schema({
     propertyNumber: { type: String },
   },
   needsParkingSpace: { type: Boolean, default: false },
-  parkingSpace: [{ type: String, ref: "ParkingSpace" }],
+  parkingSpace: [{ type: String, ref: "ParkingSpot" }],
   tenants: [{ type: String, ref: "User" }],
   paymentRaiting: { type: String },
   guests: [{ type: String, ref: "Guest" }],
 });
 
-const RecidentialUnit = model("RecidentialUnit", addressSchema);
+const RecidentialUnit = model("RecidentialUnit", residentialUnitSchema);
 export { RecidentialUnit, residentialUnitSchema };

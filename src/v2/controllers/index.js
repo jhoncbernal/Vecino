@@ -11,6 +11,8 @@ import WorkerController from "./worker.controller.js";
 import AddressController from "./address.controller.js";
 import FileController from "./file.controller.js";
 import PlanController from "./plan.controller.js";
+import PetController from "./pet.controller.js";
+import RecidentialUnitController from "./recidentialUnit.controller.js";
 
 // Export your controllers
 export {
@@ -26,4 +28,6 @@ export {
   AddressController,
   FileController,
   PlanController,
+  PetController,
+  RecidentialUnitController,
 };

@@ -11,6 +11,8 @@ import WorkerRoutes from "./worker.routes.js";
 import AddressRoutes from "./address.routes.js";
 import FileRoutes from "./file.routes.js";
 import PlanRoutes from "./plan.routes.js";
+import PetRoutes from "./pet.routes.js";
+import RecidentialUnitRoutes from "./recidentialUnit.routes.js";
 
 // Export your routes
 export {
@@ -26,4 +28,6 @@ export {
   AddressRoutes,
   FileRoutes,
   PlanRoutes,
+  PetRoutes,
+  RecidentialUnitRoutes,
 };

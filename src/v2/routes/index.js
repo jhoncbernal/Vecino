@@ -22,6 +22,8 @@ export default function ({
   AddressRoutes,
   FileRoutes,
   PlanRoutes,
+  PetRoutes,
+  RecidentialUnitRoutes,
 }) {
   const router = express.Router();
   const apiRoutesV2 = express.Router();
@@ -68,6 +70,8 @@ export default function ({
   apiRoutesV2.use("/address", AddressRoutes);
   apiRoutesV2.use("/file", FileRoutes);
   apiRoutesV2.use("/plan", PlanRoutes);
+  apiRoutesV2.use("/pet", PetRoutes);
+  apiRoutesV2.use("/recidentialunit", RecidentialUnitRoutes);
 
   router.use("/v2/api", apiRoutesV2);
   router.use("/", (req, res) => {

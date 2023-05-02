@@ -18,6 +18,8 @@ import {
   AddressService,
   FileService,
   PlanService,
+  PetService,
+  RecidentialUnitService,
 } from "../../v2/services/index.js";
 //controllers
 import {
@@ -33,9 +35,11 @@ import {
   AddressController,
   FileController,
   PlanController,
+  PetController,
+  RecidentialUnitController,
 } from "../../v2/controllers/index.js";
 //routes
-import { AuthRoutes, BillRoutes, BuildingRoutes, GuestRoutes, NotificationRoutes, ParkingSpotRoutes, UserRoutes, VehicleRoutes, WorkerRoutes, AddressRoutes, FileRoutes, PlanRoutes } from "../../v2/routes/index.routes.js";
+import { AuthRoutes, BillRoutes, BuildingRoutes, GuestRoutes, NotificationRoutes, ParkingSpotRoutes, UserRoutes, VehicleRoutes, WorkerRoutes, AddressRoutes, FileRoutes, PlanRoutes, PetRoutes, RecidentialUnitRoutes } from "../../v2/routes/index.routes.js";
 import Routes from "../../v2/routes/index.js";
 //models
 import {
@@ -51,6 +55,8 @@ import {
   Address,
   File,
   Plan,
+  Pet,
+  RecidentialUnit,
 } from "../../v2/models/index.js";
 //repositories
 import {
@@ -66,6 +72,8 @@ import {
   AddressRepository,
   FileRepository,
   PlanRepository,
+  PetRepository,
+  RecidentialUnitRepository,
 } from "../../v2/repositories/index.js";
 //const container = require("../container");
 
@@ -90,6 +98,8 @@ container
     AddressService: asClass(AddressService).singleton(),
     FileService: asClass(FileService).singleton(),
     PlanService: asClass(PlanService).singleton(),
+    PetService: asClass(PetService).singleton(),
+    RecidentialUnitService: asClass(RecidentialUnitService).singleton(),
   })
   .register({
     AuthController: asClass(AuthController.bind(AuthController)).singleton(),
@@ -116,6 +126,10 @@ container
     ).singleton(),
     FileController: asClass(FileController.bind(FileController)).singleton(),
     PlanController: asClass(PlanController.bind(PlanController)).singleton(),
+    PetController: asClass(PetController.bind(PetController)).singleton(),
+    RecidentialUnitController: asClass(
+      RecidentialUnitController.bind(RecidentialUnitController)
+    ).singleton(),
   })
   .register({
     AuthRoutes: asFunction(AuthRoutes).singleton(),
@@ -130,6 +144,8 @@ container
     AddressRoutes: asFunction(AddressRoutes).singleton(),
     FileRoutes: asFunction(FileRoutes).singleton(),
     PlanRoutes: asFunction(PlanRoutes).singleton(),
+    PetRoutes: asFunction(PetRoutes).singleton(),
+    RecidentialUnitRoutes: asFunction(RecidentialUnitRoutes).singleton(),
   })
   .register({
     Auth: asValue(Auth),
@@ -144,6 +160,8 @@ container
     Address: asValue(Address),
     File: asValue(File),
     Plan: asValue(Plan),
+    Pet: asValue(Pet),
+    RecidentialUnit: asValue(RecidentialUnit),
   })
   .register({
     AuthRepository: asClass(AuthRepository).singleton(),
@@ -158,6 +176,8 @@ container
     AddressRepository: asClass(AddressRepository).singleton(),
     FileRepository: asClass(FileRepository).singleton(),
     PlanRepository: asClass(PlanRepository).singleton(),
+    PetRepository: asClass(PetRepository).singleton(),
+    RecidentialUnitRepository: asClass(RecidentialUnitRepository).singleton(),
   });
 
 export default container;

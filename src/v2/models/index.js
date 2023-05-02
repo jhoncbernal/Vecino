@@ -12,6 +12,7 @@ import { Address } from "./address.model.js";
 import { File } from "./file.model.js";
 import { Plan } from "./plan.model.js";
 import { Pet } from "./pet.model.js";
+import { RecidentialUnit } from "./recidentialUnit.model.js";
 
 // Export your models
 export {
@@ -28,4 +29,5 @@ export {
   File,
   Plan,
   Pet,
+  RecidentialUnit,
 };

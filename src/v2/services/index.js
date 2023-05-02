@@ -11,6 +11,8 @@ import WorkerService from "./worker.service.js";
 import AddressService from "./address.service.js";
 import FileService from "./file.service.js";
 import PlanService from "./plan.service.js";
+import PetService from "./pet.service.js";
+import RecidentialUnitService from "./recidentialUnit.service.js";
 
 // Export your services
 export {
@@ -26,4 +28,6 @@ export {
   AddressService,
   FileService,
   PlanService,
+  PetService,
+  RecidentialUnitService,
 };

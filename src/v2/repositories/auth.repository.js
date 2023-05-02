@@ -3,7 +3,7 @@ import BaseRepository from "./base.repository.js";
 class AuthRepository extends BaseRepository {
   constructor({ Auth }) {
     super(Auth);
-    this.repository = Auth;
+    this.model = Auth;
   }
 }
 

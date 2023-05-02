@@ -3,7 +3,7 @@ import BaseRepository from "./base.repository.js";
 class ParkingSpotRepository extends BaseRepository {
   constructor({ ParkingSpot }) {
     super(ParkingSpot);
-    this.repository = ParkingSpot;
+    this.model = ParkingSpot;
   }
 }
 

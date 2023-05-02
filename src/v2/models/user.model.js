@@ -12,12 +12,14 @@ const userSchema = new Schema(
     auth: { type: String, ref: "Auth", required: true },
     addresses: [{ type: String, ref: "Address", required: true }],
     vehicles: [{ type: String, ref: "Vehicle" }],
-    guests: [{ type: String, ref: "Guest" }],
     bills: [{ type: String, ref: "Bill" }],
     notifications: [{ type: String, ref: "Notification" }],
     role: { type: String, required: true, default: "resident" },
     acceptPolicity: { type: Boolean, required: true, default: false },
     contactNumber: { type: String, required: true },
+    documentId: {
+      type: Number,
+    },
     friendsAndFamily: [{ type: String, ref: "User" }],
     policyHistory: [
       {
@@ -31,16 +33,6 @@ const userSchema = new Schema(
   }
 );
 
-
-
-const unitResidentSchema = new Schema({
-  _id: { type: String, default: uuidv4 },
-  user: { type: String, ref: "User", required: true },
-  address: { type: String, ref: "Address", required: true },
-  userType: { type: String, enum: ["owner", "tenant"], required: true },
-});
-
 const User = mongoose.model("User", userSchema);
-const UnitResident = mongoose.model("UnitResident", unitResidentSchema);
 
 module.exports = { User, userSchema };

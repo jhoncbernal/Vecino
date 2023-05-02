@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 const { v4: uuidv4 } = require("uuid");
 const addressSchema = new Schema({
   _id: { type: String, default: uuidv4 },
-  building: { type: String, ref: "Building" },
   street: {
     type: String,
     required: function () {
@@ -34,7 +33,6 @@ const addressSchema = new Schema({
       return this.unitType === "building";
     },
   },
-  unitResidents: [{ type: String, ref: "User" }],
   latitude: {
     type: Number,
     required: function () {
@@ -46,22 +44,7 @@ const addressSchema = new Schema({
     required: function () {
       return this.unitType === "building";
     },
-  },
-  unitNumber: {
-    type: String,
-    required: function () {
-      return this.unitType !== "building";
-    },
-  },
-  unitType: {
-    type: String,
-    enum: ["apartment", "house", "building"],
-    required: true,
-  },
-  propertyInfo: {
-    sectionNumber: { type: String },
-    propertyNumber: { type: String },
-  },
+  }
 });
 
 const Address = mongoose.model("Address", addressSchema);

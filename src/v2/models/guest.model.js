@@ -8,10 +8,12 @@ const guestSchema = new Schema({
   contactNumber: String,
   dateOfVisit: Date,
   vehicle: { type: String, ref: "Vehicle" },
+  registeredBy: { type: String, ref: "Worker" },
   visitHistory: [
     {
       building: { type: String, ref: "Building" },
       unit: String,
+      approvedBy: { type: String, ref: "User" },
       enteredAt: Date,
       exitedAt: Date,
     },

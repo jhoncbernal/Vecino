@@ -7,7 +7,7 @@ module.exports = {
   ParkingSpot: require("./parkingspot.model").ParkingSpot,
   User: require("./user.model").User,
   Vehicle: require("./vehicle.model").Vehicle,
-  Worker: require("./worker.model").Worker,
+  Worker: require("./worker.model").default.Worker,
   Address: require("./address.model").Address,
   File: require("./file.model").File,
   Plan: require("./plan.model").Plan,

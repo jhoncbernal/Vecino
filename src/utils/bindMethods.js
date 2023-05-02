@@ -10,4 +10,4 @@ function bindMethods(instance) {
   });
 }
 
-module.exports = bindMethods;
+export default bindMethods;

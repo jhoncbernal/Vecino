@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model as _model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 const vehicleSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   photo: { type: String, ref: "File" },
@@ -23,5 +23,5 @@ const vehicleSchema = new Schema({
   ],
 });
 
-const Vehicle = mongoose.model("Vehicle", vehicleSchema);
-module.exports = { Vehicle, vehicleSchema };
+const Vehicle = _model("Vehicle", vehicleSchema);
+export  { Vehicle, vehicleSchema };

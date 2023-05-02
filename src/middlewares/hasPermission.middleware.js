@@ -44,7 +44,7 @@ const actionsToMethods = {
 };
 
 // Define the middleware function
-module.exports = function (req, res, next) {
+export default function (req, res, next) {
   try {
     const { user } = req;
     const { roles } = user;

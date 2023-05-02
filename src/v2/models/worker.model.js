@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 
 const workerSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -26,5 +26,5 @@ const workerSchema = new Schema({
   },
 });
 
-const Worker = mongoose.model("Worker", workerSchema);
-module.exports = { Worker, workerSchema };
+const Worker = model("Worker", workerSchema);
+export  { Worker, workerSchema };

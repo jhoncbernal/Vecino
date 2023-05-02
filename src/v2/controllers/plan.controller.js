@@ -1,8 +1,8 @@
-const BaseController = require('./base.controller');
+import BaseController from "./base.controller.js";
 class PlanController extends BaseController {
-    constructor({ PlanService }) {
-        super(PlanService);
-        this.service = PlanService;
-    }
+  constructor({ PlanService }) {
+    super(PlanService);
+    this.service = PlanService;
+  }
 }
-module.exports = PlanController;
+export default PlanController;

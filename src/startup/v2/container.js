@@ -1,11 +1,11 @@
-const { createContainer, asClass, asValue, asFunction } = require("awilix");
+import { createContainer, asClass, asValue, asFunction } from "awilix";
 //config
-const config = require("../../config");
-const app = require("../index");
-const database = require("../../database/mongoose.database");
+import * as config from "../../config/index.js";
+import app from "../index.js";
+import database from "../../database/mongoose.database.js";
 
 //services
-const {
+import {
   AuthService,
   BillService,
   BuildingService,
@@ -18,9 +18,9 @@ const {
   AddressService,
   FileService,
   PlanService,
-} = require("../../v2/services");
+} from "../../v2/services/index.js";
 //controllers
-const {
+import {
   AuthController,
   BillController,
   BuildingController,
@@ -33,26 +33,12 @@ const {
   AddressController,
   FileController,
   PlanController,
-} = require("../../v2/controllers");
+} from "../../v2/controllers/index.js";
 //routes
-const {
-  AuthRoutes,
-  BillRoutes,
-  BuildingRoutes,
-  GuestRoutes,
-  NotificationRoutes,
-  ParkingSpotRoutes,
-  UserRoutes,
-  VehicleRoutes,
-  WorkerRoutes,
-  AddressRoutes,
-  FileRoutes,
-  PlanRoutes,
-} = require("../../v2/routes/index.routes");
-const Routes = require("../../v2/routes");
-
+import { AuthRoutes, BillRoutes, BuildingRoutes, GuestRoutes, NotificationRoutes, ParkingSpotRoutes, UserRoutes, VehicleRoutes, WorkerRoutes, AddressRoutes, FileRoutes, PlanRoutes } from "../../v2/routes/index.routes.js";
+import Routes from "../../v2/routes/index.js";
 //models
-const {
+import {
   Auth,
   Bill,
   Building,
@@ -65,9 +51,9 @@ const {
   Address,
   File,
   Plan,
-} = require("../../v2/models");
+} from "../../v2/models/index.js";
 //repositories
-const {
+import {
   AuthRepository,
   BillRepository,
   BuildingRepository,
@@ -80,7 +66,7 @@ const {
   AddressRepository,
   FileRepository,
   PlanRepository,
-} = require("../../v2/repositories");
+} from "../../v2/repositories/index.js";
 //const container = require("../container");
 
 const container = createContainer();
@@ -174,4 +160,4 @@ container
     PlanRepository: asClass(PlanRepository).singleton(),
   });
 
-module.exports = container;
+export default container;

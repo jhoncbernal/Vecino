@@ -1,17 +1,7 @@
-const {
-  S3Client,
-  PutObjectCommand,
-  DeleteObjectCommand,
-  GetObjectCommand,
-} = require("@aws-sdk/client-s3");
-const sharp = require("sharp");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-var {
-  AWSSECRETACCESSKEY,
-  AWSREGION,
-  AWSACCESSKEYID,
-  AWSBUCKETIMG,
-} = require("../config");
+import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import sharp from "sharp";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { AWSSECRETACCESSKEY, AWSREGION, AWSACCESSKEYID, AWSBUCKETIMG } from "../config";
 const s3 = new S3Client({
   region: AWSREGION,
   credentials: {
@@ -121,4 +111,4 @@ async function listImages() {
   return images;
 }
 
-module.exports = { uploadImage, getImageUrl, deleteImage, listImages };
+export default { uploadImage, getImageUrl, deleteImage, listImages };

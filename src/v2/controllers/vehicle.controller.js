@@ -1,5 +1,5 @@
-const bindMethods = require("../../utils/bindMethods");
-const BaseController = require("./base.controller");
+import bindMethods from "../../utils/bindMethods.js";
+import BaseController from "./base.controller.js";
 
 class VehicleController extends BaseController {
   constructor({ VehicleService }) {
@@ -9,4 +9,4 @@ class VehicleController extends BaseController {
   }
 }
 
-module.exports = VehicleController;
+export default VehicleController;

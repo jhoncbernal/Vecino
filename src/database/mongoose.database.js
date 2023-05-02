@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 mongoose.Promise = global.Promise;
 let MONGO_DB = null;
@@ -54,4 +54,4 @@ class MongooseConnection {
   }
 }
 
-module.exports = MongooseConnection;
+export default MongooseConnection;

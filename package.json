@@ -1,6 +1,7 @@
 {
   "name": "vecinoapp",
   "version": "1.0.0",
+  "type": "module",
   "description": "help to manage the usual problems with the community ",
   "main": "index.js",
   "scripts": {

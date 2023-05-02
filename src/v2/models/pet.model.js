@@ -18,4 +18,4 @@ const petSchema = new Schema({
 
 const Pet = model("Pet", petSchema);
 
-export default Pet;
+export  {Pet, petSchema};

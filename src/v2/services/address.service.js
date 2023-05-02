@@ -1,4 +1,4 @@
-const BaseService = require('./base.service');
+import BaseService from "./base.service.js";
 
 class AddressService extends BaseService {
   constructor({ AddressRepository }) {
@@ -7,4 +7,4 @@ class AddressService extends BaseService {
   }
 }
 
-module.exports = AddressService;
+export default AddressService;

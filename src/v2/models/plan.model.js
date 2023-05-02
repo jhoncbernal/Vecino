@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 const PlanSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   name: { type: String, required: true },
@@ -15,6 +15,6 @@ const PlanSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-const Plan = mongoose.model("Plan", PlanSchema);
+const Plan = model("Plan", PlanSchema);
 
-module.exports = { Plan, PlanSchema };
+export  { Plan, PlanSchema };

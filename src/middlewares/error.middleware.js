@@ -1,4 +1,4 @@
-module.exports = (err, req, res, next) => {
+export default (err, req, res, next) => {
   const httpStatus = err.status || 500;
   return res.status(httpStatus).send({
     status: httpStatus,

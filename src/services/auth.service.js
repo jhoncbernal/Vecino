@@ -1,4 +1,4 @@
-const { generateToken } = require("../helpers/jwt.helper");
+const { generateToken } = require("../helpers/jwt.helper").default;
 const { SECRET_OWNER, FRONT_END_URL } = require("../config");
 const { sendEmail } = require("../helpers");
 const createError = require("../utils/createError");

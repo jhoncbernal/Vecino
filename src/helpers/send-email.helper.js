@@ -1,23 +1,18 @@
-const aws = require("aws-sdk");
-const handlebars = require("handlebars");
-const fs = require("fs");
-const path = require("path");
-const {
-  FROM_EMAIL,
-  AWSREGION,
-  AWSSECRETACCESSKEY,
-  AWSACCESSKEYID,
-} = require("../config");
-const config = require("../config");
-aws.config.update({
+import { config as _config, SES } from "aws-sdk";
+import { compile } from "handlebars";
+import { readFile } from "fs";
+import { join } from "path";
+import { FROM_EMAIL, AWSREGION, AWSSECRETACCESSKEY, AWSACCESSKEYID } from "../config";
+import { APPLICATION_NAME, PROJECT } from "../config";
+_config.update({
   accessKeyId: AWSACCESSKEYID,
   secretAccessKey: AWSSECRETACCESSKEY,
   region: AWSREGION,
 });
-const ses = new aws.SES({ region: AWSREGION });
+const ses = new SES({ region: AWSREGION });
 
 async function readHTMLFile(path, callback) {
-  fs.readFile(path, { encoding: "utf-8" }, function (err, html) {
+  readFile(path, { encoding: "utf-8" }, function (err, html) {
     if (err) {
       throw err;
     } else {
@@ -29,8 +24,8 @@ async function readHTMLFile(path, callback) {
 async function HTMLReplace(htmlpath, replacements) {
   try {
     return (htmlToSend = await new Promise((resolve, reject) => {
-      readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
-        var template = handlebars.compile(html);
+      readHTMLFile(join(__dirname, htmlpath), function (err, html) {
+        var template = compile(html);
 
         if (err) {
           reject(err);
@@ -53,12 +48,12 @@ async function sendEmail(
 ) {
   try {
     htmlToSend = await new Promise((resolve, reject) => {
-      readHTMLFile(path.join(__dirname, htmlpath), function (err, html) {
-        var template = handlebars.compile(html);
+      readHTMLFile(join(__dirname, htmlpath), function (err, html) {
+        var template = compile(html);
         var replacements = {
           username: user.firstName,
           link: text,
-          APP_NAME: config.APPLICATION_NAME,
+          APP_NAME: APPLICATION_NAME,
         };
         if (err) {
           reject(err);
@@ -88,7 +83,7 @@ async function sendEmail(
       },
       Source: FROM_EMAIL,
     };
-   if (config.PROJECT.mode === "development") return { email: "OK" }; 
+   if (PROJECT.mode === "development") return { email: "OK" }; 
     return await new Promise((resolve, reject) => {
       ses.sendEmail(mailOptions, function (err, info) {
         if (err) {
@@ -103,4 +98,4 @@ async function sendEmail(
   }
 }
 
-module.exports = { sendEmail, HTMLReplace };
+export default { sendEmail, HTMLReplace };

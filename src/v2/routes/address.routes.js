@@ -1,6 +1,6 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-module.exports = function ({ AddressController }) {
+export default function ({ AddressController }) {
   const router = Router();
 
   router.get("/:id", AddressController.get);

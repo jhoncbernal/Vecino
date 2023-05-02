@@ -1,4 +1,4 @@
-const BaseService = require("./base.service");
+const BaseService = require("./base.service.js");
 const { FRONT_END_URL } = require("../config");
 const { sendEmail } = require("../helpers");
 const createError = require("../utils/createError");

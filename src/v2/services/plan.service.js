@@ -1,8 +1,8 @@
-const BaseService = require('./base.service');
+import BaseService from "./base.service.js";
 class PlanService extends BaseService {
-    constructor({ PlanRepository }) {
-        super(PlanRepository);
-        this.repository = PlanRepository;
-    }
+  constructor({ PlanRepository }) {
+    super(PlanRepository);
+    this.repository = PlanRepository;
+  }
 }
-module.exports = PlanService;
+export default PlanService;

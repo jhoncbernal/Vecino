@@ -1,5 +1,5 @@
-const bindMethods = require("../../utils/bindMethods");
-const BaseController = require("./base.controller");
+import bindMethods from "../../utils/bindMethods.js";
+import BaseController from "./base.controller.js";
 
 class NotificationController extends BaseController {
   constructor({ NotificationService }) {
@@ -9,4 +9,4 @@ class NotificationController extends BaseController {
   }
 }
 
-module.exports = NotificationController;
+export default NotificationController;

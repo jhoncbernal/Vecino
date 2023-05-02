@@ -1,9 +1,9 @@
-const BaseService = require("./base.service");
-class NotificationRepository extends BaseService {
+import BaseService from "./base.service.js";
+class NotificationService extends BaseService {
   constructor({ NotificationRepository }) {
     super(NotificationRepository);
     this.repository = NotificationRepository;
   }
 }
 
-module.exports = NotificationRepository;
+export default NotificationService;

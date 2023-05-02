@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-const BaseRepository = require("./base.repository");
+import BaseRepository from "./base.repository.js";
 let _product;
 class ProductRepository extends BaseRepository {
   constructor({ Product }) {

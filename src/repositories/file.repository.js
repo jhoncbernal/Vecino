@@ -1,6 +1,6 @@
 //const csv = require("fast-csv");
 const createError = require("../utils/createError");
-const BaseRepository = require("./base.repository");
+import BaseRepository from "./base.repository.js";
 const XLSX = require("xlsx");
 let _file;
 class FileRepository extends BaseRepository {

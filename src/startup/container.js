@@ -1,81 +1,21 @@
-const { createContainer, asClass, asValue, asFunction } = require("awilix");
+import { createContainer, asClass, asValue, asFunction } from "awilix";
 //config
-const config = require("../config");
-const app = require(".");
-const database = require("../database/mongoose.database");
+import config from "../config";
+import app from ".";
+import database from "../database/mongoose.database";
 
 //services
-const {
-  UserService,
-  AuthService,
-  AdminService,
-  ProviderService,
-  VehicleService,
-  ParkingSpaceService,
-  FileService,
-  ProductService,
-  BillService,
-  CityService,
-  PackageService,
-} = require("../services");
+import { UserService, AuthService, AdminService, ProviderService, VehicleService, ParkingSpaceService, FileService, ProductService, BillService, CityService, PackageService } from "../services";
 //controllers
-const {
-  UserController,
-  AuthController,
-  AdminController,
-  ProviderController,
-  VehicleController,
-  ParkingSpaceController,
-  FileController,
-  ProductController,
-  BillController,
-  CityController,
-  PackageController
-} = require("../controllers");
+import { UserController, AuthController, AdminController, ProviderController, VehicleController, ParkingSpaceController, FileController, ProductController, BillController, CityController, PackageController } from "../controllers";
 //routes
-const {
-  UserRoutes,
-  AuthRoutes,
-  AdminRoutes,
-  ProviderRoutes,
-  VehicleRoutes,
-  ParkingSpaceRoutes,
-  PositionsRoutes,
-  FileRoutes,
-  ProductRoutes,
-  BillRoutes,
-  CityRoutes,
-  PackageRoutes
-} = require("../routes/index.routes");
-const Routes = require("../routes");
+import { UserRoutes, AuthRoutes, AdminRoutes, ProviderRoutes, VehicleRoutes, ParkingSpaceRoutes, PositionsRoutes, FileRoutes, ProductRoutes, BillRoutes, CityRoutes, PackageRoutes } from "../routes/index.routes";
+import Routes from "../routes";
 
 //models
-const {
-  User,
-  Admin,
-  Provider,
-  Vehicle,
-  ParkingSpace,
-  Positions,
-  File,
-  Product,
-  Bill,
-  City,
-  Package
-} = require("../models");
+import { User, Admin, Provider, Vehicle, ParkingSpace, Positions, File, Product, Bill, City, Package } from "../models";
 //repositories
-const {
-  UserRepository,
-  AdminRepository,
-  ProviderRepository,
-  VehicleRepository,
-  ParkingSpaceRepository,
-  FileRepository,
-  ProductRepository,
-  BillRepository,
-  CityRepository,
-  PackageRepository
-} = require("../repositories");
+import { UserRepository, AdminRepository, ProviderRepository, VehicleRepository, ParkingSpaceRepository, FileRepository, ProductRepository, BillRepository, CityRepository, PackageRepository } from "../repositories";
 
 const container = createContainer();
 container
@@ -159,4 +99,4 @@ container
     PackageRepository: asClass(PackageRepository).singleton(),
   });
 
-module.exports = container;
+export default container;

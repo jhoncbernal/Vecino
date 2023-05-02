@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 
 let _express = null;
 let _config = null;
@@ -21,4 +21,4 @@ class Server {
     });
   }
 }
-module.exports = Server;
+export default Server;

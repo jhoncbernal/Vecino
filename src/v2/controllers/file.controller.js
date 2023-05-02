@@ -1,4 +1,4 @@
-const BaseController = require("./base.controller");
+import BaseController from "./base.controller.js";
 
 class FileController extends BaseController {
   constructor({ FileService }) {
@@ -6,4 +6,4 @@ class FileController extends BaseController {
     this.service = FileService;
   }
 }
-module.exports = FileController;
+export default FileController;

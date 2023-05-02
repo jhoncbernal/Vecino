@@ -1,9 +1,7 @@
-const { Router } = require("express");
-const {
-  EnsureAuthenticated
-} = require("../../middlewares");
+import { Router } from "express";
+import { EnsureAuthenticated } from "../../middlewares/index.js";
 
-module.exports = function ({ UserController }) {
+export default function ({ UserController }) {
   const router = Router();
 
   router.get("/:id",EnsureAuthenticated, UserController.get);

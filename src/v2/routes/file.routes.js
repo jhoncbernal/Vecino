@@ -1,6 +1,6 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-module.exports = function ({ FileController }) {
+export default function ({ FileController }) {
   const router = Router();
 
   router.get("/:id", FileController.get);

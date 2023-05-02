@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config");
-module.exports = function (req, res, next) {
+import { verify } from "jsonwebtoken";
+import { JWT_SECRET } from "../config/index.js";
+export default function (req, res, next) {
   const token = req.headers["authorization"];
   if (!token) {
     const error = new Error();
@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
     error.message = "token must be sent";
     throw error;
   }
-  jwt.verify(token, JWT_SECRET, function (err, decodedToken) {
+  verify(token, JWT_SECRET, function (err, decodedToken) {
     if (err) {
       const error = new Error();
       error.message = "validate token value";

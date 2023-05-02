@@ -1,8 +1,8 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
-const { User, Worker, Auth } = require("../v2/models/index"); // Assuming your models are exported from a single file
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import GoogleStrategy from "passport-google-oauth20";
+import FacebookStrategy from "passport-facebook";
+import { User, Worker, Auth } from "../v2/models/index.js";
 
 // Local authentication
 passport.use(
@@ -88,4 +88,4 @@ passport.deserializeUser(async (id, done) => {
   done(null, user);
 });
 
-module.exports = passport;
+export default passport;

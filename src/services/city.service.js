@@ -1,4 +1,4 @@
-const BaseService = require("./base.service");
+const BaseService = require("./base.service.js");
 class CityService extends BaseService {
   constructor({ CityRepository }) {
     super(CityRepository);

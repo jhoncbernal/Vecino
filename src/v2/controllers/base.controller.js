@@ -1,4 +1,4 @@
-const bindMethods = require("../../utils/bindMethods");
+import bindMethods from "../../utils/bindMethods.js";
 class BaseController {
   constructor(service) {
     this.service = service;
@@ -62,4 +62,4 @@ class BaseController {
     }
   }
 }
-module.exports = BaseController;
+export default BaseController;

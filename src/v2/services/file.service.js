@@ -1,4 +1,4 @@
-const BaseService = require("./base.service");
+import BaseService from "./base.service.js";
 
 class FileService extends BaseService {
   constructor({ FileRepository }) {
@@ -6,4 +6,4 @@ class FileService extends BaseService {
     this.repository = FileRepository;
   }
 }
-module.exports = FileService;
+export default FileService;

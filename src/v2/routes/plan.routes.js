@@ -1,7 +1,7 @@
-const { Router } = require("express");
-const { EnsureAuthenticated } = require("../../middlewares");
+import { Router } from "express";
+import { EnsureAuthenticated } from "../../middlewares/index.js";
 
-module.exports = function ({ PlanController }) {
+export default function ({ PlanController }) {
   const router = Router();
 
   router.get("/:id", PlanController.get);

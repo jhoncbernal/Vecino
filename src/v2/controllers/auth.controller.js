@@ -1,5 +1,5 @@
-const bindMethods = require("../../utils/bindMethods");
-const BaseController = require("./base.controller");
+import bindMethods from "../../utils/bindMethods.js";
+import BaseController from "./base.controller.js";
 
 class AuthController extends BaseController {
   constructor({ AuthService }) {
@@ -9,4 +9,4 @@ class AuthController extends BaseController {
   }
 }
 
-module.exports = AuthController;
+export default AuthController;

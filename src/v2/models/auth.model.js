@@ -1,9 +1,11 @@
-
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
-const validator = require("validator");
-const { compareSync, hashSync, genSaltSync } = require("bcryptjs");
+import { v4 as uuidv4 } from "uuid";
+import validator from "validator";
+const { isEmail } = validator;
+import bcrypt from "bcryptjs";
+
+const { compareSync, hashSync, genSaltSync } = bcrypt;
 const authSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   email: {
@@ -11,7 +13,7 @@ const authSchema = new Schema({
     unique: true,
     required: true,
     validate: {
-      validator: (email) => validator.isEmail(email),
+      validator: (email) => isEmail(email),
       message: "Invalid email format",
     },
   },
@@ -53,5 +55,5 @@ authSchema.pre("save", async function (next) {
   next();
 });
 
-const Auth = mongoose.model("Auth", authSchema);
-module.exports = { Auth, authSchema };
+const Auth = model("Auth", authSchema);
+export  { Auth, authSchema };

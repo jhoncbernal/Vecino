@@ -1,4 +1,4 @@
-function defineAbilitiesFor(user) {
+export function defineAbilitiesFor(user) {
   const { can, build } = new AbilityBuilder();
 
   if (user && user.role) {

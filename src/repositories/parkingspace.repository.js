@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-const BaseRepository = require("./base.repository");
+import BaseRepository from "./base.repository.js";
 let _parkingspace,
   _positions = null;
 class ParkingSpaceRepository extends BaseRepository {

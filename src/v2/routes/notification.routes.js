@@ -1,6 +1,6 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-module.exports = function ({ NotificationController }) {
+export default function ({ NotificationController }) {
   const router = Router();
 
   router.get("/:id", NotificationController.get);

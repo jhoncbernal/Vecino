@@ -1,6 +1,6 @@
-var json2csv = require('json2csv');
+import json2csv from 'json2csv';
  
-exports.get = function(req, res) {
+export function get(req, res) {
  
     let fields = [
         'codigo',
@@ -56,4 +56,4 @@ exports.get = function(req, res) {
  
     res.send(csv);
  
-};
+}

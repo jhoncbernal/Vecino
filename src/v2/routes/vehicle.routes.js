@@ -1,6 +1,6 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-module.exports = function ({VehicleController}) {
+export default function ({VehicleController}) {
   const router = Router();
 
   router.get("/:id", VehicleController.get);

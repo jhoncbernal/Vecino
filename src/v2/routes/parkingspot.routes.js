@@ -1,6 +1,6 @@
-const { Router } = require("express");
+import { Router } from "express";
 
-module.exports = function ({ ParkingSpotController }) {
+export default function ({ ParkingSpotController }) {
   const router = Router();
 
   router.get("/:id", ParkingSpotController.get);

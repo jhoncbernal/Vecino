@@ -1,6 +1,6 @@
-const { defineAbilitiesFor } = require("../utils/ability");
+import { defineAbilitiesFor } from "../utils/ability.js";
 
-module.exports =(req, res, next) =>{
+export default(req, res, next) =>{
   const { user } = req;
 
   if (!user) {

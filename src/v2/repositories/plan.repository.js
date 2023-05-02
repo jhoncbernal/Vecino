@@ -1,8 +1,8 @@
-const BaseRepository = require('./base.repository');
+import BaseRepository from "./base.repository.js";
 class PlanRepository extends BaseRepository {
-    constructor({ Plan }) {
-        super(Plan);
-        this.model = Plan;
-    }
+  constructor({ Plan }) {
+    super(Plan);
+    this.model = Plan;
+  }
 }
-module.exports = PlanRepository;
+export default PlanRepository;

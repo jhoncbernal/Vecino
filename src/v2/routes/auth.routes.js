@@ -1,11 +1,11 @@
-const { Router } = require("express");
-const passport = require("../../utils/passport-setup");
-module.exports = function ({ AuthController }) {
+import { Router } from "express";
+import passport from "passport"; "../../utils/passport-setup.js";
+export default function ({ AuthController }) {
   const router = Router();
-  router.post("/login", passport.authenticate("local"), (req, res) => {
+   router.post("/login", passport.authenticate("local"), (req, res) => {
     // If authentication is successful, redirect to the homepage
     res.redirect("/");
-  });
+  }); 
   //router.post("/signin", AuthController.create);
   router.post("/register", AuthController.create);
   //router.post("/signin", AuthController.signIn);

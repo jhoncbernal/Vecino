@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 const notificationSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   message: String,
@@ -10,5 +10,5 @@ const notificationSchema = new Schema({
   imgNotification: { type: String, ref: "File" },
 });
 
-const Notification = mongoose.model("Notification", notificationSchema);
-module.exports = { Notification, notificationSchema };
+const Notification = model("Notification", notificationSchema);
+export  { Notification, notificationSchema };

@@ -1,4 +1,4 @@
-const BaseRepository = require("./base.repository");
+import BaseRepository from "./base.repository.js";
 
 class BuildingRepository extends BaseRepository {
   constructor({ Building }) {
@@ -7,4 +7,4 @@ class BuildingRepository extends BaseRepository {
   }
 }
 
-module.exports = BuildingRepository;
+export default BuildingRepository;

@@ -27,4 +27,4 @@ function handleMongoError(error) {
   };
 }
 
-module.exports = { handleMongoError };
+export  { handleMongoError };

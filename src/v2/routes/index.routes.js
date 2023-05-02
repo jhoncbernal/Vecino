@@ -1,14 +1,29 @@
-module.exports = {
-  AuthRoutes: require("./auth.routes"),
-  BillRoutes: require("./bill.routes"),
-  BuildingRoutes: require("./building.routes"),
-  GuestRoutes: require("./guest.routes"),
-  NotificationRoutes: require("./notification.routes"),
-  ParkingSpotRoutes: require("./parkingspot.routes"),
-  UserRoutes: require("./user.routes"),
-  VehicleRoutes: require("./vehicle.routes"),
-  WorkerRoutes: require("./worker.routes"),
-  AddressRoutes: require("./address.routes"),
-  FileRoutes: require("./file.routes"),
-  PlanRoutes: require("./plan.routes"),
+// Import your routes
+import AuthRoutes from "./auth.routes.js";
+import BillRoutes from "./bill.routes.js";
+import BuildingRoutes from "./building.routes.js";
+import GuestRoutes from "./guest.routes.js";
+import NotificationRoutes from "./notification.routes.js";
+import ParkingSpotRoutes from "./parkingspot.routes.js";
+import UserRoutes from "./user.routes.js";
+import VehicleRoutes from "./vehicle.routes.js";
+import WorkerRoutes from "./worker.routes.js";
+import AddressRoutes from "./address.routes.js";
+import FileRoutes from "./file.routes.js";
+import PlanRoutes from "./plan.routes.js";
+
+// Export your routes
+export {
+  AuthRoutes,
+  BillRoutes,
+  BuildingRoutes,
+  GuestRoutes,
+  NotificationRoutes,
+  ParkingSpotRoutes,
+  UserRoutes,
+  VehicleRoutes,
+  WorkerRoutes,
+  AddressRoutes,
+  FileRoutes,
+  PlanRoutes,
 };

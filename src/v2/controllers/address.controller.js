@@ -1,4 +1,4 @@
-const BaseController = require("./base.controller");
+import BaseController from "./base.controller.js";
 
 class AddressController extends BaseController {
   constructor({ AddressService }) {
@@ -6,4 +6,4 @@ class AddressController extends BaseController {
     this.service = AddressService;
   }
 }
-module.exports = AddressController;
+export default AddressController;

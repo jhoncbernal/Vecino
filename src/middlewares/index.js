@@ -1,9 +1,7 @@
-module.exports = {
-  NotFoundMiddleware: require("./not-found.middleware"),
-  ErrorMiddleware: require("./error.middleware"),
-  AuthMiddleware: require("./auth.middleware"),
-  ParseIntMiddleware: require("./parse-int.middleware"),
-  HasPermissionMiddleware: require("./hasPermission.middleware"),
-  AccessControl: require("./accessControl.middleware"),
-  EnsureAuthenticated: require("./ensureAuthenticated.middleware"),
-};
+export { default as NotFoundMiddleware } from "./not-found.middleware.js";
+export { default as ErrorMiddleware } from "./error.middleware.js";
+export { default as AuthMiddleware } from "./auth.middleware.js";
+export { default as ParseIntMiddleware } from "./parse-int.middleware.js";
+export { default as HasPermissionMiddleware } from "./hasPermission.middleware.js";
+export { default as AccessControl } from "./accessControl.middleware.js";
+export { default as EnsureAuthenticated } from "./ensureAuthenticated.middleware.js";

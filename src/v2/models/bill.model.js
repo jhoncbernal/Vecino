@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 const billSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   type: String,
@@ -9,5 +9,5 @@ const billSchema = new Schema({
   isPaid: Boolean,
 });
 
-const Bill = mongoose.model("Bill", billSchema);
-module.exports = { Bill , billSchema};
+const Bill = model("Bill", billSchema);
+export  { Bill , billSchema};

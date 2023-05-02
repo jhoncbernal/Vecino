@@ -1,4 +1,4 @@
-const BaseRepository = require("./base.repository");
+import BaseRepository from "./base.repository.js";
 class CityRepository extends BaseRepository {
   constructor({ City }) {
     super(City);

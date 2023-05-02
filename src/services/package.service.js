@@ -1,4 +1,4 @@
-const BaseService = require("./base.service");
+const BaseService = require("./base.service.js");
 const { generatePin } = require("../utils/generate.utils");
 const { sendEmail } = require("../helpers");
 

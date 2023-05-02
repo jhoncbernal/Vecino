@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 
 const buildingSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -38,7 +38,7 @@ const parkingLotSchema = new Schema({
   spots: [{ type: String, ref: "ParkingSpot" }],
 });
 
-const ParkingLot = mongoose.model("ParkingLot", parkingLotSchema);
+const ParkingLot = model("ParkingLot", parkingLotSchema);
 
 const approvalRequestSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -81,16 +81,16 @@ const maintenanceRequestSchema = new Schema({
 
 
 
-const ApprovalRequest = mongoose.model(
+const ApprovalRequest = model(
   "ApprovalRequest",
   approvalRequestSchema
 );
-const MaintenanceRequest = mongoose.model(
+const MaintenanceRequest = model(
   "MaintenanceRequest",
   maintenanceRequestSchema
 );
-const Building = mongoose.model("Building", buildingSchema);
-module.exports = {
+const Building = model("Building", buildingSchema);
+export  {
   Building,
   buildingSchema,
   ApprovalRequest,

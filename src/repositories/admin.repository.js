@@ -1,4 +1,4 @@
-const BaseRepository = require("./base.repository");
+import BaseRepository from "./base.repository.js";
 let _admin = null;
 class AdminRepository extends BaseRepository {
   constructor({ Admin }) {

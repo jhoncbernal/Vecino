@@ -1,4 +1,4 @@
-const {handleMongoError} = require("../../utils/mongoErrorHandler.util");
+import {handleMongoError} from "../../utils/mongoErrorHandler.util.js";
 class BaseRepository {
   constructor(model) {
     this.model = model;
@@ -94,4 +94,4 @@ class BaseRepository {
     }
   }
 }
-module.exports = BaseRepository;
+export default BaseRepository;

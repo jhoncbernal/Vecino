@@ -1,14 +1,29 @@
-module.exports = {
-  AuthService: require("./auth.service"),
-  BillService: require("./bill.service"),
-  BuildingService: require("./building.service"),
-  GuestService: require("./guest.service"),
-  NotificationService: require("./notification.service"),
-  ParkingSpotService: require("./parkingspot.service"),
-  UserService: require("./user.service"),
-  VehicleService: require("./vehicle.service"),
-  WorkerService: require("./worker.service"),
-  AddressService: require("./address.service"),
-  FileService: require("./file.service"),
-  PlanService: require("./plan.service"),
+// Import your services
+import AuthService from "./auth.service.js";
+import BillService from "./bill.service.js";
+import BuildingService from "./building.service.js";
+import GuestService from "./guest.service.js";
+import NotificationService from "./notification.service.js";
+import ParkingSpotService from "./parkingspot.service.js";
+import UserService from "./user.service.js";
+import VehicleService from "./vehicle.service.js";
+import WorkerService from "./worker.service.js";
+import AddressService from "./address.service.js";
+import FileService from "./file.service.js";
+import PlanService from "./plan.service.js";
+
+// Export your services
+export {
+  AuthService,
+  BillService,
+  BuildingService,
+  GuestService,
+  NotificationService,
+  ParkingSpotService,
+  UserService,
+  VehicleService,
+  WorkerService,
+  AddressService,
+  FileService,
+  PlanService,
 };

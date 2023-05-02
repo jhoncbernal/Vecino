@@ -1,5 +1,5 @@
-const bindMethods = require("../../utils/bindMethods");
-const BaseController = require("./base.controller");
+import bindMethods from "../../utils/bindMethods.js";
+import BaseController from "./base.controller.js";
 
 class BillController extends BaseController {
   constructor({ BillService }) {
@@ -9,4 +9,4 @@ class BillController extends BaseController {
   }
 }
 
-module.exports = BillController;
+export default BillController;

@@ -32,6 +32,7 @@ const authSchema = new Schema({
   enabled: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
   isOnline: { type: Boolean, default: false },
+  otpCode: { type: String },
 });
 
 authSchema.methods.toJSON = function () {
@@ -56,4 +57,4 @@ authSchema.pre("save", async function (next) {
 });
 
 const Auth = model("Auth", authSchema);
-export  { Auth, authSchema };
+export { Auth, authSchema };

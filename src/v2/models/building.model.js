@@ -1,7 +1,7 @@
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 import { v4 as uuidv4 } from "uuid";
-
+import { accessibleRecordsPlugin } from "@casl/mongoose";
 const buildingSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   name: String,
@@ -88,6 +88,8 @@ const MaintenanceRequest = model(
   "MaintenanceRequest",
   maintenanceRequestSchema
 );
+buildingSchema.plugin(accessibleRecordsPlugin);
+
 const Building = model("Building", buildingSchema);
 export  {
   Building,

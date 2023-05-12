@@ -9,10 +9,10 @@ class BaseController {
     try {
       const id = req.params.id;
       const user = await this.service.getById(id);
-      return res.json(user);
+      return res.send(user);
     } catch (error) {
       console.error(error);
-      return res.status(404).json({ message: error.message });
+      return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
 
@@ -20,11 +20,11 @@ class BaseController {
     try {
       const pageNumber = parseInt(req.query.pageNumber) || 1;
       const pageSize = parseInt(req.query.pageSize) || 10;
-      const users = await this.service.getAll(pageNumber, pageSize);
-      return res.json(users);
+      const users = await this.service.getAll(pageNumber, pageSize, req.ability);
+      return res.send(users);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(error?.statusCode||500).send({ message: error.message });
     }
   }
 
@@ -32,10 +32,10 @@ class BaseController {
     try {
       const id = req.params.id;
       await this.service.deleteById(id);
-      return res.json({ message: " deleted successfully" });
+      return res.send({ message: " deleted successfully" });
     } catch (error) {
       console.error(error);
-      return res.status(404).json({ message: error.message });
+      return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
 
@@ -43,10 +43,10 @@ class BaseController {
     try {
       const userData = req.body;
       const saved = await this.service.create(userData);
-      return res.status(201).json(saved);
+      return res.status(error?.statusCode||201).send(saved);
     } catch (error) {
       console.error(error);
-      return res.status(400).json({ message: "Invalid Request" });
+      return res.status(error?.statusCode||400).send({ message: error.message });
     }
   }
 
@@ -55,10 +55,10 @@ class BaseController {
       const id = req.params.id;
       const updatedData = req.body;
       await this.service.updateById(id, updatedData);
-      return res.json({ message: " updated successfully" });
+      return res.send({ message: " updated successfully" });
     } catch (error) {
       console.error(error);
-      return res.status(404).json({ message: error.message });
+      return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
 }

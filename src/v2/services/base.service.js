@@ -14,9 +14,9 @@ class BaseService {
   }
 
   // Get all results with pagination
-  async getAll(pageNumber, pageSize) {
+  async getAll(pageNumber, pageSize, ability) {
     try {
-      const results = await this.repository.getAll(pageNumber, pageSize);
+      const results = await this.repository.getAll(pageNumber, pageSize, ability);
       return results;
     } catch (error) {
       console.error(error);

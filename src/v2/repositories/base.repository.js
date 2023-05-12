@@ -1,4 +1,4 @@
-import {handleMongoError} from "../../utils/mongoErrorHandler.util.js";
+import { handleMongoError } from "../../utils/mongoErrorHandler.util.js";
 class BaseRepository {
   constructor(model) {
     this.model = model;
@@ -7,6 +7,9 @@ class BaseRepository {
   async getById(modelId) {
     try {
       const model = await this.model.findById(modelId);
+      if (!model) {
+        throw new Error(`${this.model.modelName} Not found`);
+      }
       return model;
     } catch (error) {
       console.error(error);
@@ -15,12 +18,43 @@ class BaseRepository {
   }
 
   // Get all models with pagination
-  async getAll(pageNumber, pageSize) {
+  async getAll(pageNumber, pageSize, ability) {
     try {
-      const models = await this.model.find()
-        .skip((pageNumber - 1) * pageSize)
-        .limit(pageSize)
-        .exec();
+      const { projection, query } =
+        this._extractProjectionAndConditionsFromAbility(ability);
+      const pipeline = [
+        query,
+        { $skip: (pageNumber - 1) * pageSize },
+        { $limit: pageSize },
+      ];
+
+      if (Object.keys(projection).length > 0) {
+        pipeline.splice(1, 0, { $project: projection });
+      }
+
+      const models = await this.model.aggregate(pipeline).exec();
+
+      return models;
+    } catch (error) {
+      console.error(error);
+      throw handleMongoError(error);
+    }
+  }
+  // Get by condition
+  async getByCondition(condition) {
+    try {
+      const model = this.model.findOne(condition).exec();
+      return model;
+    } catch (error) {
+      console.error(error);
+      throw handleMongoError(error);
+    }
+  }
+
+  // Get all models that match a condition
+  async getAllByCondition(condition) {
+    try {
+      const models = await this.model.find(condition).exec();
       return models;
     } catch (error) {
       console.error(error);
@@ -93,5 +127,34 @@ class BaseRepository {
       throw handleMongoError(error);
     }
   }
+  _extractProjectionAndConditionsFromAbility(ability) {
+    const action = ability.action;
+    const subject = ability.subject;
+    const rules = ability.rules.filter(
+      (rule) => rule.action === action && rule.subject === subject
+    );
+
+    const result = rules.reduce(
+      (acc, rule) => {
+        if (rule.conditions && rule.conditions.$project) {
+          Object.assign(acc.projection, rule.conditions.$project);
+          // Clone the conditions object to remove the $project property
+          const conditionsWithoutProjection = { ...rule.conditions };
+          delete conditionsWithoutProjection.$project;
+          acc.conditions.push(conditionsWithoutProjection);
+        } else if (rule.conditions) {
+          acc.conditions.push(rule.conditions);
+        }
+        return acc;
+      },
+      { projection: {}, conditions: [] }
+    );
+
+    const query = result.conditions.length
+      ? { $match: { $or: result.conditions } }
+      : { $match: {} };
+    return { ...result, query };
+  }
 }
+
 export default BaseRepository;

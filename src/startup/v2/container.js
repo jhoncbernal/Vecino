@@ -1,4 +1,4 @@
-import { createContainer, asClass, asValue, asFunction } from "awilix";
+import awilix, { createContainer, asClass, asValue, asFunction } from "awilix";
 //config
 import * as config from "../../config/index.js";
 import app from "../index.js";
@@ -16,26 +16,31 @@ import Router from "../../v2/routes/index.js";
 import * as Models from "../../v2/models/index.js";
 //repositories
 import * as Repositories from "../../v2/repositories/index.js";
+import { Logger, Mailer } from "../../helpers/index.js";
 
-const container = createContainer();
+const container = createContainer({
+  injectionMode: awilix.InjectionMode.PROXY,
+});
 container.register({
   app: asClass(app).singleton(),
   router: asClass(Router).singleton(),
   config: asValue(config),
   database: asClass(database).singleton(),
+  logger: asClass(Logger).singleton(),
+  mailer: asClass(Mailer).singleton(),
 });
 
 // Register all services as classes
 Object.entries(Services).forEach(([name, Service]) => {
   container.register({
-    [name]: asClass(Service).singleton(),
+    [name]: asClass(Service).transient(),
   });
 });
 
 // Register all controllers as classes with bound methods
 Object.entries(Controllers).forEach(([name, Controller]) => {
   container.register({
-    [name]: asClass(Controller.bind(Controller)).singleton(),
+    [name]: asClass(Controller).transient(),
   });
 });
 
@@ -49,7 +54,7 @@ Object.entries(Routes).forEach(([name, Route]) => {
 // Register all repositories as classes
 Object.entries(Repositories).forEach(([name, Repository]) => {
   container.register({
-    [name]: asClass(Repository).singleton(),
+    [name]: asClass(Repository).transient(),
   });
 });
 
@@ -59,6 +64,5 @@ Object.entries(Models).forEach(([name, Model]) => {
     [name]: asValue(Model),
   });
 });
-
 
 export default container;

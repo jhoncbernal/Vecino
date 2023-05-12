@@ -1,9 +1,23 @@
 import BaseService from "./base.service.js";
+import { uploadImage } from "../../helpers/index.js";
 
 class FileService extends BaseService {
   constructor({ FileRepository }) {
     super(FileRepository);
     this.repository = FileRepository;
+  }
+
+  async create(document) {
+    try {
+      const s3File = await uploadImage(document.file);
+      delete document.file;
+      document.fileUrl = s3File.Location;
+      const result = await this.repository.create(document);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }
 export default FileService;

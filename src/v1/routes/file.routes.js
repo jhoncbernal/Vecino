@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { AuthMiddleware, HasPermissionMiddleware } = require("../middlewares");
+const { AuthMiddleware, HasPermissionMiddleware } = require("../../middlewares");
 module.exports = function ({ FileController }) {
   const router = Router();
   router.get("/:documentId", FileController.getUserByDocumentId);

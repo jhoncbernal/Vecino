@@ -50,7 +50,7 @@ export default function ({
 
   router.use(passport.initialize());
   router.use(passport.session());
-
+  router.use(ErrorMiddleware);
   apiRoutesV2
     .use(express.json())
     .use(express.urlencoded({ extended: false }))
@@ -76,7 +76,7 @@ export default function ({
   apiRoutesV2.use("/package", PackageRoutes);
 
   router.use("/v2/api", apiRoutesV2);
-  router.use("/", (req, res) => {
+  router.use("/welcome", (req, res) => {
     res.status(200).json({
       message: "Welcome to the Vecino API",
       version: "v2",
@@ -85,7 +85,7 @@ export default function ({
   });
 
   router.use(NotFoundMiddleware);
-  router.use(ErrorMiddleware);
+
   router.use(apiRoutesV2);
 
   return router;

@@ -1,8 +1,7 @@
-module.exports={
-    jwtHelper:require('./jwt.helper').default,
-    CACHE_TIME:require('./cache-time.helper'),
-    HTMLReplace:require('./send-email.helper').default.HTMLReplace,
-    sendEmail:require('./send-email.helper').default.sendEmail,
-    uploadImage:require('./s3Image.helper').default.uploadImage,
-    deleteImage:require('./s3Image.helper').default.deleteImage,
-}
+import jwtHelper from "./jwt.helper.js";
+import {Mailer } from "./send-email.helper.js";
+import { uploadImage, deleteImage } from "./s3Image.helper.js";
+import  Logger  from "./logger.helper.js";
+
+
+export { jwtHelper, Mailer, uploadImage, deleteImage, Logger };

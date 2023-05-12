@@ -8,4 +8,8 @@ function generatePin() {
   }
   return pin;
 }
-export { generatePin };
+function generateOtp() {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
+export { generatePin, generateOtp };

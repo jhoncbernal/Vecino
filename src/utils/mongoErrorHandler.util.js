@@ -18,6 +18,19 @@ function handleMongoError(error) {
     statusCode = 409;
     message = "Duplicate Key";
     details = error.keyValue;
+  } else if (error.name === "MongoError") {
+    // Mongo errors
+    statusCode = 400;
+    message = "Mongo Error";
+    details = error;
+  } else if (
+    error?.message?.includes("Not found") ||
+    error?.message?.includes("Invalid")
+  ) {
+    // Mongo errors
+    statusCode = 404;
+    message = error.message;
+    details = error;
   }
 
   return {
@@ -27,4 +40,4 @@ function handleMongoError(error) {
   };
 }
 
-export  { handleMongoError };
+export { handleMongoError };

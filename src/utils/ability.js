@@ -1,26 +1,33 @@
+import { AbilityBuilder, createMongoAbility } from "@casl/ability";
 export function defineAbilitiesFor(user) {
-  const { can, build } = new AbilityBuilder();
-
+  const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
+  if (!user) {
+    can("read", "Building", { $project: { name: 1 , address:1} });
+    can("read", "Plan", {
+      $project: { createdAt: 0, updatedAt: 0, __v: 0 },
+    });
+    can("read", "RecidentialUnit", { $project: { unitNumber: 1 } });
+  }
   if (user && user.role) {
-    if (user.role === "user") {
-      const ownerUnitTypes = user.addresses
-        .filter((address) => address.userType === "owner")
-        .map((address) => address.unitType);
+    if (user.role === "resident") {
+      /*       const ownerUnitTypes = user.addresses
+      .filter((address) => address.userType === "owner")
+      .map((address) => address.unitType);
 
-      can(["create", "update", "delete"], "User", {
-        $or: user.addresses.map((address) => ({
-          addresses: {
-            $elemMatch: {
-              userType: "tenant",
-              unitType: { $in: ownerUnitTypes },
-              _id: address._id,
-              unitResidents: { $in: ["$._id"] },
-            },
+    can(["create", "update", "delete"], "User", {
+      $or: user.addresses.map((address) => ({
+        addresses: {
+          $elemMatch: {
+            userType: "tenant",
+            unitType: { $in: ownerUnitTypes },
+            _id: address._id,
+            unitResidents: { $in: ["$._id"] },
           },
-        })),
-      });
-      can("read", "Building");
-      can(["update", "delete"], "User", { _id: user._id });
+        },
+      })), 
+    });*/
+      can("read", "Building", { $project: { _id: 0 } });
+      can(["update", "delete", "read"], "User", { $match: { _id: user._id } });
     } else if (user.role === "worker") {
       switch (user.workerType) {
         case "propertyManager":

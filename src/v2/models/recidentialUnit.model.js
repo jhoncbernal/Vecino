@@ -6,7 +6,7 @@ const residentialUnitSchema = new Schema({
   unitNumber: String,
   unitType: {
     type: String,
-    enum: ["apartment", "house"],
+    enum: ["appartment", "house","other"],
     required: true,
   },
 
@@ -36,8 +36,7 @@ const residentialUnitSchema = new Schema({
     enum: ["email", "sms", "both"],
     default: "email",
   },
-
-  });
+});
 
 const RecidentialUnit = model("RecidentialUnit", residentialUnitSchema);
 export { RecidentialUnit, residentialUnitSchema };

@@ -36,8 +36,15 @@ const authSchema = new Schema({
 });
 
 authSchema.methods.toJSON = function () {
+  // Convert Mongoose document to a plain JavaScript object
   let auth = this.toObject();
+
+  // Remove sensitive or unnecessary fields
   delete auth.password;
+  delete auth.__v;
+  delete auth.otpCode;
+
+  // Return the updated object
   return auth;
 };
 

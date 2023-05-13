@@ -1,8 +1,8 @@
 import BaseController from "./base.controller.js";
 
 class AddressController extends BaseController {
-  constructor({ AddressService }) {
-    super(AddressService);
+  constructor({ AddressService, logger }) {
+    super(AddressService, logger);
     this.service = AddressService;
   }
 }

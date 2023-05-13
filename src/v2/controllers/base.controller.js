@@ -1,7 +1,8 @@
 import bindMethods from "../../utils/bindMethods.js";
 class BaseController {
-  constructor(service) {
+  constructor(service, logger) {
     this.service = service;
+    this.logger = logger;
     bindMethods(this);
   }
 
@@ -11,7 +12,7 @@ class BaseController {
       const user = await this.service.getById(id);
       return res.send(user);
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
@@ -23,7 +24,7 @@ class BaseController {
       const users = await this.service.getAll(pageNumber, pageSize, req.ability);
       return res.send(users);
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res.status(error?.statusCode||500).send({ message: error.message });
     }
   }
@@ -34,7 +35,7 @@ class BaseController {
       await this.service.deleteById(id);
       return res.send({ message: " deleted successfully" });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
@@ -43,9 +44,9 @@ class BaseController {
     try {
       const userData = req.body;
       const saved = await this.service.create(userData);
-      return res.status(error?.statusCode||201).send(saved);
+      return res.status(201).send(saved);
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res.status(error?.statusCode||400).send({ message: error.message });
     }
   }
@@ -57,7 +58,7 @@ class BaseController {
       await this.service.updateById(id, updatedData);
       return res.send({ message: " updated successfully" });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }

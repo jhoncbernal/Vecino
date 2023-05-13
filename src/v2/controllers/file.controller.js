@@ -1,8 +1,8 @@
 import BaseController from "./base.controller.js";
 
 class FileController extends BaseController {
-  constructor({ FileService }) {
-    super(FileService);
+  constructor({ FileService, logger }) {
+    super(FileService, logger);
     this.service = FileService;
   }
   async create(req, res) {

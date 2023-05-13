@@ -2,9 +2,10 @@ import bindMethods from "../../utils/bindMethods.js";
 import BaseController from "./base.controller.js";
 
 class AuthController extends BaseController {
-  constructor({ AuthService }) {
-    super(AuthService);
+  constructor({ AuthService, logger }) {
+    super(AuthService, logger);
     this.service = AuthService;
+    this.logger = logger;
     bindMethods(this);
   }
 
@@ -12,9 +13,9 @@ class AuthController extends BaseController {
     try {
       const userData = req.body;
       const saved = await this.service.create(userData);
-      return res.status(201).send({ saved, message: "OTP sent successfully" });
+      return res.status(201).send({ ...saved, message: "OTP sent successfully" });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });
@@ -28,9 +29,11 @@ class AuthController extends BaseController {
       if (!result) {
         throw new Error("Invalid OTP");
       }
-      return res.status(200).send({ message: "OTP verified successfully" });
+      return res
+        .status(200)
+        .send({ message: "OTP verified successfully", ...result });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });
@@ -46,7 +49,7 @@ class AuthController extends BaseController {
       }
       return res.status(200).send({ message: "OTP sent successfully" });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });

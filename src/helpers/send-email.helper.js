@@ -1,3 +1,4 @@
+import bindMethods from "../utils/bindMethods.js";
 import pkgAws from "aws-sdk";
 import pkg from "handlebars";
 import { readFile } from "fs/promises";
@@ -12,7 +13,19 @@ import {
 
 const { config: _config, SES } = pkgAws;
 const { compile } = pkg;
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+async function getTemplate(path) {
+  if (!templates.has(path)) {
+    const html = await readFile(path, { encoding: "utf-8" });
+    templates.set(path, compile(html));
+  }
+  return templates.get(path);
+}
 
 // AWS SES setup
 _config.update({
@@ -25,33 +38,29 @@ const ses = new SES({ region: AWSREGION });
 
 // Template manager
 const templates = new Map();
-
-async function getTemplate(path) {
-  if (!templates.has(path)) {
-    const html = await readFile(path, { encoding: "utf-8" });
-    templates.set(path, compile(html));
-  }
-  return templates.get(path);
-}
-
 // Mailer class
 class Mailer {
   constructor({ logger }) {
     this.logger = logger;
+    bindMethods(this);
   }
-  async sendEmail(user, subject, text, htmlpath, objectReplacement = {}) {
+  async sendEmail(recipents, subject, objectReplacement = {}, templateName) {
     try {
+      const htmlpath = `../public/pages/${templateName}.html`;
+      const csspath = `../public/styles/emails.css`;
       const template = await getTemplate(join(__dirname, htmlpath));
+      const css = await readFile(join(__dirname, csspath), {
+        encoding: "utf-8",
+      });
       const replacements = {
-        username: user.firstName,
-        link: text,
         APP_NAME: APPLICATION_NAME,
+        CSS: css,
         ...objectReplacement,
       };
       const htmlToSend = template(replacements);
-      const recipientsArr = user.email.includes(",")
-        ? user.email.split(",")
-        : [user.email];
+      const recipientsArr = recipents.includes(",")
+        ? recipents.split(",")
+        : [recipents];
       const mailOptions = {
         Destination: {
           ToAddresses: recipientsArr,
@@ -72,16 +81,15 @@ class Mailer {
       };
 
       const info = await ses.sendEmail(mailOptions).promise();
-      logger.info("Email sent", {
+      this.logger.info("Email sent", {
         to: recipientsArr,
         subject: subject,
       });
       return info;
     } catch (error) {
-      logger.error("Error sending email", { error: error.message });
+      this.logger.error("Error sending email", { error: error.message });
       throw error;
     }
   }
 }
-
 export { Mailer };

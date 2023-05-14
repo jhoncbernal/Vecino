@@ -2,131 +2,18 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Verify Your Account</title>
+    <title>Verifica tu correo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- eslint-disable-next-line -->
     <style>
-      /* Reset styles */
-      body,
-      html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
-      table,
-      td {
-        border-collapse: collapse;
-      }
-      img {
-        border: none;
-        display: block;
-        max-width: 100%;
-      }
-
-      /* Main styles */
-      body {
-        background-color: #f2f2f2;
-      }
-      .container {
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px #888888;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        font-size: 16px;
-        line-height: 1.5;
-        color: #444444;
-      }
-      .subtitle {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        color: #444444;
-        width: 100%;
-        border-collapse: collapse;
-        border-spacing: 0px 0px;
-      }
-      p {
-        margin-top: 0;
-        margin-bottom: 20px;
-        text-align: left;
-      }
-      .button {
-        display: inline-block;
-        background-color: #007bff;
-        color: #ffffff;
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background-color 0.3s ease-in-out;
-      }
-      .button:hover {
-        background-color: #0056b3;
-      }
-      .footer {
-        background-color: #f5f5f5;
-        color: #777;
-        font-size: 12px;
-        padding: 10px;
-        text-align: left;
-      }
-
-      /* Media Queries */
-      @media only screen and (max-width: 480px) {
-        .container {
-          padding: 10px;
-        }
-        p {
-          font-size: 14px;
-        }
-        .button {
-          font-size: 16px;
-        }
-        .footer {
-          font-size: 12px;
-        }
-      }
-      .container {
-        background-image: url("https://drive.google.com/uc?export=view&id=1wFsLvKXJOBMkpZoMVBcqGyGy5UwmtuDb");
-        background-position: 0 0;
-        background-repeat: no-repeat;
-        animation-name: moveBackground;
-        animation-duration: 60s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-      }
-
-      @keyframes moveBackground {
-        from {
-          background-position: 0 0;
-        }
-        to {
-          background-position: 100% 0;
-        }
-      }
-      .terms {
-        font-size: 14px;
-        margin-top: 20px;
-        text-align: justify;
-      }
-
-      .terms a {
-        color: #007bff;
-        text-decoration: none;
-      }
-
-      .terms a:hover {
-        text-decoration: underline;
-      }
+      {{{CSS}}}
     </style>
   </head>
   <body>
     <div class="container">
       <img
         src="https://drive.google.com/uc?export=view&id=1yR79pwjmWhJT0T94lLbZW8NpqHs1G8v6"
+        alt="Logo"
         width="100"
       />
       <p class="subtitle">
@@ -137,13 +24,14 @@
       </p>
       <p>¡Casi ahí! Gracias por crear su cuenta {{APP_NAME}}.</p>
       <p>
-        Seleccione <b>CONTINUAR</b> para completar la verificación de su cuenta
+        Ingresa <b>TU CODIGO</b> para completar la verificación de su cuenta
       </p>
-      <p><a href="{{VERIFY_LINK}}" class="button">CONTINUAR</a></p>
+      <div class="pin-box">
+        <div class="pin">{{OTP}}</div>
+      </div>
       <p class="terms">
-        El enlace de arriba solo se puede usar una vez. Caducará en una hora,
-        después de lo cual deberá comenzar una nueva solicitud para verificar su
-        cuenta.
+        El codigo solo se puede usar una vez. Caducará en una hora, después de
+        lo cual deberá comenzar una nueva solicitud para verificar su cuenta.
       </p>
       <p class="terms">
         Si no realizó esta solicitud, puede ignorar este correo electrónico.

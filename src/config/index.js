@@ -6,6 +6,7 @@ export const PROJECT = {
   mode: process.env.PROJECT_MODE,
   environment: process.env.PROJECT_MODE,
   version: process.env.PROJECT_VERSION,
+  service: process.env.SERVICE_NAME,
 };
 export const SERVER = {
   hostname: process.env.SERVER_HOSTNAME,

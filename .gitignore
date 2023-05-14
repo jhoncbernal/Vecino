@@ -3,3 +3,4 @@ node_modules
 exampledata.json
 src/controllers/s
 schema
+*.log

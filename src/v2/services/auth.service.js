@@ -1,17 +1,25 @@
 import { generateOtp } from "../../utils/generate.utils.js";
 import BaseService from "./base.service.js";
 class AuthService extends BaseService {
-  constructor({ AuthRepository }) {
+  constructor({ AuthRepository, logger, mailer }) {
     super(AuthRepository);
     this.repository = AuthRepository;
+    this.logger = logger;
+    this.mailer = mailer;
   }
 
   async create(userData) {
     const otpCode = generateOtp();
     userData.otpCode = otpCode;
     const user = await this.repository.create(userData);
-    delete user.otpCode;
-    return user;
+    const auth = await this.repository.getById(user._id);
+    this.mailer.sendEmail(
+      user.email,
+      "OTP Code",
+      { OTP: `${otpCode}` },
+      "verifyemail"
+    );
+    return auth.toJSON();
   }
 
   async verifyOtp(email, otpCode) {

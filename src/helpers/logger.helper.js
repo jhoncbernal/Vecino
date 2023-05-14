@@ -1,7 +1,8 @@
 import winston from "winston";
 
 class Logger {
-  constructor(serviceName) {
+  constructor({config}) {
+    const serviceName = config.PROJECT.service|| "default";
     this.logger = winston.createLogger({
       level: "info",
       format: winston.format.json(),

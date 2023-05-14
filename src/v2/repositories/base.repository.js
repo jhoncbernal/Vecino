@@ -6,7 +6,7 @@ class BaseRepository {
   // Get a single model by ID
   async getById(modelId) {
     try {
-      const model = await this.model.findById(modelId);
+      const model = await this.model.findById(modelId).exec();
       if (!model) {
         throw new Error(`${this.model.modelName} Not found`);
       }
@@ -87,8 +87,10 @@ class BaseRepository {
   // Create a single model
   async create(modelData) {
     try {
-      const saved = await this.model.create(modelData);
-      return saved;
+      const saved = await new this.model(modelData).save();
+      if (!saved) throw new Error("Unable to create model");
+      const { _doc } = await this.getById(saved?._id);
+      return _doc;
     } catch (error) {
       console.error(error);
       throw handleMongoError(error);
@@ -99,7 +101,10 @@ class BaseRepository {
   async creates(modelsData) {
     try {
       const result = await this.model.insertMany(modelsData);
-      return result;
+      const createdModels = await this.getAllByCondition({
+        _id: { $in: result.insertedIds },
+      });
+      return createdModels;
     } catch (error) {
       console.error(error);
       throw handleMongoError(error);
@@ -109,7 +114,9 @@ class BaseRepository {
   // Update a single model by ID
   async updateById(modelId, updatedData) {
     try {
-      const result = await this.model.updateOne({ _id: modelId }, updatedData);
+      const result = await this.model
+        .updateOne({ _id: modelId }, updatedData)
+        .exec();
       return result.nModified;
     } catch (error) {
       console.error(error);
@@ -120,7 +127,7 @@ class BaseRepository {
   // Update multiple models that match a condition
   async updateByCondition(condition, updatedData) {
     try {
-      const result = await this.model.updateMany(condition, updatedData);
+      const result = await this.model.updateMany(condition, updatedData).exec();
       return result.nModified;
     } catch (error) {
       console.error(error);

@@ -9,22 +9,24 @@ class AuthRepository extends BaseRepository {
 
   async verifyOtp(email, otpCode) {
     try {
-      const auth = await this.model.findOne({
-        email: email,
-        otpCode: otpCode,
-        isVerified: false,
-      });
+      const auth = await this.model
+        .findOne({
+          email: email,
+          otpCode: otpCode,
+          isVerified: false,
+        })
+        .exec();
       if (!auth) {
         throw new Error("Invalid OTP or already verified");
       }
-      await this.model.updateOne(
+       await this.model.updateOne(
         { _id: auth._id },
         {
           otpCode: null,
           isVerified: true,
         }
       );
-      return auth;
+      return { ...auth.toJSON(), isVerified: true };
     } catch (error) {
       console.error(error);
       throw handleMongoError(error);
@@ -33,10 +35,12 @@ class AuthRepository extends BaseRepository {
 
   async resendOtp(email, otpCode) {
     try {
-      const auth = await this.model.findOne({
-        email: email,
-        isVerified: false,
-      });
+      const auth = await this.model
+        .findOne({
+          email: email,
+          isVerified: false,
+        })
+        .exec();
       if (!auth) {
         throw new Error("Invalid email or email already verified");
       }
@@ -46,7 +50,7 @@ class AuthRepository extends BaseRepository {
           otpCode: otpCode,
         }
       );
-      return auth;
+      return auth.toJSON();
     } catch (error) {
       console.error(error);
       throw handleMongoError(error);

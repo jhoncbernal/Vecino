@@ -1,10 +1,12 @@
 import { handleMongoError } from "../../utils/mongoErrorHandler.util.js";
+import { permittedFieldsOf } from "@casl/ability/extra";
 class BaseRepository {
-  constructor(model) {
+  constructor(model, eventBus) {
     this.model = model;
+    this.eventBus = eventBus;
   }
   // Get a single model by ID
-  async getById(modelId) {
+  async getById(modelId, ability) {
     try {
       const model = await this.model.findById(modelId).exec();
       if (!model) {
@@ -20,21 +22,22 @@ class BaseRepository {
   // Get all models with pagination
   async getAll(pageNumber, pageSize, ability) {
     try {
-      const { projection, query } =
-        this._extractProjectionAndConditionsFromAbility(ability);
-      const pipeline = [
-        query,
-        { $skip: (pageNumber - 1) * pageSize },
-        { $limit: pageSize },
-      ];
+      const page = Math.max(0, pageNumber);
+      const limit = Math.max(1, pageSize);
+      const fields = this._getAccessibleFields(ability);
+      const total = await this.model.accessibleBy(ability).countDocuments();
 
-      if (Object.keys(projection).length > 0) {
-        pipeline.splice(1, 0, { $project: projection });
-      }
+      const models = await this.model
+        .accessibleBy(ability)
+        .select(fields)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
 
-      const models = await this.model.aggregate(pipeline).exec();
-
-      return models;
+      return {
+        data: models,
+        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+      };
     } catch (error) {
       console.error(error);
       throw handleMongoError(error);
@@ -85,11 +88,15 @@ class BaseRepository {
   }
 
   // Create a single model
-  async create(modelData) {
+  async create(modelData, user) {
     try {
       const saved = await new this.model(modelData).save();
       if (!saved) throw new Error("Unable to create model");
       const { _doc } = await this.getById(saved?._id);
+      await this.eventBus.emit(`${this.model.modelName}.created`, {
+        model: _doc,
+        user,
+      });
       return _doc;
     } catch (error) {
       console.error(error);
@@ -134,33 +141,16 @@ class BaseRepository {
       throw handleMongoError(error);
     }
   }
-  _extractProjectionAndConditionsFromAbility(ability) {
-    const action = ability.action;
-    const subject = ability.subject;
-    const rules = ability.rules.filter(
-      (rule) => rule.action === action && rule.subject === subject
-    );
 
-    const result = rules.reduce(
-      (acc, rule) => {
-        if (rule.conditions && rule.conditions.$project) {
-          Object.assign(acc.projection, rule.conditions.$project);
-          // Clone the conditions object to remove the $project property
-          const conditionsWithoutProjection = { ...rule.conditions };
-          delete conditionsWithoutProjection.$project;
-          acc.conditions.push(conditionsWithoutProjection);
-        } else if (rule.conditions) {
-          acc.conditions.push(rule.conditions);
-        }
-        return acc;
-      },
-      { projection: {}, conditions: [] }
+  _getAccessibleFields(ability) {
+    const options = { fieldsFrom: (rule) => rule.fields || [] };
+    const fields = permittedFieldsOf(
+      ability,
+      "read",
+      this.model.modelName,
+      options
     );
-
-    const query = result.conditions.length
-      ? { $match: { $or: result.conditions } }
-      : { $match: {} };
-    return { ...result, query };
+    return fields.length ? fields.join(" ") : null;
   }
 }
 

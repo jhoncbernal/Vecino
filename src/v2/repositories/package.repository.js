@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class PackageRepository extends BaseRepository {
-  constructor({ Package }) {
-    super(Package);
+  constructor({ Package, eventBus }) {
+    super(Package, eventBus);
     this.model = Package;
   }
 }

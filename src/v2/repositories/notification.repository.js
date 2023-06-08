@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class NotificationRepository extends BaseRepository {
-  constructor({ Notification }) {
-    super(Notification);
+  constructor({ Notification, eventBus }) {
+    super(Notification, eventBus);
     this.model = Notification;
   }
 }

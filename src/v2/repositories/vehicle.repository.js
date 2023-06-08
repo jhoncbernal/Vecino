@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class VehicleRepository extends BaseRepository {
-  constructor({ Vehicle }) {
-    super(Vehicle);
+  constructor({ Vehicle, eventBus }) {
+    super(Vehicle, eventBus);
     this.model = Vehicle;
   }
 }

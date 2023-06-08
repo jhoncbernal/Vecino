@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class PetRepository extends BaseRepository {
-  constructor({ Pet }) {
-    super(Pet);
+  constructor({ Pet, eventBus }) {
+    super(Pet, eventBus);
     this.model = Pet;
   }
 }

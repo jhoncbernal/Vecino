@@ -2,8 +2,8 @@ import { handleMongoError } from "../../utils/mongoErrorHandler.util.js";
 import BaseRepository from "./base.repository.js";
 
 class AuthRepository extends BaseRepository {
-  constructor({ Auth }) {
-    super(Auth);
+  constructor({ Auth, eventBus }) {
+    super(Auth, eventBus);
     this.model = Auth;
   }
 

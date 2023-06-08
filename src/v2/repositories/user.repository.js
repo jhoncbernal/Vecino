@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class UserRepository extends BaseRepository {
-  constructor({ User }) {
-    super(User);
+  constructor({ User , eventBus}) {
+    super(User, eventBus);
     this.model = User;
   }
 }

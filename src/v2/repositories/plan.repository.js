@@ -1,7 +1,7 @@
 import BaseRepository from "./base.repository.js";
 class PlanRepository extends BaseRepository {
-  constructor({ Plan }) {
-    super(Plan);
+  constructor({ Plan, eventBus }) {
+    super(Plan, eventBus);
     this.model = Plan;
   }
 }

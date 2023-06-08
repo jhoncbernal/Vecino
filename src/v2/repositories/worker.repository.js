@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class WorkerRepository extends BaseRepository {
-  constructor({ Worker }) {
-    super(Worker);
+  constructor({ Worker, eventBus }) {
+    super(Worker, eventBus);
     this.model = Worker;
   }
 }

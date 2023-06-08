@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class FileRepository extends BaseRepository {
-  constructor({ File }) {
-    super(File);
+  constructor({ File, eventBus }) {
+    super(File, eventBus);
     this.model = File;
   }
 }

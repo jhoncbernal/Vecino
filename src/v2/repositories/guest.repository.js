@@ -1,8 +1,8 @@
 import BaseRepository from "./base.repository.js";
 
 class GuestRepository extends BaseRepository {
-  constructor({ Guest }) {
-    super(Guest);
+  constructor({ Guest, eventBus }) {
+    super(Guest, eventBus);
     this.model = Guest;
   }
 }

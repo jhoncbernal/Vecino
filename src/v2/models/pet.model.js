@@ -1,6 +1,7 @@
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 import { v4 as uuidv4 } from "uuid";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
 
 const petSchema = new Schema({
   _id: { type: String, default: uuidv4 },
@@ -15,7 +16,7 @@ const petSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
-
+petSchema.plugin(accessibleRecordsPlugin);
 const Pet = model("Pet", petSchema);
 
 export  {Pet, petSchema};

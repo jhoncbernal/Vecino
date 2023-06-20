@@ -2,10 +2,13 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-import { ErrorMiddleware, NotFoundMiddleware } from "../../middlewares/index.js";
+import {
+  ErrorMiddleware,
+  NotFoundMiddleware,
+} from "../../middlewares/index.js";
 import session from "express-session";
 import passport from "../../utils/passport-setup.js";
-import { JWT_SECRET } from "../../config/index.js";
+import { JWT_SECRET, PROJECT } from "../../config/index.js";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 
@@ -32,18 +35,23 @@ export default function ({
   const corsOptions = {
     origin: ["https://vecinoo.herokuapp.com", "http://localhost:5173"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
     allowedHeaders:
       "Content-Type,Authorization,encType,Access-Control-Allow-Origin,Access-Control-Allow-Headers,Origin,Accept,X-Requested-With,Access-Control-Request-Method,Access-Control-Request-Headers",
   };
-
   router.use(cookieParser());
+  
+  const isProd = PROJECT.mode === "production";
   router.use(
     session({
       secret: JWT_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 1800000,
+        httpOnly: true,
+        secure: `${isProd ? "true" : "auto"}`,
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        sameSite: `${isProd ? "none" : "lax"}`, // set to 'none' for cross-site contexts
       },
     })
   );
@@ -85,7 +93,7 @@ export default function ({
   });
 
   router.use(NotFoundMiddleware);
-
+  
   router.use(apiRoutesV2);
 
   return router;

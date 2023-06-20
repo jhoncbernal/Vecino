@@ -1,8 +1,10 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 import { v4 as uuidv4 } from "uuid";
 import { generatePin } from "../../utils/generate.utils.js";
 import { Notification } from "./notification.model.js";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
+
 const packageSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   packageCode: {
@@ -13,7 +15,7 @@ const packageSchema = new Schema({
     },
     unique: true,
   },
-  courier: { type: String, required: true },
+  carrier: { type: String, required: true },
   receivedBy: { type: String, ref: "Worker" },
   receivedAt: {
     type: Date,
@@ -48,6 +50,7 @@ const packageSchema = new Schema({
     default: "package",
   },
 });
+packageSchema.plugin(accessibleRecordsPlugin);
 const Package = Notification.discriminator("Package", packageSchema);
 
 export { Package, packageSchema };

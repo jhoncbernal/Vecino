@@ -1,6 +1,8 @@
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 import { v4 as uuidv4 } from "uuid";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
+
 const addressSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   street: {
@@ -46,6 +48,6 @@ const addressSchema = new Schema({
     },
   }
 });
-
+addressSchema.plugin(accessibleRecordsPlugin);
 const Address = model("Address", addressSchema);
 export  { Address, addressSchema };

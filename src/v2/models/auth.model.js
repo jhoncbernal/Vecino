@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import validator from "validator";
 const { isEmail } = validator;
 import bcrypt from "bcryptjs";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
 
 const { compareSync, hashSync, genSaltSync } = bcrypt;
 const authSchema = new Schema({
@@ -62,6 +63,6 @@ authSchema.pre("save", async function (next) {
   auth.password = hashedPassword;
   next();
 });
-
+authSchema.plugin(accessibleRecordsPlugin);
 const Auth = model("Auth", authSchema);
 export { Auth, authSchema };

@@ -3,9 +3,9 @@ class BaseService {
     this.repository = repository;
   }
   // Get a single result by ID
-  async getById(id) {
+  async getById(id, ability) {
     try {
-      const result = await this.repository.getById(id);
+      const result = await this.repository.getById(id, ability);
       return result;
     } catch (error) {
       console.error(error);
@@ -47,9 +47,9 @@ class BaseService {
   }
 
   // Create a single document
-  async create(document) {
+  async create(document, user) {
     try {
-      const result = await this.repository.create(document);
+      const result = await this.repository.create(document, user);
       return result;
     } catch (error) {
       console.error(error);

@@ -16,7 +16,7 @@ import Router from "../../v2/routes/index.js";
 import * as Models from "../../v2/models/index.js";
 //repositories
 import * as Repositories from "../../v2/repositories/index.js";
-import { Logger, Mailer } from "../../helpers/index.js";
+import { Logger, Mailer, EventBus } from "../../helpers/index.js";
 
 const container = createContainer({
   injectionMode: awilix.InjectionMode.PROXY,
@@ -28,6 +28,7 @@ container.register({
   database: asClass(database).singleton(),
   logger: asClass(Logger).singleton(),
   mailer: asClass(Mailer).singleton(),
+  eventBus: asClass(EventBus).singleton(),
 });
 
 // Register all services as classes

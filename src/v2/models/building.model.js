@@ -12,7 +12,6 @@ const buildingSchema = new Schema({
     required: true,
   },
   subscriptionPlan: { type: String, ref: "Plan", required: true },
-  workers: [{ type: String, ref: "Worker" }],
   guestParkingLot: { type: String, ref: "ParkingLot" },
   residentParkingLot: { type: String, ref: "ParkingLot" },
   parkingLimits: {

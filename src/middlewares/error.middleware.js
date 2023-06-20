@@ -16,6 +16,10 @@ const wrapResponse = (data, statusCode) => {
       } catch (error) {
         wrappedResponse.data = data;
       }
+    } else if (data?.data && data?.meta) {
+      // If data has a 'data' and 'meta' property, extract both separately
+      wrappedResponse.data = data.data;
+      wrappedResponse.meta = data.meta;
     } else {
       wrappedResponse.data = data;
     }

@@ -9,7 +9,7 @@ class BaseController {
   async get(req, res) {
     try {
       const id = req.params.id;
-      const user = await this.service.getById(id);
+      const user = await this.service.getById(id, req.ability);
       return res.send(user);
     } catch (error) {
       this.logger.error(error);
@@ -43,7 +43,8 @@ class BaseController {
   async create(req, res) {
     try {
       const userData = req.body;
-      const saved = await this.service.create(userData);
+      const user = req.user;
+      const saved = await this.service.create(userData, user);
       return res.status(201).send(saved);
     } catch (error) {
       this.logger.error(error);

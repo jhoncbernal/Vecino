@@ -8,13 +8,13 @@ class AuthService extends BaseService {
     this.mailer = mailer;
   }
 
-  async create(userData) {
+  async create(userData, user) {
     const otpCode = generateOtp();
     userData.otpCode = otpCode;
-    const user = await this.repository.create(userData);
-    const auth = await this.repository.getById(user._id);
+    const result = await this.repository.create(userData, user);
+    const auth = await this.repository.getById(result._id);
     this.mailer.sendEmail(
-      user.email,
+      result.email,
       "OTP Code",
       { OTP: `${otpCode}` },
       "verifyemail"

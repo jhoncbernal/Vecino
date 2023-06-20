@@ -1,6 +1,8 @@
 import mongoose, { model as _model } from "mongoose";
 const { Schema } = mongoose;
 import { v4 as uuidv4 } from "uuid";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
+
 const vehicleSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   photo: { type: String, ref: "File" },
@@ -22,6 +24,6 @@ const vehicleSchema = new Schema({
     },
   ],
 });
-
+vehicleSchema.plugin(accessibleRecordsPlugin);
 const Vehicle = _model("Vehicle", vehicleSchema);
 export  { Vehicle, vehicleSchema };

@@ -1,15 +1,15 @@
 import mongoose, { model } from "mongoose";
 const { Schema } = mongoose;
 import { v4 as uuidv4 } from "uuid";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
 const residentialUnitSchema = new Schema({
   _id: { type: String, default: uuidv4 },
-  unitNumber: String,
+  unitNumber: { type: String },
   unitType: {
     type: String,
-    enum: ["appartment", "house","other"],
+    enum: ["appartment", "house", "other"],
     required: true,
   },
-
   building: { type: String, ref: "Building" },
   address: { type: String, ref: "Address", required: true },
   owners: [{ type: String, ref: "User", required: true }],
@@ -21,10 +21,10 @@ const residentialUnitSchema = new Schema({
     },
   ],
   isRented: { type: Boolean, default: false }, // Add this field to indicate if the unit is rented
-  propertyInfo: {
-    sectionNumber: { type: String },
-    propertyNumber: { type: String },
-  },
+
+  sectionNumber: { type: String },
+  propertyNumber: { type: String },
+
   needsParkingSpace: { type: Boolean, default: false },
   parkingSpace: [{ type: String, ref: "ParkingSpot" }],
   tenants: [{ type: String, ref: "User" }],
@@ -37,6 +37,10 @@ const residentialUnitSchema = new Schema({
     default: "email",
   },
 });
-
+residentialUnitSchema.index(
+  { unitNumber: 1, building: 1 },
+  { unique: true }
+);
+residentialUnitSchema.plugin(accessibleRecordsPlugin);
 const RecidentialUnit = model("RecidentialUnit", residentialUnitSchema);
 export { RecidentialUnit, residentialUnitSchema };

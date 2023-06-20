@@ -40,8 +40,9 @@ const ses = new SES({ region: AWSREGION });
 const templates = new Map();
 // Mailer class
 class Mailer {
-  constructor({ logger }) {
+  constructor({ logger, config }) {
     this.logger = logger;
+    this.config = config;
     bindMethods(this);
   }
   async sendEmail(recipents, subject, objectReplacement = {}, templateName) {
@@ -79,8 +80,9 @@ class Mailer {
         },
         Source: FROM_EMAIL,
       };
-
-      const info = await ses.sendEmail(mailOptions).promise();
+      let info;
+      if (this.config.env === "production")
+        info = await ses.sendEmail(mailOptions).promise();
       this.logger.info("Email sent", {
         to: recipientsArr,
         subject: subject,

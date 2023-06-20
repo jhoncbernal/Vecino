@@ -1,79 +1,100 @@
 import { AbilityBuilder, createMongoAbility } from "@casl/ability";
+
+// Define role constants
+const ROLES = {
+  RESIDENT: "resident",
+  WORKER: "worker",
+};
+
+// Define workerType constants
+const WORKER_TYPES = {
+  PROPERTY_MANAGER: "propertyManager",
+  CONCIERGE: "concierge",
+  SECURITY: "security",
+  JANITOR: "janitor",
+  MAINTENANCE: "maintenance",
+};
+
+// Define actions constants
+const ACTIONS = {
+  CREATE: "create",
+  READ: "read",
+  UPDATE: "update",
+  DELETE: "delete",
+  MANAGE: "manage",
+};
+
 export function defineAbilitiesFor(user) {
   const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
+  //Check login
+  can(ACTIONS.READ, "Auth");
   if (!user) {
-    can("read", "Building", { $project: { name: 1 , address:1} });
-    can("read", "Plan", {
-      $project: { createdAt: 0, updatedAt: 0, __v: 0 },
-    });
-    can("read", "RecidentialUnit", { $project: { unitNumber: 1 } });
+    defineAbilitiesForGuest(can);
   }
-  if (user && user.role) {
-    if (user.role === "resident") {
-      /*       const ownerUnitTypes = user.addresses
-      .filter((address) => address.userType === "owner")
-      .map((address) => address.unitType);
 
-    can(["create", "update", "delete"], "User", {
-      $or: user.addresses.map((address) => ({
-        addresses: {
-          $elemMatch: {
-            userType: "tenant",
-            unitType: { $in: ownerUnitTypes },
-            _id: address._id,
-            unitResidents: { $in: ["$._id"] },
-          },
-        },
-      })), 
-    });*/
-      can("read", "Building", { $project: { _id: 0 } });
-      can(["update", "delete", "read"], "User", { $match: { _id: user._id } });
-    } else if (user.role === "worker") {
-      switch (user.workerType) {
-        case "propertyManager":
-          // Define abilities for propertyManager role
-          can("manage", "User", {
-            addresses: { $elemMatch: { building: worker.building } },
-          });
-          can("manage", "Building", {
-            addresses: { $elemMatch: { building: worker.building } },
-          });
-          break;
-
-        case "concierge":
-          // Define abilities for concierge role
-          can("read", "User", {
-            addresses: { $elemMatch: { building: worker.building } },
-          });
-          can("create", "Guest", {
-            visitHistory: { $elemMatch: { building: worker.building } },
-          });
-          can(["read", "create"], "Notification", {
-            building: worker.building,
-          });
-          break;
-
-        case "security":
-          // Define abilities for security role
-          can("read", "ParkingSpot", {
-            building: worker.building,
-          });
-          can("read", "Guest", {
-            visitHistory: { $elemMatch: { building: worker.building } },
-          });
-          break;
-
-        // ... add other workerType cases as needed
-        case "janitor" || "maintenance":
-          can(["read", "update"], "MaintenanceRequest", {
-            building: worker.building,
-          });
-        default:
-          break;
-      }
-      // Add more permissions depending on the worker type
-    }
+  if (user && user.role === ROLES.RESIDENT) {
+    defineAbilitiesForResident(can, user);
+  } else if (user && user.role === ROLES.WORKER) {
+    defineAbilitiesForWorker(can, user);
   }
 
   return build();
+}
+
+// Define abilities for guest user
+function defineAbilitiesForGuest(can) {
+  can(ACTIONS.READ, "Building", ["name", "address"]);
+  can(ACTIONS.READ, "Plan", ["-createdAt", "-updatedAt", "-__v"]);
+  can(ACTIONS.READ, "RecidentialUnit", ["unitNumber"]);
+}
+
+// Define abilities for resident user
+function defineAbilitiesForResident(can, user) {
+  can(ACTIONS.READ, "Building");
+  can([ACTIONS.UPDATE, ACTIONS.DELETE, ACTIONS.READ], "User", {
+    _id: user._id,
+  });
+  can(ACTIONS.READ, "RecidentialUnit", {
+    owners: { $in: [user._id] },
+  });
+}
+
+// Define abilities for worker user
+function defineAbilitiesForWorker(can, user) {
+  switch (user.workerType) {
+    case WORKER_TYPES.PROPERTY_MANAGER:
+      can(ACTIONS.MANAGE, "RecidentialUnit", {
+        building: { $in: user.buildings },
+      });
+      can(ACTIONS.MANAGE, "Building", {
+        _id: { $in: user.buildings },
+      });
+      break;
+    case WORKER_TYPES.CONCIERGE:
+      can(ACTIONS.READ, "User", {
+        "addresses.building": user.building,
+      });
+      can(ACTIONS.CREATE, "Guest", {
+        "visitHistory.building": user.building,
+      });
+      can([ACTIONS.READ, ACTIONS.CREATE], "Notification", {
+        building: user.building,
+      });
+      break;
+    case WORKER_TYPES.SECURITY:
+      can(ACTIONS.READ, "ParkingSpot", { building: user.building });
+      can(ACTIONS.READ, "Guest", {
+        "visitHistory.building": user.building,
+      });
+      break;
+    case WORKER_TYPES.JANITOR:
+    case WORKER_TYPES.MAINTENANCE:
+      can([ACTIONS.READ, ACTIONS.UPDATE], "MaintenanceRequest", {
+        building: user.building,
+      });
+      break;
+    default:
+      // Handle missing or unknown workerType
+      console.error(`Unknown workerType: ${user.workerType}`);
+  }
 }

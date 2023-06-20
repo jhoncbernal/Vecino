@@ -13,7 +13,9 @@ class AuthController extends BaseController {
     try {
       const userData = req.body;
       const saved = await this.service.create(userData);
-      return res.status(201).send({ ...saved, message: "OTP sent successfully" });
+      return res
+        .status(201)
+        .send({ ...saved, message: "OTP sent successfully" });
     } catch (error) {
       this.logger.error(error);
       return res
@@ -48,6 +50,17 @@ class AuthController extends BaseController {
         throw new Error("Invalid OTP");
       }
       return res.status(200).send({ message: "OTP sent successfully" });
+    } catch (error) {
+      this.logger.error(error);
+      return res
+        .status(error?.statusCode || 400)
+        .send({ message: error.message });
+    }
+  }
+
+  async checkAuth(req, res) {
+    try {
+      return res.status(200).send({ message: "AUTHENTICATED" });
     } catch (error) {
       this.logger.error(error);
       return res

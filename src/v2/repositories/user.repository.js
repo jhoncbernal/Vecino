@@ -5,6 +5,7 @@ class UserRepository extends BaseRepository {
     super(User, eventBus);
     this.model = User;
   }
+
 }
 
 export default UserRepository;

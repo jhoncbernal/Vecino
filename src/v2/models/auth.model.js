@@ -1,12 +1,13 @@
-import mongoose, { model } from "mongoose";
-const { Schema } = mongoose;
+import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import validator from "validator";
-const { isEmail } = validator;
 import bcrypt from "bcryptjs";
 import { accessibleRecordsPlugin } from "@casl/mongoose";
 
+const { Schema } = mongoose;
+const { isEmail } = validator;
 const { compareSync, hashSync, genSaltSync } = bcrypt;
+
 const authSchema = new Schema({
   _id: { type: String, default: uuidv4 },
   email: {
@@ -24,12 +25,14 @@ const authSchema = new Schema({
       return this.provider === "local";
     },
   },
-  provider: {
-    type: String,
-    enum: ["local", "google", "facebook"],
-    required: true,
-  },
-  providerId: String,
+  providers: [
+    {
+      type: String,
+      enum: ["local", "google", "facebook"],
+      required: true,
+    },
+  ],
+  providerIds: [String],
   enabled: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
   isOnline: { type: Boolean, default: false },
@@ -37,15 +40,10 @@ const authSchema = new Schema({
 });
 
 authSchema.methods.toJSON = function () {
-  // Convert Mongoose document to a plain JavaScript object
-  let auth = this.toObject();
-
-  // Remove sensitive or unnecessary fields
+  const auth = this.toObject();
   delete auth.password;
   delete auth.__v;
   delete auth.otpCode;
-
-  // Return the updated object
   return auth;
 };
 
@@ -63,6 +61,9 @@ authSchema.pre("save", async function (next) {
   auth.password = hashedPassword;
   next();
 });
+
 authSchema.plugin(accessibleRecordsPlugin);
-const Auth = model("Auth", authSchema);
+
+const Auth = mongoose.model("Auth", authSchema);
+
 export { Auth, authSchema };

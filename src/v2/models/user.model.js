@@ -6,14 +6,14 @@ import { accessibleRecordsPlugin } from "@casl/mongoose";
 const userSchema = new Schema(
   {
     _id: { type: String, default: uuidv4 },
-    photo: { type: String, ref: "File" },
+    photo: { type: String, ref: "File", default:""},
     firstName: String,
     lastName: String,
     auth: { type: String, ref: "Auth", required: true },
     vehicles: [{ type: String, ref: "Vehicle" }],
     role: { type: String, required: true, default: "resident" },
     acceptPolicity: { type: Boolean, required: true, default: false },
-    contactNumber: { type: String, required: true },
+    contactNumber: { type: String, required: true, default: "00000001" },
     documentId: {
       type: Number,
     },
@@ -29,7 +29,9 @@ const userSchema = new Schema(
     timestamps: true,
   }
 );
+userSchema.index({ auth: 1, role: 1 }, { unique: true });
 userSchema.plugin(accessibleRecordsPlugin);
+
 const User = model("User", userSchema);
 
 export  { User, userSchema };

@@ -60,12 +60,14 @@ class AuthController extends BaseController {
 
   async checkAuth(req, res) {
     try {
-      return res.status(200).send({ message: "AUTHENTICATED" });
+      return res
+        .status(200)
+        .send({ isAuthenticated: true, user: req.user });
     } catch (error) {
       this.logger.error(error);
       return res
         .status(error?.statusCode || 400)
-        .send({ message: error.message });
+        .send({ message: error.message , isAuthenticated: false});
     }
   }
 }

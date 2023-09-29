@@ -15,7 +15,7 @@ const packageSchema = new Schema({
     },
     unique: true,
   },
-  carrier: { type: String, required: true },
+  courier: { type: String, required: true },
   receivedBy: { type: String, ref: "Worker" },
   receivedAt: {
     type: Date,
@@ -41,8 +41,10 @@ const packageSchema = new Schema({
   recidentialUnit: { type: String, ref: "RecidentialUnit" },
   signature: { type: String },
   photo: { type: String, ref: "File" },
+  owners: [{ type: String, ref: "User" }],
   trackingNumber: { type: String },
   recipientType: { type: String, default: "recidency" },
+  building: { type: String, ref: "Building" },
   type: {
     type: String,
     required: true,

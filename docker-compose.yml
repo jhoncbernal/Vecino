@@ -42,7 +42,7 @@ services:
         max-size: 10m
   redis:
     container_name: redis-${PROJECT_NAME}
-    image: bitnami/redis:6.2.7
+    image: bitnami/redis:latest
     restart: always
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}

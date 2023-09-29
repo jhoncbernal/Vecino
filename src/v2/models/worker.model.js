@@ -5,8 +5,9 @@ import { accessibleRecordsPlugin } from "@casl/mongoose";
 
 const workerSchema = new Schema({
   _id: { type: String, default: uuidv4 },
-  photo: { type: String, ref: "File" },
-  name: String,
+  photo: { type: String, ref: "File", default: "" },
+  firstName: String,
+  lastName: String,
   contactNumber: String,
   auth: { type: String, ref: "Auth", required: true },
   role: { type: String, required: true },

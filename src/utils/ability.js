@@ -69,6 +69,9 @@ function defineAbilitiesForWorker(can, user) {
       can(ACTIONS.MANAGE, "Building", {
         _id: { $in: user.buildings },
       });
+      can(ACTIONS.MANAGE, "Package", {
+        building: { $in: user.buildings },
+      });
       break;
     case WORKER_TYPES.CONCIERGE:
       can(ACTIONS.READ, "User", {

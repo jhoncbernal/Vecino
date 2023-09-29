@@ -40,7 +40,7 @@ export default function ({
       "Content-Type,Authorization,encType,Access-Control-Allow-Origin,Access-Control-Allow-Headers,Origin,Accept,X-Requested-With,Access-Control-Request-Method,Access-Control-Request-Headers",
   };
   router.use(cookieParser());
-  
+
   const isProd = PROJECT.mode === "production";
   router.use(
     session({
@@ -58,6 +58,8 @@ export default function ({
 
   router.use(passport.initialize());
   router.use(passport.session());
+
+
   router.use(ErrorMiddleware);
   apiRoutesV2
     .use(express.json())
@@ -93,7 +95,7 @@ export default function ({
   });
 
   router.use(NotFoundMiddleware);
-  
+
   router.use(apiRoutesV2);
 
   return router;

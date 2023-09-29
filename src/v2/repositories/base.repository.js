@@ -92,11 +92,11 @@ class BaseRepository {
     try {
       const saved = await new this.model(modelData).save();
       if (!saved) throw new Error("Unable to create model");
-      const { _doc } = await this.getById(saved?._id);
-      await this.eventBus.emit(`${this.model.modelName}.created`, {
+      const { _doc } = saved;
+     /*  await this.eventBus.emit(`${this.model.modelName}.created`, {
         model: _doc,
         user,
-      });
+      }); */
       return _doc;
     } catch (error) {
       console.error(error);

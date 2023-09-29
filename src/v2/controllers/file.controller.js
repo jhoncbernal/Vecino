@@ -19,5 +19,6 @@ class FileController extends BaseController {
       return res.status(400).send({ message: "Invalid Request" });
     }
   }
+
 }
 export default FileController;

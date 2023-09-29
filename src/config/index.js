@@ -19,6 +19,17 @@ export const MONGO_DB = {
   username: process.env.MONGODB_USERNAME,
   password: process.env.MONGODB_PASSWORD,
 };
+
+export const OAUTH2={
+  google:{
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  },
+  facebook:{
+    clientID: process.env.FACEBOOK_CLIENT_ID,
+    clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+  }
+}
 export const FRONT_END_URL = process.env.FRONT_END_URL;
 export const APPLICATION_NAME = process.env.APPLICATION_NAME;
 export const JWT_SECRET = process.env.JWT_SECRET;
@@ -34,3 +45,4 @@ export const AWSBUCKETIMG = process.env.AWSBUCKETIMG;
 export const HOST = process.env.HOST;
 export const API = process.env.API;
 export const FRONT = process.env.FRONT;
+export const BACKEND_API_URL = process.env.BACKEND_API_URL;

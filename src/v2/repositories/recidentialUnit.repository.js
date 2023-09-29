@@ -54,8 +54,11 @@ class RecidentialUnitRepository extends BaseRepository {
     try {
       const page = Math.max(0, pageNumber);
       const limit = Math.max(1, pageSize);
-      const fields = this._getAccessibleFields(ability);
 
+      // Only select the required fields: _id, unitNumber, owners, notificationWay
+      const fields = "_id unitNumber owners notificationWay building";
+
+      // Find models by unitNumber and accessible by ability
       const models = await this.model
         .accessibleBy(ability)
         .find({ unitNumber: new RegExp(unitNumber, "i") })
@@ -67,13 +70,18 @@ class RecidentialUnitRepository extends BaseRepository {
         .lean() // return plain JavaScript objects
         .exec();
 
-      const total = await this.model.accessibleBy(ability).countDocuments();
+      // Count only the documents that match the unitNumber query and are accessible by ability
+      const total = await this.model
+        .accessibleBy(ability)
+        .countDocuments({ unitNumber: new RegExp(unitNumber, "i") });
+
       return {
         data: models,
         meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
       };
     } catch (error) {
       console.error(error);
+      // Replace handleMongoError with your own error handling logic
       throw handleMongoError(error);
     }
   }

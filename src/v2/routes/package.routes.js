@@ -3,6 +3,7 @@ import { AccessControl } from "../../middlewares/index.js";
 
 export default function ({ PackageController }) {
   const router = Router();
+  router.get("/couriers", PackageController.getAllCarriers);
 
   router.get("/:id", PackageController.get);
   router.get("", AccessControl("Package", "read"), PackageController.getAll);

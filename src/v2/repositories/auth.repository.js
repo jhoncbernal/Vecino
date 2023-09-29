@@ -19,7 +19,7 @@ class AuthRepository extends BaseRepository {
       if (!auth) {
         throw new Error("Invalid OTP or already verified");
       }
-       await this.model.updateOne(
+      await this.model.updateOne(
         { _id: auth._id },
         {
           otpCode: null,
@@ -51,6 +51,15 @@ class AuthRepository extends BaseRepository {
         }
       );
       return auth.toJSON();
+    } catch (error) {
+      console.error(error);
+      throw handleMongoError(error);
+    }
+  }
+
+  async getByEmail(email) {
+    try {
+      return await this.model.findOne({ email: email });
     } catch (error) {
       console.error(error);
       throw handleMongoError(error);

@@ -8,7 +8,7 @@ import {
 } from "../../middlewares/index.js";
 import session from "express-session";
 import passport from "../../utils/passport-setup.js";
-import { JWT_SECRET, PROJECT } from "../../config/index.js";
+import { JWT_SECRET, PROJECT, CORS_WHITELIST } from "../../config/index.js";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 
@@ -33,7 +33,7 @@ export default function ({
   const apiRoutesV2 = express.Router();
 
   const corsOptions = {
-    origin: ["https://vecinoo.herokuapp.com", "http://localhost:5173"],
+    origin: CORS_WHITELIST,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     allowedHeaders:

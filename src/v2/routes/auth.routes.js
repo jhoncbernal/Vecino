@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import "../../utils/passport-setup.js";
 import { AccessControl } from "../../middlewares/index.js";
+import {FRONT_END_URL} from "../../config/index.js";
 
 export default function ({ AuthController }) {
   const router = Router();
@@ -10,7 +11,7 @@ export default function ({ AuthController }) {
 
   const handleOAuthError = (err, req, res, next) => {
     console.error(err); // Log the error to the server's console
-    res.redirect("http://localhost:5173/login?error=Authentication failed."); // Redirect to the frontend with a query parameter indicating the error
+    res.redirect(`${FRONT_END_URL}/login?error=Authentication failed.`); // Redirect to the frontend with a query parameter indicating the error
   };
 
   router.post(
@@ -36,7 +37,7 @@ export default function ({ AuthController }) {
       `/${provider}/callback`,
       passport.authenticate(provider, { failureRedirect: "/login" }),
       (req, res) => {
-        res.redirect("http://localhost:5173/");
+        res.redirect(`${FRONT_END_URL}/`);
       },
       handleOAuthError
     );

@@ -27,20 +27,38 @@ class RecidentialUnitRepository extends BaseRepository {
   async getById(id, ability) {
     try {
       const fields = this._getAccessibleFields(ability);
-
+      const userPopulate = [
+        {
+          path: "photo",
+          model: "File",
+          select: "fileUrl",
+        },
+        {
+          path: "auth",
+          model: "Auth",
+          select: "email enabled isVerified",
+        },
+      ];
       const model = await this.model
-        .findById(id)
+        .findById(id, "owners tenants guests parkingSpace")
         .select(fields)
         .populate({
           path: "owners",
-          populate: {
-            path: "photo",
-            model: "File",
-          },
+          select: "photo auth",
+          populate: userPopulate,
         })
-        .populate("tenants")
-        .populate("guests")
+        .populate({
+          path: "tenants",
+          select: "photo auth",
+          populate: userPopulate,
+        })
+        .populate({
+          path: "guests",
+          select: "photo auth",
+          populate: userPopulate,
+        })
         .populate("parkingSpace")
+        .lean()
         .exec();
 
       return model;
@@ -82,6 +100,52 @@ class RecidentialUnitRepository extends BaseRepository {
     } catch (error) {
       console.error(error);
       // Replace handleMongoError with your own error handling logic
+      throw handleMongoError(error);
+    }
+  }
+
+  async getAllUsersByBuilding(buildingId) {
+    try {
+      const userPopulate = [
+        {
+          path: "auth",
+          model: "Auth",
+          select: "email enabled isVerified",
+        },
+      ];
+      const models = await this.model
+        .find({ building: buildingId })
+        .populate({
+          path: "owners",
+          select: "auth",
+          populate: userPopulate,
+        })
+        .populate({
+          path: "tenants",
+          select: "auth",
+          populate: userPopulate,
+        })
+        .lean()
+        .exec();
+
+      return models;
+    } catch (error) {
+      console.error(error);
+      throw handleMongoError(error);
+    }
+  }
+
+  async getAllRecidentialUnitsByBuilding(buildingId, ability) {
+    try {
+      const models = await this.model
+        .find({ building: buildingId })
+        .lean()
+        .select("_id unitNumber")
+        .exec();
+
+      return models;
+    } catch (error) {
+      console.error(error);
       throw handleMongoError(error);
     }
   }

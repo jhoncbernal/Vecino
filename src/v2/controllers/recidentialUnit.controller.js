@@ -17,7 +17,7 @@ class RecidentialUnitController extends BaseController {
       );
       res.send(result);
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });
@@ -36,7 +36,24 @@ class RecidentialUnitController extends BaseController {
       );
       res.send(result);
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
+      return res
+        .status(error?.statusCode || 400)
+        .send({ message: error.message });
+    }
+  }
+
+  async getAllRecidentialUnitsByBuilding(req, res) {
+    const { buildingId } = req.params;
+    const { ability } = req;
+    try {
+      const result = await this.service.getAllRecidentialUnitsByBuilding(
+        buildingId,
+        ability
+      );
+      res.send(result);
+    } catch (error) {
+      this.logger.error(error.message, error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });

@@ -17,7 +17,7 @@ class AuthController extends BaseController {
         .status(201)
         .send({ ...saved, message: "OTP sent successfully" });
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });
@@ -35,7 +35,7 @@ class AuthController extends BaseController {
         .status(200)
         .send({ message: "OTP verified successfully", ...result });
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });
@@ -51,7 +51,7 @@ class AuthController extends BaseController {
       }
       return res.status(200).send({ message: "OTP sent successfully" });
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message });
@@ -64,7 +64,7 @@ class AuthController extends BaseController {
         .status(200)
         .send({ isAuthenticated: true, user: req.user });
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);;
       return res
         .status(error?.statusCode || 400)
         .send({ message: error.message , isAuthenticated: false});

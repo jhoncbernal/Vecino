@@ -3,7 +3,10 @@ import { AccessControl } from "../../middlewares/index.js";
 
 export default function ({ RecidentialUnitController }) {
   const router = Router();
-
+  router.get(
+    "/recidentialUnits/:buildingId",
+    RecidentialUnitController.getAllRecidentialUnitsByBuilding
+  );
   router.get(
     "/:id",
     AccessControl("RecidentialUnit"),

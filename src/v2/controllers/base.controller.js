@@ -12,7 +12,7 @@ class BaseController {
       const user = await this.service.getById(id, req.ability);
       return res.send(user);
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
@@ -24,7 +24,7 @@ class BaseController {
       const users = await this.service.getAll(pageNumber, pageSize, req.ability);
       return res.send(users);
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res.status(error?.statusCode||500).send({ message: error.message });
     }
   }
@@ -35,7 +35,7 @@ class BaseController {
       await this.service.deleteById(id);
       return res.send({ message: " deleted successfully" });
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }
@@ -44,10 +44,10 @@ class BaseController {
     try {
       const userData = req.body;
       const user = req.user;
-      const saved = await this.service.create(userData, user);
+      const saved = await this.service.create(userData, user, req?.ability);
       return res.status(201).send(saved);
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res.status(error?.statusCode||400).send({ message: error.message });
     }
   }
@@ -59,7 +59,7 @@ class BaseController {
       await this.service.updateById(id, updatedData);
       return res.send({ message: " updated successfully" });
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(error.message, error);
       return res.status(error?.statusCode||404).send({ message: error.message });
     }
   }

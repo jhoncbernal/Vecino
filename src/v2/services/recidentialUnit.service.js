@@ -32,6 +32,19 @@ class RecidentialUnitService extends BaseService {
       throw error;
     }
   }
+
+  async getAllRecidentialUnitsByBuilding(buildingId, ability) {
+    try {
+      const result = await this.repository.getAllRecidentialUnitsByBuilding(
+        buildingId,
+        ability
+      );
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
 
 export default RecidentialUnitService;

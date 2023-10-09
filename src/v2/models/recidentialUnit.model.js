@@ -7,7 +7,7 @@ const residentialUnitSchema = new Schema({
   unitNumber: { type: String },
   unitType: {
     type: String,
-    enum: ["appartment", "house", "other"],
+    enum: ["apartment", "house", "other"],
     required: true,
   },
   building: { type: String, ref: "Building" },

@@ -710,6 +710,7 @@ p {
   margin-bottom: 20px;
   text-align: left;
 }
+
 .button {
   display: inline-block;
   background-color: #3880ff;
@@ -795,4 +796,18 @@ a {
 
 .terms a:hover {
   text-decoration: underline;
+}
+.svg-container {
+  width: 100px;
+  height: auto;
+  margin: auto 10px auto auto;
+}
+.logo {
+  width: 100px;
+  height: auto;
+}
+.flex-container {
+  display: flex;
+  justify-content: space-between; /* This will put maximum space between the two items */
+  align-items: center; /* This will center the items vertically */
 }

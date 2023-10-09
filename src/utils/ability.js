@@ -43,7 +43,7 @@ export function defineAbilitiesFor(user) {
 
 // Define abilities for guest user
 function defineAbilitiesForGuest(can) {
-  can(ACTIONS.READ, "Building", ["name", "address"]);
+  can(ACTIONS.READ, "Building", ["name", "address","image"]);
   can(ACTIONS.READ, "Plan", ["-createdAt", "-updatedAt", "-__v"]);
   can(ACTIONS.READ, "RecidentialUnit", ["unitNumber"]);
 }
@@ -71,6 +71,7 @@ function defineAbilitiesForWorker(can, user) {
       });
       can(ACTIONS.MANAGE, "Package", {
         building: { $in: user.buildings },
+        status: { $ne: "delivered" },
       });
       break;
     case WORKER_TYPES.CONCIERGE:
@@ -82,6 +83,10 @@ function defineAbilitiesForWorker(can, user) {
       });
       can([ACTIONS.READ, ACTIONS.CREATE], "Notification", {
         building: user.building,
+      });
+      can([ACTIONS.READ, ACTIONS.CREATE, ACTIONS.UPDATE], "Package", {
+        building: { $in: user.buildings },
+        status: { $ne: "delivered" },
       });
       break;
     case WORKER_TYPES.SECURITY:

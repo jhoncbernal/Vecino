@@ -45,7 +45,7 @@ class Mailer {
     this.config = config;
     bindMethods(this);
   }
-  async sendEmail(recipents, subject, objectReplacement = {}, templateName) {
+  async sendEmail(recipients, subject, objectReplacement = {}, templateName) {
     try {
       const htmlpath = `../public/pages/${templateName}.html`;
       const csspath = `../public/styles/emails.css`;
@@ -59,12 +59,21 @@ class Mailer {
         ...objectReplacement,
       };
       const htmlToSend = template(replacements);
-      const recipientsArr = recipents.includes(",")
-        ? recipents.split(",")
-        : [recipents];
+      let recipientsArr = [];
+
+      if (typeof recipients === "string") {
+        recipientsArr = recipients.includes(",")
+          ? recipients.split(",")
+          : [recipients];
+      } else if (Array.isArray(recipients)) {
+        recipientsArr = recipients;
+      } else {
+        console.error("Invalid recipients type: expected string or array");
+        // Handle the error appropriately, perhaps by throwing an error or returning from the function
+      }
       const mailOptions = {
         Destination: {
-          ToAddresses: recipientsArr,
+          BccAddresses: recipientsArr,
         },
         Message: {
           Body: {
@@ -81,15 +90,15 @@ class Mailer {
         Source: FROM_EMAIL,
       };
       let info;
-      if (this.config.env === "production")
-        info = await ses.sendEmail(mailOptions).promise();
+      //if (this.config.env === "production")
+      info = await ses.sendEmail(mailOptions).promise();
       this.logger.info("Email sent", {
         to: recipientsArr,
         subject: subject,
       });
       return info;
     } catch (error) {
-      this.logger.error("Error sending email", { error: error.message });
+      this.logger.error("Error sending email", error);
       throw error;
     }
   }

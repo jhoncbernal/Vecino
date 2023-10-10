@@ -42,23 +42,23 @@ export default function ({
   router.use(cookieParser());
 
   const isProd = PROJECT.mode === "production";
-  router.use(
-    session({
-      secret: JWT_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        httpOnly: true,
-        secure: `${isProd ? "true" : "auto"}`,
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-        sameSite: `${isProd ? "none" : "lax"}`, // set to 'none' for cross-site contexts
-      },
-    })
-  );
+  const sessionConfig = {
+    secret: JWT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: `${isProd ? true : "auto"}`,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: `${isProd ? "none" : "lax"}`, // set to 'none' for cross-site contexts
+    },
+  };
+  console.log("isProd", isProd, "sessionConfig", sessionConfig); //TODO: remove this line
+
+  router.use(session(sessionConfig));
 
   router.use(passport.initialize());
   router.use(passport.session());
-
 
   router.use(ErrorMiddleware);
   apiRoutesV2

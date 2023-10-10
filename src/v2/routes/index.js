@@ -48,7 +48,7 @@ export default function ({
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: `${isProd ? true : "auto"}`,
+      secure: isProd ? true : "auto",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: `${isProd ? "none" : "lax"}`, // set to 'none' for cross-site contexts
     },

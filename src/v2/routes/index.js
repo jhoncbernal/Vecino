@@ -31,7 +31,20 @@ export default function ({
 }) {
   const router = express.Router();
   const apiRoutesV2 = express.Router();
-
+  router.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+    );
+    if ("OPTIONS" == req.method) {
+      res.send(200);
+    } else {
+      next();
+    }
+  });
   const corsOptions = {
     origin: CORS_WHITELIST,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -50,7 +63,7 @@ export default function ({
       httpOnly: true,
       secure: isProd ? true : "auto",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "None" ,
+      sameSite: "None",
     },
   };
   console.log("isProd", isProd, "sessionConfig", sessionConfig); //TODO: remove this line

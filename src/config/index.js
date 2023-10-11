@@ -35,6 +35,13 @@ export const CORS_WHITELIST = process.env.CORS_WHITELIST
   ? process.env.CORS_WHITELIST.split(",")
   : [];
 
+export const REDIS = {
+  port: parseInt(process.env.REDIS_PORT),
+  host: process.env.REDIS_HOSTNAME,
+  password: process.env.REDIS_PASSWORD,
+  url: process.env.REDIS_URL,
+};
+
 export const FRONT_END_URL = process.env.FRONT_END_URL;
 export const APPLICATION_NAME = process.env.APPLICATION_NAME;
 export const JWT_SECRET = process.env.JWT_SECRET;

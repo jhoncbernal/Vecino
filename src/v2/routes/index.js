@@ -8,10 +8,53 @@ import {
 } from "../../middlewares/index.js";
 import session from "express-session";
 import passport from "../../utils/passport-setup.js";
-import { JWT_SECRET, PROJECT, CORS_WHITELIST } from "../../config/index.js";
+import { JWT_SECRET, PROJECT, CORS_WHITELIST, REDIS } from "../../config/index.js";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
+// Importing the connect-redis and redis packages
+import redis from "redis";
+import RedisStore from "connect-redis";
 
+let redisClient;
+
+if (PROJECT.environment === "production") {
+  // Production environment
+  const redisURL = new URL(REDIS.url); // Assumes you have REDIS_URL as an env variable in production
+  redisClient = redis.createClient({
+    port: redisURL.port,
+    host: redisURL.hostname,
+    password: redisURL.password,
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+} else {
+  // Development environment
+  redisClient = redis.createClient({
+    host: "localhost", // The host on which the Redis server is running in your Docker container
+    port: REDIS.port || 6379, // The port on which Redis is running in your Docker container
+    password: REDIS.password, // The password you set for Redis in your Docker Compose file
+  });
+}
+console.log("REDIS", redisClient);
+
+redisClient.on("connect", () => {
+  console.log("Connected to Redis");
+});
+
+redisClient.on("error", (err) => {
+  console.log("Error connecting to Redis:", err);
+});
+
+redisClient.on("end", () => {
+  console.log("Redis client disconnected");
+});
+
+// Automatically reconnect when a connection is lost
+redisClient.on("reconnecting", (retry_time) => {
+  console.log(`Reconnecting to Redis. Attempt: ${retry_time}`);
+});
+redisClient.connect();
 export default function ({
   AuthRoutes,
   BillRoutes,
@@ -31,20 +74,7 @@ export default function ({
 }) {
   const router = express.Router();
   const apiRoutesV2 = express.Router();
-  router.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
-    );
-    if ("OPTIONS" == req.method) {
-      res.send(200);
-    } else {
-      next();
-    }
-  });
+
   const corsOptions = {
     origin: CORS_WHITELIST,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -56,16 +86,19 @@ export default function ({
 
   const isProd = PROJECT.mode === "production";
   const sessionConfig = {
+    store: new RedisStore({ client: redisClient }),
     secret: JWT_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: isProd ? true : "auto",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: isProd ? true : false, // set secure to false for development
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: "None",
+      domain: isProd ? "vecino.pro" : "localhost",
     },
   };
+
   console.log("isProd", isProd, "sessionConfig", sessionConfig); //TODO: remove this line
 
   router.use(session(sessionConfig));

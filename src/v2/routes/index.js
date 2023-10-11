@@ -50,7 +50,7 @@ export default function ({
       httpOnly: true,
       secure: isProd ? true : "auto",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: `${isProd ? "none" : "lax"}`, // set to 'none' for cross-site contexts
+      sameSite: "None" ,
     },
   };
   console.log("isProd", isProd, "sessionConfig", sessionConfig); //TODO: remove this line

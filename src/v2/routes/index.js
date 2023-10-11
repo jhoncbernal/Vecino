@@ -19,12 +19,10 @@ let redisClient;
 
 if (PROJECT.environment === "production") {
   // Production environment
-  const redisURL = new URL(REDIS.url); // Assumes you have REDIS_URL as an env variable in production
   redisClient = redis.createClient({
-    port: redisURL.port,
-    host: redisURL.hostname,
-    password: redisURL.password,
-    tls: {
+    url: REDIS.url,
+    socket: {
+      tls: true,
       rejectUnauthorized: false,
     },
   });
